@@ -2,6 +2,10 @@
 *.thy~
 
 ## LATEX IGNORES
+
+# Ignore any produced pdf files by now
+*.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -248,3 +252,6 @@ TSWLatexianTemp*
 
 # generated if using elsarticle.cls
 *.spl
+
+# Atom-latex config file
+.latexcfg
