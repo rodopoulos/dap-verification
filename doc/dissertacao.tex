@@ -1,0 +1,75 @@
+\documentclass[dissertacao, mestrado, ppginf]{UnB-CIC}%
+
+\usepackage{pdfpages}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[underline=false]{pgf-umlsd}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Definições Extras
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclareFontEncoding{LS2}{}{\noaccents@}
+\DeclareFontSubstitution{LS2}{stix}{m}{n}
+
+\DeclareSymbolFont{largesymbolsstix}  {LS2}{stixex}   {m} {n}
+
+% Chaves duplas
+\DeclareMathDelimiter{\lBrace}{\mathopen}{largesymbolsstix}{"E0}{largesymbolsstix}{"06}
+\DeclareMathDelimiter{\rBrace}{\mathclose}{largesymbolsstix}{"E1}{largesymbolsstix}{"07}
+
+\newcommand{\Braces}[1]{{\lBrace}{#1}{\rBrace}}
+
+% Colchetes duplos
+\DeclareMathDelimiter{\lBrack}{\mathopen}{largesymbolsstix}{"E8}{largesymbolsstix}{"0E}
+\DeclareMathDelimiter{\rBrack}{\mathclose}{largesymbolsstix}{"E9}{largesymbolsstix}{"0F}
+
+\newcommand{\Bracks}[1]{{\lBrack}{#1}{\rBrack}}
+
+% Definições
+% \newtheorem{definition}{Definition}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Informações do Trabalho
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\orientador {\prof[a] \dr[a] Cláudia Nalon}{CIC/UnB}%
+\coorientador{\prof \dr João da Costa Gondim}{CIC/UnB}
+\coordenador{\prof \dr Bruno Luiggi Macchiavello Espinoza}{University of Brasília}%
+\diamesano{29}{Novembro}{2017}%
+
+\membrobanca{Flávio L. C. de Moura}{CIC/UnB}%
+\membrobanca{Marcelo Menezes de Carvalho}{ENE/UnB}%
+
+\autor{Felipe Rodopoulos de Oliveira}{}%
+
+\titulo{Verification of Dynamic Authorization Protocol}%
+
+\palavraschave{internet banking, protocolos de segurança, formalização de protocolos, Método Indutivo, prova de teoremas}%
+
+\keywords{internet banking, security protocols, protocol formalization, Inductive Method, theorem proving}%
+
+\newcommand{\unbcic}{\texttt{UnB-CIC}}%
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Texto
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}%
+    \capitulo{chaps/1.introduction}{Introduction}
+    \capitulo{chaps/2.security-protocols}{Security Protocols}
+    \capitulo{chaps/3.inductive}{The Inductive Method}
+    \capitulo{chaps/4.dap}{DAP: Dynamic Authentication Protocol}
+    \capitulo{chaps/5.offline-channel}{Offline Channel Formalization}
+    % \capitulo{chaps/6.verification}{Verification}
+    % \capitulo{chaps/7.conclusion}{Discussion and Conclusion}
+\end{document}%

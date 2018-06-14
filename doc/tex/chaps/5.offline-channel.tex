@@ -1,0 +1,235 @@
+\label{chap:formal-phones}
+
+As seem in Chapter \ref{chap:dap}, DAP main strategy for securely authorizing transactions is providing a verification phase between the human User and his smartphone device, where the transaction will be revised and further confirmed. All these operations takes place in an offline physical channel, which is supposed inviolable by the Spy. Moreover, the DAP specification makes strong assumptions about the smartphone security model, which needs deeper research.
+
+We stress that this kind of channel and the smartphone peculiarities are not properly formalized in the Inductive Method theory. In order to verify the protocol, we need to provide a reliable and suitable model for this context. In this chapter, we provide this formal model, taking into account all the real world details surrounding these entities, adapting the protocol assumptions into a conceivable scenario.
+
+
+\section{Context Analysis}
+The DAP specification describes the User smartphone as a key component for the protocol operation and, further, vital for its security. Meanwhile, based on the protocol operational steps, we identify and list the required set of actions for a device rightly fulfill the protocol's goals:
+
+\begin{description}
+  \item[Cryptographic Calculus:] the device must be able to securely generate and perform cryptographic keys, hashes, calculations and checks. Such operations are constantly done by the smartphone on the hash verification phase and decryption of the TAN;
+
+  \item[2D code reading capability:] it must be able to scan and decode any presented QR code through a physical optical reader. In the protocol, such action is needed in order to receive the pieces of the symmetric key $K$ and further transactions in the User personal computer screen;
+
+  \item[On-screen data output:] in order to show any received message and further operations to the User, the device must provide a visual physical channel to display such data. A screen is the selected way in the specification, due to its clarity;
+
+  \item[Physical input:] at last, the User must be able to accept or decline messages presented on the device screen. Therefore, the smartphone must provide a way for the User to input these action on the phone.
+\end{description}
+
+% TODO: procurar aqui se a especificação pede para que o dispositivo tenha a característica de posse
+
+These actions can be embedded on a dedicated hardware, which could be issued by the bank to the protocol users. Each client would have his own device, already packed with any required encryption key, establishing the proper link between Bank and User. Similar schemes are already implemented by banks: One Time Password (OTP) proprietary tokens are delivered to bank clients, in order to compose two-factor authentication and transaction authorization systems for online banking protocols \cite{web-passwords, bank-passwords}.
+
+However, the protocol authors enjoyed the convenience of the smartphone. Not only the device appropriately fits the requirements for the protocol desired hardware but also has a strong and known acceptance among users around the world {\color{blue} REFERENCIA}. Also, it has the ownership link with its user. Therefore, the device is a suitable choice.
+
+
+
+\subsection{Smartphone Scope}
+\label{sec:smartphone-first-analysis}
+Smartphones are portable devices that have an operational system, which provides the capacity to performs actions like a personal computer. They can process data, store information and communicate through a network channel.
+
+Recalling the DAP specification, it is known that the User's smartphone is the entrusted entity for securely holding long-term secrets, shared between User and Bank. Such pair of shared keys will create the proper link between User and Bank and, for this reason, note that it is important that the User uses his own smartphone for establishing the shared key. Plus, the specification also states that any communication between the smartphone and other devices must be done by visual means: either output data through a screen or obtain information by the smartphone camera.
+
+These strategies provide more security based on two main facts, according to the specification: the long-term keys are never disclosed to the User's computer, which is considered insecure, and any necessary communication between the phone and another device is restricted to an offline, out-of-band and non-interposable channel \cite{bbcode-thesis}.
+
+However, it is important to note that the smartphone performs more actions than the protocol needs. Due to its set of capabilities, the smartphone can act like a personal computer, even connecting to the network channel. Hence, we have possible attack vectors that should be discussed.
+
+
+
+\subsection{DAP Assumptions \textit{vs.} Real World Scenarios}
+\label{sec:dap-assumptions}
+Before going further, it is important to discuss the environment described in the DAP specification and contrast it with the real world. The protocol specification makes strong assumptions about the User smartphone, stating that it cannot be directly accessed or operated by the Spy. We argue that such claim is idealistic, since recent studies have shown critical security flaws and attacks in the major mobile phones operating systems \cite{android-malware,ios-malware}, enabling remote operations by an attacker, as well.
+
+Moreover, it is reasonable to consider the situation of theft, a scenario which is effectively contemplated in Inductive Method extended theory \cite{bella-book}.
+
+Therefore, in contrast with DAP specification, but in accordance with the formal method for verifying a protocol, we must consider the real world scenario cases, where the Spy can exploit or obtain the User smartphone. We stress that these situations provide different sets of information to the Spy, presenting two distinct formalization for both of them in further sections.
+
+
+
+\subsection{Security Context}
+The offline communication environment depicted in Section \ref{sec:smartphone-first-analysis} restrains the Spy from its omniscient features, introducing a channel where she does not have full control. However, with the new postulations introduced in Section \ref{sec:dap-assumptions}, a feasible manners to exploit some protocol entities can be found.
+
+Given the fact that the smartphone can connect to the default network channel, it can be reached by the Spy and further compromised by her. Like a regular computer, the smartphone can be exploited in such manner so that the attacker can disclose stored data, eavesdropping communication, faking data, and other malicious actions, through remote control.
+
+At the same time, such attack is only possible when the smartphone is connected to the network channel, i.e., the Internet. Thus, we must properly formalize the possible states of mobile phones connectivity with the cited channel. Also, perceive that the offline channel remains secure and what is compromised it is only the User device.
+
+Finally, the situation of smartphone robbery must also be taken in account. Here, the Spy could not only operate the smartphone but, if skilled enough, exploit the device, obtaining the same privileges as if the smartphone is compromised. Hence, in such situation, we indicate that such device
+
+
+
+
+
+\section{Smartphone Formalization}
+As a first step towards its formalization, we properly define smartphones, as an entity linked to one, and only one, agent:
+
+\begin{definition}
+  Smartphones are defined as a bijective relation between the agent set and a free type set, denoting the set of available smartphones.
+  \begin{center}
+    \texttt{Smartphone : agent} $\longrightarrow$ \texttt{smartphone}
+  \end{center}
+\end{definition}
+
+Note that such formalization bounds the ownership of a smartphone for one User only, establishing a permanent link between both entities. In the DAP specification, such bound is described in terms of the key $K$, shared between the User's smartphone and the Bank, identifying the User towards the Bank. This entity is defined in a software context, in the smartphone memory, thereby it may be exploited. Furthermore, a hardware link between User and smartphone can also be found in the SIM card, present in any smartphone in order to it receive a phone number.
+
+However, these details are confined to the protocol implementation in the underlying software executing it. In short, the formalization of the smartphone entity cannot fully comprehend how the application will treat the link between a User and a mobile phone, combining software and hardware aspects. Accordingly, we preserve the theoretical ownership aspect, using a conservative approach, stating that our model establishes the link between the two entities and keep it until the end of all trace.
+
+
+
+
+
+\subsection{Vulnerabilities}
+An evaluation of realistic vulnerabilities for smartphones is presented, in order to fully comprehend how such aspects must be formalized in our final model:
+
+\begin{itemize}
+  \item \textbf{Theft:} mobile phones are highly susceptible to robbery, considering that its reduced size also increases its risk to loss and stealing. Hence, we need to formalize devices that are robbed from their owners and used by the Spy, including them in a correspondent set \texttt{stolen};
+
+  \item \textbf{Device control:} mobile phones are reduced personal computers, which can be held by users. As noted, they can also be exploited and controlled remotely by the Spy, giving her the ability to request computational actions and access device data. Therefore, compromised smartphones could be added to the set \texttt{bad}, of compromised agents. However, such capacities are limited to the set of computational operations, which does not include physical actions with the smartphone, like pointing its camera to something. As a result, the formalization of a compromised device must not include such actions, but only the ones achievable by computational ways.
+\end{itemize}
+
+Additionally, once robbed by the Spy, a smartphone may be in possession of a skilled attacker, which now can easily compromise and exploit the device. Even if it is unlikely, this claim is not idealistic {\color{blue} REFERENCIA}. Hence, we state that if a smartphone is robbed, it is automatically compromised:
+%
+$$stolen \subseteq bad$$
+
+
+\subsection{Keys}
+A discussion in smartphones keys is necessary due to the nature of the device itself and the QR code technology involved in this work.
+
+Several smartphone's operational systems present to their users the possibility to be operated until a passphrase is inputted, protecting them from any unwanted access. In this way, such key protects a stolen phone from an illegal access. However, it is important to notice that such security scheme is irrelevant for compromised smartphones, since the spy has full device control.
+
+
+We also mention the QR code ciphering scheme that happens over some steps of DAP. The protocol standard presents a matrix barcode scheme for displaying information, using four possible encoding modes: numeric, alphanumeric, binary and kanji. That said, we emphasize that no innate encryption happens in such codification and any operation of this kind is defined by the protocol. {\color{blue} Pegar referências sobre QR code, que aparentemente, possui uma especificação proprietaria}.
+
+The definition for shared keys among agents is kept. Smartphones also work as a storage for its owner's long-term keys, specially in DAP. How such keys are stored does not require an explicit formalization, but only how they are handled by agents and its devices. Thus, any important definition on such knowledge must be made on agents initial knowledge and further operations over it.
+
+
+
+\subsection{Usability}
+Usability concerns the characterization of an smartphone operations, hence modeling this property affects both legal agents and the Spy. For defining legal or illegal uses, it is necessary to investigate which actions are interesting to focus, perceiving how the mobile devices communicate with agents.
+
+We note that the set of actions of the smartphone is constrained to physical operation, so, in order to perform an illegal action, the Spy must have physical and direct access to the User smartphone, meaning that, it must be stolen. Hence, the propositions involving smartphone exploitation will not add complexity in this particular case, since they do not involve such operations.
+
+% For this reason, we note that all information exchange between smartphones and agents is done visually, through physical and direct means. This conveys that the Spy cannot interpose between a communication between smartphone and agents, defining the expression \textit{secure means}, also used in the formalization of smartcard protocols in the Inductive Method.
+
+Legal actions are done by legal users, consequently it is easy to define the legal operation:
+%
+\begin{center}
+  \textit{legalUse}(\texttt{Smartphone} $A$) $\triangleq$ \texttt{Smartphone} $A \notin$ \texttt{stolen}
+\end{center}
+%
+As discussed, the illegal action is constrained to physical actions, thus, for performing any of these, the Spy must physically posses the smartphone, by robbery, so:
+%
+\begin{center}
+  \textit{illegalUse}(\texttt{Smartphone} $A$) $\triangleq$ \texttt{Smartphone} $A \in$ \texttt{stolen}
+\end{center}
+
+It is important to also discuss the smartphone usability for the Spy, given that she can also perform legal actions. In that sense, we stress that she does not need to use her own card illegally, given that such action would not result in any more relevant information to her knowledge set. Hence:
+%
+\begin{center}
+  \texttt{Smartphone} \textit{Spy} $\notin$ \texttt{stolen}
+\end{center}
+%
+The same is assumed to the server, since it does not use any smartphone.
+
+
+
+\subsection{Events}
+Having the notions of smartphone threats and usage, we are able to go forward and define the possible event among protocol traces. We extend the \texttt{event} datatype as follows:
+%
+\begin{equation*}
+  \begin{split}
+    \texttt{datatype event} \triangleq \
+    & \texttt{\textbf{Says} agent agent msg} \\
+    & \texttt{\textbf{Notes} agent msg} \\
+    & \texttt{\textbf{Gets} agent msg} \\
+    & \texttt{\textbf{Inputs} agent smartphone msg} \\
+    & \texttt{\textbf{Gets\_s} smartphone msg} \\
+    & \texttt{\textbf{Outputs} smartphone agent msg} \\
+    & \texttt{\textbf{Gets\_a} agent msg}
+  \end{split}
+\end{equation*}
+
+The regular network events are kept, while four new events are added, which describe the agents and smartphone interactions with the offline channel. We depict each event below:
+
+\begin{description}
+  \item[Inputs]
+
+  \item[Gets\_s]
+
+  \item[Outputs]
+
+  \item[Gets\_a]
+\end{description}
+
+The \texttt{Shows} event translates the act of an agent displaying some data on its screen. It is important to add the fact that the process which displays such data does not directly point such message to some other agent or smartphone, hence he simply displays the data and expects that someone scans it. Therefore, we do not add a recipient to the event. Plus,
+
+Conversely, the \texttt{Scans} event needs two entities: the one which is reading the data and the one providing it. Therefore, the event is defined with the agent smartphone which reads an agent screen, receiving some message from it.
+
+With such events, the process of displaying and scanning information from a screen is not only formalized, but properly correlated: a smartphone can only scans the screen of an agent with the \texttt{Scans} event if there was some agent which displayed some message with the \texttt{Shows} event in the trace.
+
+The formal definition of the \textit{used} function is extended for account the new events presented:
+
+\begin{enumerate}
+  \setcounter{enumi}{3}
+  \item All components of a message that an agent displays on his screen in a trace are used on that trace:
+  \begin{center}
+    $\texttt{used}((Shows\ A\ X)\ \# \ evs) \triangleq \texttt{parts}\{X\} \cup \texttt{used} \ evs$
+  \end{center}
+  \item All components of a message that an agent's smartphone scans in a trace are used on that trace:
+  \begin{center}
+    $\texttt{used}((Scans\ P\ A\ X)\ \# \ evs) \triangleq \texttt{parts}\{X\} \cup \texttt{used} \ evs$
+  \end{center}
+\end{enumerate}
+
+
+The formal definition of the \textit{knows} function is extended for account the new events presented:
+\begin{enumerate}
+  \item An agent knows what he inputs to any smartphone in a trace;
+
+  \item No legal agent can extend his knowledge with any of the message received by any smartphone in a trace, since he already know them by case 4. However, if the smartphone is connect to the network and compromised, the Spy can learn any information received by the device.
+
+  \item An agent, including the Spy, knows what he is output from his smartphone a in trace. Also, the Spy knows what all connected and compromised smartphones output.
+
+  \item An agent other than the Spy knows what he receives from his smartphone in a trace.
+\end{enumerate}
+
+
+\subsection{Agents' Knowledge}
+Here, the definitions on agents' knowledge sets will be extended both on initial states and on further protocol operations. We consider the former first. Similarly to Section \ref{sec:initial-assumptions}, a review on each kind of the agent's initial knowledge set is done.
+
+\begin{enumerate}
+  \item The Server's initial knowledge set consists of all long-term secrets, both for those who abides in agents and smartphones. For this reason, we extend its initial knowledge set to cover such keys:
+  %
+  \begin{equation*}
+    \begin{split}
+      \texttt{initState Server} \triangleq
+      & (\texttt{Key range shrK}) \  \cup \\
+      & \{\texttt{Key (priEK Server)}\} \cup \{\texttt{Key (priSK Server)}\}\  \cup \\
+      & \texttt{(Key range pubEK)} \cup \texttt{(Key range pubSK)}\ \cup \\
+      & (\texttt{Key shrK}\{A.\ Card\ A\})
+    \end{split}
+  \end{equation*}
+  %
+  \item Each legitimate agent (\texttt{Friend}) initially knows all public keys and his own shared and private keys. Since secrets stored at the smartphone are not revealed to the User without interaction, his initial knowledge set remains the same as stated in previous sections;
+
+  \item The Spy knows all public keys and all secrets from agents who belong to the compromised set, which includes herself and compromised smartphones. Thus, secrets living on them are also disclosed to the Spy. We extend her initial knowledge set:
+  %
+  \begin{equation*}
+    \begin{split}
+      \texttt{initState}\ Spy \triangleq \
+      & (\texttt{Key shrK bad}) \ \cup \\
+      & (\texttt{Key priEK bad}) \cup (\texttt{Key priSK bad}) \ \cup \\
+      & (\texttt{Key range pubSK}) \cup (\texttt{Key range pubSK})\ \cup \\
+      & (\texttt{Key shrK}\{A.\ Card\ A \in bad\})
+    \end{split}
+  \end{equation*}
+\end{enumerate}
+
+% Now, we extend the definitions for function \textit{knows} which properly extend the knowledge set of agents along traces:
+% %
+% \begin{enumerate}
+%   \item An agent knows what the displays on this screen in a trace;
+%
+%   \item An agent knows what his smartphone
+% \end{enumerate}
