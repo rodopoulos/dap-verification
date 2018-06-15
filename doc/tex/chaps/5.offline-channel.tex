@@ -93,6 +93,9 @@ Additionally, once robbed by the Spy, a smartphone may be in possession of a ski
 $$stolen \subseteq bad$$
 
 
+
+
+
 \subsection{Keys}
 A discussion in smartphones keys is necessary due to the nature of the device itself and the QR code technology involved in this work.
 
@@ -134,6 +137,8 @@ The same is assumed to the server, since it does not use any smartphone.
 
 
 
+
+
 \subsection{Events}
 Having the notions of smartphone threats and usage, we are able to go forward and define the possible event among protocol traces. We extend the \texttt{event} datatype as follows:
 %
@@ -153,49 +158,56 @@ Having the notions of smartphone threats and usage, we are able to go forward an
 The regular network events are kept, while four new events are added, which describe the agents and smartphone interactions with the offline channel. We depict each event below:
 
 \begin{description}
-  \item[Inputs]
+  \item[Inputs] defines the act of an agent sending data to a smartphone. Hence, this event describes when the User points his smartphone to his computer the screen, in order to scan some data and thus, it envolves the two entities: the one scanning and the one being scanned;
 
-  \item[Gets\_s]
+  \item[Gets\_s] defines the reception event at the smartphone side, in respect to a \textit{Inputs} event;
 
-  \item[Outputs]
+  \item[Outputs] the event describing the act of a smartphone displaying data to an agent, where an User properly checks its smartphone's screen in order to input some data on his computer. Like the \textit{Inputs} event, it envolves both devices;
 
-  \item[Gets\_a]
+  \item[Gets\_a] finally, it defines the reception of data by the agent from the \textit{Inputs} event.
 \end{description}
 
-The \texttt{Shows} event translates the act of an agent displaying some data on its screen. It is important to add the fact that the process which displays such data does not directly point such message to some other agent or smartphone, hence he simply displays the data and expects that someone scans it. Therefore, we do not add a recipient to the event. Plus,
+It is easy to note that the new events allow a proper distinction from messages received on the regular channel from the ones received in the new channel. Yet, the Spy still can forge messages on compromised devices and send them through these channels.
 
-Conversely, the \texttt{Scans} event needs two entities: the one which is reading the data and the one providing it. Therefore, the event is defined with the agent smartphone which reads an agent screen, receiving some message from it.
+The creation of proper events for message reception in offline channels, \textit{Gets\_s} and \textit{Gets\_a}, provides a reliable way for smartphones correctly receive messages sent by \textit{Inputs} events and agents receive messages sent by \textit{Outputs} events, respectvely.
 
-With such events, the process of displaying and scanning information from a screen is not only formalized, but properly correlated: a smartphone can only scans the screen of an agent with the \texttt{Scans} event if there was some agent which displayed some message with the \texttt{Shows} event in the trace.
-
-The formal definition of the \textit{used} function is extended for account the new events presented:
+Finally, we need to extend the formal definition of the \textit{used} function, describing how each new event contributes to enrich the set of past messages present in the current trace:
 
 \begin{enumerate}
   \setcounter{enumi}{3}
-  \item All components of a message that an agent displays on his screen in a trace are used on that trace:
+  \item All components of a message that an agent inputs to his smartphone in a trace are used on that trace:
   \begin{center}
-    $\texttt{used}((Shows\ A\ X)\ \# \ evs) \triangleq \texttt{parts}\{X\} \cup \texttt{used} \ evs$
+    \texttt{used}((\textit{Inputs} $A$ $P$ $X$) $\#$ \textit{evs}) $\triangleq$ \texttt{parts} $\{ X\}\ \cup$ \texttt{used} \textit{evs}
   \end{center}
-  \item All components of a message that an agent's smartphone scans in a trace are used on that trace:
+
+  \item All messages that a smartphone receives as inputs from an agent in a trace do not directly extend those that are used on that trace.
+  %
   \begin{center}
-    $\texttt{used}((Scans\ P\ A\ X)\ \# \ evs) \triangleq \texttt{parts}\{X\} \cup \texttt{used} \ evs$
+    \texttt{used}((\textit{Gets\_s} $P$ $X$) $\#$ \textit{evs}) $\triangleq$ \texttt{used} \textit{evs}
+  \end{center}
+
+  \item All components of a message that an agent's smartphone outputs in a trace are used on that trace:
+  %
+  \begin{center}
+    \texttt{used}((\textit{Outputs} $A$ $P$ $X$) $\#$ \textit{evs}) $\triangleq$ \texttt{parts} $\{ X\}\ \cup$ \texttt{used} \textit{evs}
+  \end{center}
+
+  \item All messages that an agent receives as inputs from a smartphone in a trace do not directly extend those that are used on that trace.
+  %
+  \begin{center}
+    \texttt{used}((\textit{Gets\_a} $A$ $X$) $\#$ \textit{evs}) $\triangleq$ \texttt{used} \textit{evs}
   \end{center}
 \end{enumerate}
 
+We stress that cases 5 and 7 do not extend the set of used components, because its corresponding events already include these components in such set.
 
-The formal definition of the \textit{knows} function is extended for account the new events presented:
-\begin{enumerate}
-  \item An agent knows what he inputs to any smartphone in a trace;
 
-  \item No legal agent can extend his knowledge with any of the message received by any smartphone in a trace, since he already know them by case 4. However, if the smartphone is connect to the network and compromised, the Spy can learn any information received by the device.
 
-  \item An agent, including the Spy, knows what he is output from his smartphone a in trace. Also, the Spy knows what all connected and compromised smartphones output.
-
-  \item An agent other than the Spy knows what he receives from his smartphone in a trace.
-\end{enumerate}
 
 
 \subsection{Agents' Knowledge}
+
+
 Here, the definitions on agents' knowledge sets will be extended both on initial states and on further protocol operations. We consider the former first. Similarly to Section \ref{sec:initial-assumptions}, a review on each kind of the agent's initial knowledge set is done.
 
 \begin{enumerate}
@@ -224,6 +236,45 @@ Here, the definitions on agents' knowledge sets will be extended both on initial
       & (\texttt{Key shrK}\{A.\ Card\ A \in bad\})
     \end{split}
   \end{equation*}
+\end{enumerate}
+
+Function \textit{knows} will also be extended. The new events impacts both on agents and the Spy knowledge set, where the latter needs careful analysis:
+\begin{enumerate}
+  \item An agent knows what he inputs to any smartphone in a trace;
+  %
+  \begin{center}
+    \texttt{knows} $A$ ((\textit{Inputs} $A'$ $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
+      \{ X\} \cup \textit{knows}\ A\ evs & \text{if } A = A', \\
+      \textit{knows}\ A\ evs & \text{otherwise}
+    \end{cases}$
+  \end{center}
+
+  \item No legal agent can extend his knowledge with any of the message received by any smartphone in a trace, since he already know them by case 4. However, if the smartphone is connect to the network and is compromised, the Spy can learn any information received by it.
+  %
+  \begin{center}
+    \texttt{knows} $A$ ((\textit{Gets\_s} $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
+      \{ X\} \cup \textit{knows}\ A\ evs & \text{if } A = Spy, P \in \texttt{connected} \text{ and } P \in badp\\
+      \textit{knows}\ A\ evs & \text{otherwise}
+    \end{cases}$
+  \end{center}
+
+  \item An agent, including the Spy, knows what his smartphone outputs in trace, given that reception is guaranteed. Also, the Spy knows what all connected and compromised smartphones output.
+  %
+  \begin{center}
+    \texttt{knows} $A$ ((\textit{Outputs} $P$ $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
+      \{ X\} \cup \textit{knows}\ A\ evs & \text{if } A = A' \text{ or if } A = Spy, P \in \texttt{connected} \text{ and } P \in badp \\
+      \textit{knows}\ A\ evs & \text{otherwise}
+    \end{cases}$
+  \end{center}
+
+  \item An agent, other than the Spy, knows what he receives from his smartphone in a trace.
+  %
+  \begin{center}
+    \texttt{knows} $A$ ((\textit{Gets\_a} $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
+      \{ X\} \cup \textit{knows}\ A\ evs & \text{if } A = A' \text{ and } A \neq Spy \\
+      \textit{knows}\ A\ evs & \text{otherwise}
+    \end{cases}$
+  \end{center}
 \end{enumerate}
 
 % Now, we extend the definitions for function \textit{knows} which properly extend the knowledge set of agents along traces:
