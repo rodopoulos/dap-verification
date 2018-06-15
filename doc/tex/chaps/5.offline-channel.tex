@@ -99,12 +99,13 @@ $$stolen \subseteq bad$$
 \subsection{Keys}
 A discussion in smartphones keys is necessary due to the nature of the device itself and the QR code technology involved in this work.
 
-Several smartphone's operational systems present to their users the possibility to be operated until a passphrase is inputted, protecting them from any unwanted access. In this way, such key protects a stolen phone from an illegal access. However, it is important to notice that such security scheme is irrelevant for compromised smartphones, since the spy has full device control.
+Several smartphone's operational systems present to their users the possibility to be operated until a passphrase is inputted, protecting them from any unwanted access and further illegal actions. However, given the fact that stolen devices are automatically considered compromised, such security scheme is irrelevant, since the spy has full device control.
+
+We also mention the QR code ciphering scheme that happens over some steps of DAP. The protocol standard presents a matrix barcode scheme for displaying information, using four possible encoding modes: numeric, alphanumeric, binary and kanji. That said, we emphasize that no innate encryption happens in such codification. {\color{blue} Pegar referências sobre QR code, que aparentemente, possui uma especificação proprietaria}.
+
+The definition for shared keys among agents is kept. Smartphones also work as a storage for its owner's long-term keys, specially in DAP. How such keys are stored does not require an explicit formalization, but a description of how they are handled by agents and their devices. This approach flexibilize our specification process for smartphones, leaving any specific aspects to the model formalization.
 
 
-We also mention the QR code ciphering scheme that happens over some steps of DAP. The protocol standard presents a matrix barcode scheme for displaying information, using four possible encoding modes: numeric, alphanumeric, binary and kanji. That said, we emphasize that no innate encryption happens in such codification and any operation of this kind is defined by the protocol. {\color{blue} Pegar referências sobre QR code, que aparentemente, possui uma especificação proprietaria}.
-
-The definition for shared keys among agents is kept. Smartphones also work as a storage for its owner's long-term keys, specially in DAP. How such keys are stored does not require an explicit formalization, but only how they are handled by agents and its devices. Thus, any important definition on such knowledge must be made on agents initial knowledge and further operations over it.
 
 
 
@@ -112,8 +113,6 @@ The definition for shared keys among agents is kept. Smartphones also work as a 
 Usability concerns the characterization of an smartphone operations, hence modeling this property affects both legal agents and the Spy. For defining legal or illegal uses, it is necessary to investigate which actions are interesting to focus, perceiving how the mobile devices communicate with agents.
 
 We note that the set of actions of the smartphone is constrained to physical operation, so, in order to perform an illegal action, the Spy must have physical and direct access to the User smartphone, meaning that, it must be stolen. Hence, the propositions involving smartphone exploitation will not add complexity in this particular case, since they do not involve such operations.
-
-% For this reason, we note that all information exchange between smartphones and agents is done visually, through physical and direct means. This conveys that the Spy cannot interpose between a communication between smartphone and agents, defining the expression \textit{secure means}, also used in the formalization of smartcard protocols in the Inductive Method.
 
 Legal actions are done by legal users, consequently it is easy to define the legal operation:
 %
@@ -206,34 +205,30 @@ We stress that cases 5 and 7 do not extend the set of used components, because i
 
 
 \subsection{Agents' Knowledge}
+With new the events, agents' knowledge are now subject to changes. The smartphone is a device that do not necessarily disclose its data to its agents, but it requires communication in order to enrich the agent's knowledge set. At the same time, we observe that compromised devices will disclose its secrets to the Spy, however we stress that such situation only happens to smartphones connected to the unreliable channel.
 
-
-Here, the definitions on agents' knowledge sets will be extended both on initial states and on further protocol operations. We consider the former first. Similarly to Section \ref{sec:initial-assumptions}, a review on each kind of the agent's initial knowledge set is done.
-
+The definitions on agents' initial knowledge are properly updated, following the guideline of Section \ref{sec:initial-assumptions} and taking in account the secrets held by the smartphone. We omit asymmetric long-term keys for readability:
+%
 \begin{enumerate}
-  \item The Server's initial knowledge set consists of all long-term secrets, both for those who abides in agents and smartphones. For this reason, we extend its initial knowledge set to cover such keys:
+  \item The Server's initial knowledge set consists of all long-term secrets, both for those who abides in agents and smartphones:
   %
   \begin{equation*}
     \begin{split}
       \texttt{initState Server} \triangleq
-      & (\texttt{Key range shrK}) \  \cup \\
-      & \{\texttt{Key (priEK Server)}\} \cup \{\texttt{Key (priSK Server)}\}\  \cup \\
-      & \texttt{(Key range pubEK)} \cup \texttt{(Key range pubSK)}\ \cup \\
+      & (\texttt{Key range shrK}) \ \cup \\
       & (\texttt{Key shrK}\{A.\ Card\ A\})
     \end{split}
   \end{equation*}
   %
-  \item Each legitimate agent (\texttt{Friend}) initially knows all public keys and his own shared and private keys. Since secrets stored at the smartphone are not revealed to the User without interaction, his initial knowledge set remains the same as stated in previous sections;
+  \item The knowledge set for legitimate agents remains the same: their own secrets and all public keys. They do not know their smartphone secrets before any communication;
 
-  \item The Spy knows all public keys and all secrets from agents who belong to the compromised set, which includes herself and compromised smartphones. Thus, secrets living on them are also disclosed to the Spy. We extend her initial knowledge set:
+  \item The Spy knows all public keys and all secrets from compromised agents and smartphones, which includes her own:
   %
   \begin{equation*}
     \begin{split}
-      \texttt{initState}\ Spy \triangleq \
+      \texttt{initState}\ Spy \triangleq\
       & (\texttt{Key shrK bad}) \ \cup \\
-      & (\texttt{Key priEK bad}) \cup (\texttt{Key priSK bad}) \ \cup \\
-      & (\texttt{Key range pubSK}) \cup (\texttt{Key range pubSK})\ \cup \\
-      & (\texttt{Key shrK}\{A.\ Card\ A \in bad\})
+      & (\texttt{Key shrK}\{P.\ Smartphone\ P \in badp \wedge Smartphone\ P \in connected\})
     \end{split}
   \end{equation*}
 \end{enumerate}
@@ -244,8 +239,8 @@ Function \textit{knows} will also be extended. The new events impacts both on ag
   %
   \begin{center}
     \texttt{knows} $A$ ((\textit{Inputs} $A'$ $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
-      \{ X\} \cup \textit{knows}\ A\ evs & \text{if } A = A', \\
-      \textit{knows}\ A\ evs & \text{otherwise}
+      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = A', \\
+      \texttt{knows}\ A\ evs & \text{otherwise}
     \end{cases}$
   \end{center}
 
@@ -253,17 +248,17 @@ Function \textit{knows} will also be extended. The new events impacts both on ag
   %
   \begin{center}
     \texttt{knows} $A$ ((\textit{Gets\_s} $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
-      \{ X\} \cup \textit{knows}\ A\ evs & \text{if } A = Spy, P \in \texttt{connected} \text{ and } P \in badp\\
-      \textit{knows}\ A\ evs & \text{otherwise}
+      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = Spy, P \in \textit{connected} \text{ and } P \in badp\\
+      \texttt{knows}\ A\ evs & \text{otherwise}
     \end{cases}$
   \end{center}
 
-  \item An agent, including the Spy, knows what his smartphone outputs in trace, given that reception is guaranteed. Also, the Spy knows what all connected and compromised smartphones output.
+  \item An agent, including the Spy, knows what his smartphone outputs in trace, given that reception in the offline channel is guaranteed. Also, the Spy knows what all connected and compromised smartphones output.
   %
   \begin{center}
     \texttt{knows} $A$ ((\textit{Outputs} $P$ $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
-      \{ X\} \cup \textit{knows}\ A\ evs & \text{if } A = A' \text{ or if } A = Spy, P \in \texttt{connected} \text{ and } P \in badp \\
-      \textit{knows}\ A\ evs & \text{otherwise}
+      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = A' \text{ or if } A = Spy, P \in \textit{connected} \text{ and } P \in badp \\
+      \texttt{knows}\ A\ evs & \text{otherwise}
     \end{cases}$
   \end{center}
 
@@ -271,16 +266,8 @@ Function \textit{knows} will also be extended. The new events impacts both on ag
   %
   \begin{center}
     \texttt{knows} $A$ ((\textit{Gets\_a} $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
-      \{ X\} \cup \textit{knows}\ A\ evs & \text{if } A = A' \text{ and } A \neq Spy \\
-      \textit{knows}\ A\ evs & \text{otherwise}
+      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = A' \text{ and } A \neq Spy \\
+      \texttt{knows}\ A\ evs & \text{otherwise}
     \end{cases}$
   \end{center}
 \end{enumerate}
-
-% Now, we extend the definitions for function \textit{knows} which properly extend the knowledge set of agents along traces:
-% %
-% \begin{enumerate}
-%   \item An agent knows what the displays on this screen in a trace;
-%
-%   \item An agent knows what his smartphone
-% \end{enumerate}
