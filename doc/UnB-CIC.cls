@@ -308,7 +308,7 @@
 		\if@qualificacao%
 		\else%
 			\newpage\thispagestyle{empty}%
-			\begin{picture}(0,0)\put(-90,-747){\includegraphics{doc/BDM.pdf}}\end{picture}%
+			\begin{picture}(0,0)\put(-90,-747){\includegraphics{src/aux/BDM.pdf}}\end{picture}%
 			% \includepdf (comando adequado neste caso) precisa ser reconfigurado em modo pretextual, \includegraphics é uma solução rápida, mas ara isso usa valores arbitrários para posicionar a página.
 			\clearpage%
 		\fi%
@@ -834,7 +834,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\titulo}[1]{\title{#1}}%
 
-\def\@texpath{tex}%
+\def\@texpath{src}%
 \newcommand{\@erroSeNaoExiste}[1]{%
     \IfFileExists{#1}{}%
 	    {\ClassError{UnB-CIC}%
