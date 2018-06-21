@@ -1,3 +1,4 @@
+%!TEX root = ../../dissertacao.tex
 \label{chap:dap}
 
 In this chapter, our case study, the Dynamic Authentication Protocol (DAP), is presented. The protocol is designed for providing an extra reliability layer for the banking application, creating an encrypted authorization scheme for each banking transaction over a previously authenticated session between User and Bank.
@@ -181,7 +182,7 @@ At the ATM machine, the user must present his personal smartcard and password fo
 Now, the smartphone can compute key $K$, using $N_K$ and $K'$ as inputs. At the end of the computation, the inputs are discarded and $K$ is stored at the User's smartphone. Finally, the key is properly distributed between the Server and the User.
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \begin{sequencediagram}
     \newinst{pc}{PC}
