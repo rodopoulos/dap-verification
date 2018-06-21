@@ -1,11 +1,21 @@
-(*header{* Theory of Events for Security Protocols that use Smartphones with QR-Code readers *}*)
+(*  Title:      Smartphone.thy
+    Author:     Felipe Rodopoulos, University of Brasilia
+    Copyright   2018  University of Brasilia
+
+Theory of Events for Security Protocol that use the offline and out-of-band
+  channels defined by communications means created using the smartphone 
+  camera for decoding QR codes displayed at other insecure devices screens.
+
+"badp" smartphones are compromised by the Spy; their private keys and internal
+  stores are visible to her
+*)
 
 theory EventSP imports "~~/src/HOL/Auth/Message" begin
 
-consts  (*Initial states of agents -- parameter of the construction*)
+consts (*Initial states of agents -- parameter of the construction*)
   initState :: "agent => msg set"
 
-datatype smartphone = Smarphone agent
+datatype smartphone = Smartphone agent
 
 datatype  
   event = Says    agent agent msg
