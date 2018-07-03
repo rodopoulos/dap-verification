@@ -376,4 +376,13 @@ apply (induct_tac evs, simp)
 apply (blast intro: knows_subset_knows_Cons [THEN subsetD])
 done
 
+text\<open>For proving \<open>new_keys_not_used\<close>\<close>
+lemma keysFor_parts_insert:
+     "\<lbrakk> K \<in> keysFor (parts (insert X G));  X \<in> synth (analz H) \<rbrakk>   
+      \<Longrightarrow> K \<in> keysFor (parts (G \<union> H)) \<or> Key (invKey K) \<in> parts H" 
+by (force 
+    dest!: parts_insert_subset_Un [THEN keysFor_mono, THEN [2] rev_subsetD]
+           analz_subset_parts [THEN keysFor_mono, THEN [2] rev_subsetD]
+    intro: analz_subset_parts [THEN subsetD] parts_mono [THEN [2] rev_subsetD])
+
 end
