@@ -23,8 +23,7 @@ The DAP specification describes the User Smartphone as a key component for the p
 \end{description}
 % TODO: procurar aqui se a especificação pede para que o dispositivo tenha a característica de posse
 
-These described qualities can be embedded on a dedicated hardware, other than smartphones, which could be issued by the bank to the protocol users. Each client would have his own device, already packed with any required encryption key, establishing the proper link between Bank and User. Similar schemes have been already implemented by other online banking systems, for instance, One Time Password (OTP) proprietary tokens are delivered to bank clients, in order to compose two-factor authentication and transaction authorization systems for online banking protocols \cite{web-passwords, bank-passwords}.
-% TODO: check with Claudia if this paragraph is ok.
+The above described properties can be embedded on a dedicated hardware, other than smartphones, which could be issued by the bank to the protocol users. Each client would have his own device, already packed with any required encryption key, establishing the proper link between Bank and User. Similar schemes have been already implemented by other online banking systems, for instance, One Time Password (OTP) proprietary tokens are delivered to bank clients, in order to compose two-factor authentication and transaction authorization systems for online banking protocols \cite{web-passwords, bank-passwords}.
 
 However, the protocol authors enjoyed the convenience of the smartphone. Not only the device appropriately fits the requirements for the protocol mandatory hardware but also has a strong and known acceptance among users around the world {\color{blue} REFERENCIA}. Therefore, the device is a reasonable choice.
 % TODO: procurar se a especificação pede para que o dispositivo a propriedade de posse pelo usuário;
@@ -102,7 +101,7 @@ An evaluation of realistic vulnerabilities for smartphones is presented, in orde
 
 Additionally, once robbed by the Spy, a smartphone may be in possession of a skilled attacker, which now can easily compromise and exploit the device. Even if it is unlikely, this claim is not idealistic {\color{blue} REFERENCIA}. Hence, we state that if a smartphone is robbed, it is automatically compromised:
 %
-$$stolen \subseteq bad$$
+$$stolen \subseteq badp$$
 
 
 
@@ -249,7 +248,7 @@ The definitions on the agents' initial knowledge set are properly updated, follo
 The function \textit{knows} will also be extended. The new events impacts both on agents and the Spy knowledge set, where the latter needs careful analysis, as follows:
 \begin{enumerate}
   \setcounter{enumi}{3}
-  \item An agent knows what he inputs to any smartphone in a trace;
+  \item An agent knows what she inputs to any smartphone in a trace;
   %
   \begin{center}
     \texttt{knows} $A$ ((\texttt{Inputs} $A'$ $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
@@ -267,7 +266,7 @@ The function \textit{knows} will also be extended. The new events impacts both o
     \end{cases}$
   \end{center}
 
-  \item An agent, including the Spy, knows what his smartphone outputs in a trace, given that reception in the offline channel is guaranteed. Also, the Spy knows what all connected and compromised smartphones output.
+  \item An agent, including the Spy, knows what her smartphone outputs in a trace, given that reception in the offline channel is guaranteed. Also, the Spy knows what all connected and compromised smartphones output.
   %
   \begin{center}
     \texttt{knows} $A$ ((\texttt{Outputs} $P$ $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
@@ -276,7 +275,7 @@ The function \textit{knows} will also be extended. The new events impacts both o
     \end{cases}$
   \end{center}
 
-  \item An agent, other than the Spy, knows what he receives from his smartphone in a trace.
+  \item An agent, other than the Spy, knows what she receives from his smartphone in a trace.
   %
   \begin{center}
     \texttt{knows} $A$ ((\texttt{Gets\_a} $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
