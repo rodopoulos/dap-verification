@@ -1,5 +1,6 @@
 ## ISABELLE IGNORES
 *.thy~
+\#*\#
 
 ## LATEX IGNORES
 
