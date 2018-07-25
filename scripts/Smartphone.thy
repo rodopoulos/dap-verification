@@ -105,4 +105,22 @@ by blast
 
 declare shrK_neq [THEN not_sym, simp]
 
+(* NONCE LEMMAS *)
+
+(* Nonces must be fresh! *)
+lemma Nonce_notin_initState [iff]: "Nonce N \<notin> parts (initState (Friend i))"
+by auto
+
+
+lemma subset_Compl_range_shrK: "A \<subseteq> - (range shrK) \<Longrightarrow> shrK x \<notin> A"
+by blast
+
+lemma insert_Key_singleton: "insert (Key K) H = Key ` {K} \<union> H"
+by blast
+
+lemma insert_Key_image: "insert (Key K) (Key`KK \<union> C) = Key`(insert K KK) \<union> C"
+by blast
+
+
+
 end
