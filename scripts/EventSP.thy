@@ -275,27 +275,31 @@ by (simp add: subset_insertI)
 (* ===== *)
 
 (* Agents know what they say *)
-lemma Says_imp_knows [rule_format]: "Says A B X \<in> set evs \<longrightarrow> X \<in> knows A evs"
+lemma Says_imp_knows [rule_format] :
+  "Says A B X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) split: event.split)
 apply auto
 done
 
 (* Agents know what they note *)
-lemma Notes_imp_knows [rule_format]: "Notes A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
+lemma Notes_imp_knows [rule_format] :
+  "Notes A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) split: event.split)
 apply auto
 done
 
 (* Agents know what they receive *)
-lemma Gets_imp_knows [rule_format]: "A \<noteq> Spy \<longrightarrow> Gets A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
+lemma Gets_imp_knows [rule_format] :
+  "A \<noteq> Spy \<longrightarrow> Gets A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) split: event.split)
 done
 
 (* Agents know what they *)
-lemma Inputs_imp_knows [rule_format]: "Inputs A P X \<in> set evs \<longrightarrow> X \<in> knows A evs"
+lemma Inputs_imp_knows [rule_format] :
+  "Inputs A P X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) split: event.split)
 apply auto
@@ -305,7 +309,8 @@ done
 (* So no rule for this *)
 
 (* Agents knows what their smartphones shows to them *)
-lemma Outputs_imp_knows [rule_format]: "Outputs P A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
+lemma Outputs_imp_knows [rule_format] : 
+  "Outputs P A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) split: event.split)
 apply auto
@@ -316,7 +321,8 @@ done
 
 
 
-lemma parts_knows_Spy_subset_used: "parts (knows Spy evs) \<subseteq> used evs"
+lemma parts_knows_Spy_subset_used :
+  "parts (knows Spy evs) \<subseteq> used evs"
 apply (induct_tac "evs", force)  
 apply (simp add: parts_insert_knows_A split: event.split) 
 apply (auto)
@@ -324,14 +330,14 @@ done
 
 lemmas usedI = parts_knows_Spy_subset_used [THEN subsetD, intro]
 
-lemma initState_into_used: "X \<in> parts (initState B) ==> X \<in> used evs"
+lemma initState_into_used : 
+  "X \<in> parts (initState B) ==> X \<in> used evs"
 apply (induct_tac "evs")
 apply (simp_all add: parts_insert_knows_A split: event.split, blast)
 done
 
 
 (* USED FUNCTION LEMMAS *)
-
 lemma Says_parts_used [rule_format (no_asm)] : 
   "Says A B X \<in> set evs \<longrightarrow> (parts {X}) \<subseteq> used evs "
 apply (induct_tac "evs")
@@ -363,15 +369,18 @@ done
 (* END USED FUNCTION LEMMAS *)
 
 
+
 text{*NOTE REMOVAL--laws above are cleaner, as they don't involve "case"*}
 declare knows_Cons [simp del]
-        used_Nil [simp del] used_Cons [simp del]
+        used_Nil [simp del] 
+        used_Cons [simp del]
 
-
-lemma knows_subset_knows_Cons: "knows A evs \<subseteq> knows A (e # evs)"
+lemma knows_subset_knows_Cons :
+  "knows A evs \<subseteq> knows A (e # evs)"
 by (induct e, auto simp: knows_Cons)
 
-lemma initState_subset_knows: "initState A \<subseteq> knows A evs"
+lemma initState_subset_knows :
+  "initState A \<subseteq> knows A evs"
 apply (induct_tac evs, simp) 
 apply (blast intro: knows_subset_knows_Cons [THEN subsetD])
 done
