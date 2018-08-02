@@ -46,7 +46,10 @@ overloading initState \<equiv> initState
 end
 
 axiomatization where
-  Key_sypply_ax: "finite KK \<Longrightarrow> \<exists> K. K \<notin> KK & Key K \<notin> used evs "
+  Key_sypply_ax: "finite KK \<Longrightarrow> \<exists> K. K \<notin> KK & Key K \<notin> used evs " and
+  
+  (*Needed because of Spy's knowledge of Pairkeys*)
+  Nonce_supply_ax: "finite NN \<Longrightarrow> \<exists> N. N \<notin> NN & Nonce N \<notin> used evs"
 
 
   
@@ -74,9 +77,9 @@ done
 declare analz.Decrypt [rule del]
 
 (* parts predicate idempotency on nonces *)
-lemma parts_image_Nonce [simp]: "parts (Nonce` N) = Nonce` N"
-apply (auto)
-done
+lemma parts_image_Nonce [simp] :
+  "parts (Nonce` N) = Nonce` N"
+by auto
 
 (* *)
 lemma keysFor_parts_initState [simp] : 
@@ -103,15 +106,17 @@ apply (induct_tac "A")
 apply auto
 done
 
+(* Long term keys are not fresh *)
 lemma shrK_in_used [iff]: "Key (shrK A) \<in> used evs"
 apply (rule initState_into_used)
 apply blast
 done
 
+
 (* Following lemmas are used in parts_induct_tac and analz_Fake_tac to distinguish session keys
    from long-term shared keys *)
 
-(* If a key is fresh, then it must not  *)
+(* If a key is fresh, then it must not a long-term key *)
 lemma Key_not_used [simp]: "Key K \<notin> used evs \<Longrightarrow> K \<notin> range shrK"
 by blast
 
@@ -119,6 +124,24 @@ lemma shrK_neq [simp]: "Key K \<notin> used evs \<Longrightarrow> shrK B \<noteq
 by blast
 
 declare shrK_neq [THEN not_sym, simp]
+
+
+
+(* FUNCTION KNOWS *)
+(* An agent's compromised and connected Smartphone disclose hers shared keys *)
+lemma Spy_knows_bad [intro!] :
+  "\<lbrakk>Smartphone A \<in> connected; Smartphone A \<in> badp\<rbrakk> \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
+apply (induct_tac "evs")
+apply (simp_all (no_asm_simp) add: imageI knows_Cons split: event.split)
+done
+
+(* Case analysis on whether or not an agent is compromised *)
+lemma Crypt_Spy_analz_bad :
+  "\<lbrakk> Crypt (shrK A) X \<in> analz (knows Spy evs); Smartphone A \<in> badp; Smartphone A \<in> connected \<rbrakk> 
+    \<Longrightarrow> X \<in> analz (knows Spy evs)"
+apply (erule analz.Decrypt)
+apply (simp add: Spy_knows_bad)
+done
 
 
 
@@ -137,5 +160,93 @@ lemma insert_Key_image: "insert (Key K) (Key`KK \<union> C) = Key`(insert K KK) 
 by blast
 
 
+lemma Nonce_supply :
+  "Nonce (SOME N. Nonce N \<notin> used evs) \<notin> used evs"
+apply (rule finite.emptyI [THEN Nonce_supply_ax, THEN exE])
+apply (rule someI, blast)
+done
+
+
+lemmas analz_image_freshK_simps =
+       simp_thms mem_simps \<comment>\<open>these two allow its use with \<open>only:\<close>\<close>
+       disj_comms 
+       image_insert [THEN sym] image_Un [THEN sym] empty_subsetI insert_subset
+       analz_insert_eq Un_upper2 [THEN analz_mono, THEN [2] rev_subsetD]
+       insert_Key_singleton subset_Compl_range_shrK
+       Key_not_used insert_Key_image Un_assoc [THEN sym]
+
+(*Lemma for the trivial direction of the if-and-only-if*)
+lemma analz_image_freshK_lemma:
+     "(Key K \<in> analz (Key`nE \<union> H)) \<longrightarrow> (K \<in> nE | Key K \<in> analz H)  \<Longrightarrow>  
+         (Key K \<in> analz (Key`nE \<union> H)) = (K \<in> nE | Key K \<in> analz H)"
+by (blast intro: analz_mono [THEN [2] rev_subsetD])
+
+
+subsection\<open>Tactics for possibility theorems\<close>
+
+ML
+\<open>
+structure Smartphone =
+struct
+
+(*Omitting used_Says makes the tactic much faster: it leaves expressions
+    such as  Nonce ?N \<notin> used evs that match Nonce_supply*)
+fun possibility_tac ctxt =
+   (REPEAT 
+    (ALLGOALS (simp_tac (ctxt
+      delsimps @{thms used_Cons_simps}
+      setSolver safe_solver))
+     THEN
+     REPEAT_FIRST (eq_assume_tac ORELSE' 
+                   resolve_tac ctxt [refl, conjI, @{thm Nonce_supply}])))
+
+(*For harder protocols (such as Recur) where we have to set up some
+  nonces and keys initially*)
+fun basic_possibility_tac ctxt =
+    REPEAT 
+    (ALLGOALS (asm_simp_tac (ctxt setSolver safe_solver))
+     THEN
+     REPEAT_FIRST (resolve_tac ctxt [refl, conjI]))
+
+val analz_image_freshK_ss = 
+  simpset_of
+   (@{context} delsimps [image_insert, image_Un]
+               delsimps [@{thm imp_disjL}]    (*reduces blow-up*)
+               addsimps @{thms analz_image_freshK_simps})
+end
+\<close>
+
+
+(*Lets blast_tac perform this step without needing the simplifier*)
+lemma invKey_shrK_iff [iff]:
+     "(Key (invKey K) \<in> X) = (Key K \<in> X)"
+by auto
+
+(*Specialized methods*)
+
+method_setup analz_freshK = \<open>
+    Scan.succeed (fn ctxt =>
+     (SIMPLE_METHOD
+      (EVERY [REPEAT_FIRST (resolve_tac ctxt [allI, ballI, impI]),
+          REPEAT_FIRST (resolve_tac ctxt @{thms analz_image_freshK_lemma}),
+          ALLGOALS (asm_simp_tac (put_simpset Smartphone.analz_image_freshK_ss ctxt))])))\<close>
+    "for proving the Session Key Compromise theorem"
+
+method_setup possibility = \<open>
+    Scan.succeed (fn ctxt =>
+        SIMPLE_METHOD (Smartphone.possibility_tac ctxt))\<close>
+    "for proving possibility theorems"
+
+method_setup basic_possibility = \<open>
+    Scan.succeed (fn ctxt =>
+        SIMPLE_METHOD (Smartphone.basic_possibility_tac ctxt))\<close>
+    "for proving possibility theorems"
+
+lemma knows_subset_knows_Cons: "knows A evs \<subseteq> knows A (e # evs)"
+by (induct e) (auto simp: knows_Cons)
+
+(*Needed for actual protocols that will follow*)
+
+declare legalUse_def [iff] illegalUse_def [iff]
 
 end
