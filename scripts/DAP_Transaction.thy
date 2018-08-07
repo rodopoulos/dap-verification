@@ -14,7 +14,8 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Says A Server \<lbrace> Agent A, Number T \<rbrace> # evs1 \<in> daptrans"
 
   | DT2: "\<lbrakk> evs2 \<in> daptrans;
-          Says A' Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2;
+          Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2;
+          A \<noteq> Server;
           Nonce r \<notin> used evs2;
           r' = Crypt (shrK A) (Nonce r);
           h_s = Hash \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r' \<rbrace> \<rbrakk>
@@ -60,19 +61,24 @@ inductive_set daptrans :: "event list set" where
     
   | Rcpt: "\<lbrakk> evsr \<in> daptrans; Says A B X \<in> set evsr \<rbrakk> \<Longrightarrow> Gets B X # evsr \<in> daptrans"
 
+  | Rcpt_s: "\<lbrakk> evsRs \<in> daptrans; Inputs A (Smartphone B) X \<in> set evsRs \<rbrakk> 
+    \<Longrightarrow> Gets_s (Smartphone B) X # evsRc \<in> daptrans"
+
+  | Rcpt_a: "\<lbrakk> evsRa \<in> daptrans; Outputs (Smartphone A) B X \<in> set evsRa \<rbrakk>
+    \<Longrightarrow> Gets_a B X # evsRa \<in> daptrans"
+
 
 lemma Protocol_terminates :
   "\<exists>r. \<exists>evs \<in> daptrans. Says A Server (Nonce r) \<in> set evs"
 apply (intro exI bexI)
-apply (rule_tac [2] daptrans.DT7)
-apply (rule_tac [2] daptrans.DT6)
-apply (rule_tac [2] daptrans.DT5)
-apply (rule_tac [2] daptrans.DT4)
-apply (rule_tac [2] daptrans.DT3)
-apply (rule_tac [2] daptrans.DT2)
-apply (rule_tac [2] daptrans.DT1)
-apply (rule_tac [2] daptrans.Nil)
-apply (possibility)
+apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
+        THEN daptrans.DT2, THEN daptrans.Rcpt,
+        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
+        THEN daptrans.DT4, THEN daptrans.Rcpt_a,
+        THEN daptrans.DT5, THEN daptrans.Rcpt_s,
+        THEN daptrans.DT6, THEN daptrans.Rcpt_a,
+        THEN daptrans.DT7])
+apply (possibility, simp_all)
 apply (auto)
 done
 
