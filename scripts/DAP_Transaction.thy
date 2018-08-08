@@ -10,12 +10,11 @@ begin
 inductive_set daptrans :: "event list set" where
   Nil: "[] \<in> daptrans"
 
-  | DT1: "evs1 \<in> daptrans
+  | DT1: "\<lbrakk> evs1 \<in> daptrans; A \<noteq> Server \<rbrakk>
     \<Longrightarrow> Says A Server \<lbrace> Agent A, Number T \<rbrace> # evs1 \<in> daptrans"
 
   | DT2: "\<lbrakk> evs2 \<in> daptrans;
           Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2;
-          A \<noteq> Server;
           Nonce r \<notin> used evs2;
           r' = Crypt (shrK A) (Nonce r);
           h_s = Hash \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r' \<rbrace> \<rbrakk>
