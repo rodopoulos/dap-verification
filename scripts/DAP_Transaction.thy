@@ -27,11 +27,10 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> Transaction, r', h_s \<rbrace> # evs3 \<in> daptrans"
 
   | DT4: "\<lbrakk> evs4 \<in> daptrans; 
-            Gets_s (Smartphone A) \<lbrace> Transaction, r', h_s \<rbrace> \<in> set evs4;  
-            h_u \<notin> used evs4; (* Hash must be fresh and generated at smartphone *)
-            h_u = Hash \<lbrace> Transaction, r' \<rbrace>;
+            Gets_s (Smartphone A) \<lbrace> Transaction', r', h_s \<rbrace> \<in> set evs4;
+            h_u = Hash \<lbrace> Transaction', r' \<rbrace>;
             h_s == h_u \<rbrakk> 
-    \<Longrightarrow> Outputs (Smartphone A) A Transaction # evs4 \<in> daptrans"
+    \<Longrightarrow> Outputs (Smartphone A) A Transaction' # evs4 \<in> daptrans"
 
   | DT5: "\<lbrakk> evs5 \<in> daptrans;
             Says A Server Transaction \<in> set evs5;
@@ -42,8 +41,8 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Inputs A (Smartphone A) Confirmation # evs5 \<in> daptrans"
 
   | DT6: "\<lbrakk> evs6 \<in> daptrans; 
-            Gets_s (Smartphone A) \<lbrace> Transaction, r', h_s \<rbrace> \<in> set evs6;
-            Outputs (Smartphone A) A Transaction \<in> set evs6; 
+            Gets_s (Smartphone A) \<lbrace> Transaction', r', h_s \<rbrace> \<in> set evs6;
+            Outputs (Smartphone A) A Transaction' \<in> set evs6; 
             Gets_s (Smartphone A) Confirmation \<in> set evs6;
             r_u \<notin> used evs6 \<rbrakk> 
    \<Longrightarrow> Outputs (Smartphone A) A r_u # evs6 \<in> daptrans"
