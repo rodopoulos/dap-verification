@@ -7,10 +7,13 @@ theory DAP_Transaction imports "./Smartphone"
 
 begin
 
+abbreviation
+  Confirmation :: msg where "Confirmation \<equiv> (Number 1)"
+
 inductive_set daptrans :: "event list set" where
   Nil: "[] \<in> daptrans"
 
-  | DT1: "evs1 \<in> daptrans
+  | DT1: "\<lbrakk> evs1 \<in> daptrans \<rbrakk>
     \<Longrightarrow> Says A Server \<lbrace> Agent A, Number T \<rbrace> # evs1 \<in> daptrans"
 
   | DT2: "\<lbrakk> evs2 \<in> daptrans;
@@ -37,7 +40,7 @@ inductive_set daptrans :: "event list set" where
             Gets S \<lbrace> Transaction, r', h_u \<rbrace> \<in> set evs5;
             Inputs A (Smartphone A) \<lbrace> Transaction, r', h_s \<rbrace> \<in> set evs5;
             Gets_a A Transaction' \<in> set evs5;
-            Transaction == Transaction' \<rbrakk> 
+            Transaction == Transaction' \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) Confirmation # evs5 \<in> daptrans"
 
   | DT6: "\<lbrakk> evs6 \<in> daptrans; 
@@ -52,7 +55,7 @@ inductive_set daptrans :: "event list set" where
             Gets S \<lbrace> Transaction, r', h_u \<rbrace> \<in> set evs7; 
             Inputs A (Smartphone A) \<lbrace> Transaction, r', h_u\<rbrace> \<in> set evs7;
             Gets_a A Transaction' \<in> set evs7;
-            Inputs A (Smartphone A) Confirmaton \<in> set evs7;
+            Inputs A (Smartphone A) Confirmation \<in> set evs7;
             Gets_a A r_u \<in> set evs7 \<rbrakk> 
     \<Longrightarrow> Says A Server r_u # evs7 \<in> daptrans"
 
@@ -79,6 +82,7 @@ apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
         THEN daptrans.DT7])
 apply (possibility, simp_all)
 apply (auto)
+defer
 done
 
 end
