@@ -103,8 +103,7 @@ primrec used :: "event list \<Rightarrow> msg set" where
       | Gets_a A X \<Rightarrow> used evs
   )"
 
-
-
+(* Describing how some the set used evs is enriched given our events *)
 lemma Notes_imp_used [rule_format] :
   "Notes A X \<in> set evs \<longrightarrow> X \<in> used evs"
 apply (induct_tac evs)
@@ -129,6 +128,10 @@ apply (induct_tac evs)
 apply (auto split: event.split)
 done
 
+lemma Getss_imp_Inputs:
+  "Gets_s P X \<in> set evs \<Longrightarrow> Inputs A P X \<in> set evs"
+  apply (simp add: )
+  done
 
 (* AGENTS' KNOWLEDGE LEMMAS *)
 (* Simplifying:
