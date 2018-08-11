@@ -98,7 +98,10 @@ primrec used :: "event list \<Rightarrow> msg set" where
       | Notes A X \<Rightarrow> parts {X} \<union> (used evs)
       | Gets A X \<Rightarrow> used evs
       | Inputs A P X \<Rightarrow> parts {X} \<union> used evs
-      | Gets_s P X \<Rightarrow> used evs
+      (* We need to extend the used set here due to lemma parts_knows_Spy_subset_used
+         We do not violate the reception invariant, since every message received here was already
+         been added in the above definition *)
+      | Gets_s P X \<Rightarrow> parts {X} \<union> used evs
       | Outputs P A X \<Rightarrow> parts {X} \<union> used evs
       | Gets_a A X \<Rightarrow> used evs
   )"
@@ -129,9 +132,10 @@ apply (auto split: event.split)
 done
 
 lemma Getss_imp_Inputs:
-  "Gets_s P X \<in> set evs \<Longrightarrow> Inputs A P X \<in> set evs"
-  apply (simp add: )
-  done
+  "Gets_s P X \<in> set evs \<longrightarrow> X \<in> used evs"
+apply (induct_tac evs)
+apply (auto split: event.split)
+done
 
 (* AGENTS' KNOWLEDGE LEMMAS *)
 (* Simplifying:
