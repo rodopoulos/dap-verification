@@ -14,7 +14,7 @@ inductive_set daptrans :: "event list set" where
   Nil: "[] \<in> daptrans"
 
 
-  | DT1: "\<lbrakk> evs1 \<in> daptrans; A \<noteq> Server \<rbrakk>
+  | DT1: "\<lbrakk> evs1 \<in> daptrans \<rbrakk>
     \<Longrightarrow> Says A Server \<lbrace> Agent A, Number T \<rbrace> # evs1 \<in> daptrans"
 
   | DT2: "\<lbrakk> evs2 \<in> daptrans;
@@ -70,6 +70,25 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Gets_a B X # evsRa \<in> daptrans"
 
 
+lemma DT3_happens:
+  "\<exists> T r h. \<exists>evs \<in> daptrans. Inputs A (Smartphone A) \<lbrace> T, r, h \<rbrace> \<in> set evs"
+apply (intro exI bexI)
+apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
+        THEN daptrans.DT2, THEN daptrans.Rcpt,
+        THEN daptrans.DT3])
+apply (possibility, auto)
+done
+
+lemma DT4_happens:
+  "\<exists> T. \<exists>evs \<in> daptrans. Outputs (Smartphone A) A T \<in> set evs"
+apply (intro exI bexI)
+apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
+        THEN daptrans.DT2, THEN daptrans.Rcpt,
+        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
+        THEN daptrans.DT4])
+apply (possibility, auto)
+done    
+    
 lemma Protocol_terminates :
   "\<exists>r. \<exists>evs \<in> daptrans. Says A Server (Nonce r) \<in> set evs"
 apply (intro exI bexI)
@@ -80,9 +99,9 @@ apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
         THEN daptrans.DT5, THEN daptrans.Rcpt_s,
         THEN daptrans.DT6, THEN daptrans.Rcpt_a,
         THEN daptrans.DT7])
-apply (possibility, simp_all)
-apply (auto)
-defer
-done
+apply (possibility, auto)
+oops
+
+
 
 end
