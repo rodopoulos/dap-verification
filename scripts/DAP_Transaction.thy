@@ -31,6 +31,7 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> Transaction, r', h_s \<rbrace> # evs3 \<in> daptrans"
 
   | DT4: "\<lbrakk> evs4 \<in> daptrans;
+            legalUse(Smartphone A); A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace> Transaction', r', h_s \<rbrace> \<in> set evs4;
             h_u = Hash \<lbrace> Transaction', r' \<rbrace>;
             h_s == h_u \<rbrakk> 
@@ -44,7 +45,7 @@ inductive_set daptrans :: "event list set" where
             Transaction == Transaction' \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) Confirmation # evs5 \<in> daptrans"
 
-  | DT6: "\<lbrakk> evs6 \<in> daptrans; 
+  | DT6: "\<lbrakk> evs6 \<in> daptrans; A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace> Transaction', r', h_s \<rbrace> \<in> set evs6;
             Outputs (Smartphone A) A Transaction' \<in> set evs6; 
             Gets_s (Smartphone A) Confirmation \<in> set evs6;
@@ -78,6 +79,12 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Gets_a B X # evsRa \<in> daptrans"
 
 
+lemma Outputs_Server_not_evs [rule_format]:
+  "evs \<in> daptrans \<Longrightarrow> Outputs (Smartphone Server) A X \<notin> set evs"
+apply (erule daptrans.induct)
+apply (auto)
+done
+
 lemma DT3_happens:
   "\<exists> T r h. \<exists>evs \<in> daptrans. Inputs A (Smartphone A) \<lbrace> T, r, h \<rbrace> \<in> set evs"
 apply (intro exI bexI)
@@ -85,7 +92,8 @@ apply (rule_tac [2] daptrans.Nil
         [THEN daptrans.DT1, THEN daptrans.Rcpt,
         THEN daptrans.DT2, THEN daptrans.Rcpt,
         THEN daptrans.DT3])
-apply (possibility, auto)
+apply (possibility)
+apply (auto)
 done
 
 lemma DT4_happens:
@@ -135,10 +143,10 @@ apply (rule_tac [2] daptrans.Nil
         THEN daptrans.DT5, THEN daptrans.Rcpt_s,
         THEN daptrans.DT6, THEN daptrans.Rcpt_a,
         THEN daptrans.DT7])
-apply (possibility)
 apply (simp_all)
+apply (possibility)
 apply (auto)
-oops
+done
 
 lemma Protocol_terminates :
   "\<exists>Success. \<exists>evs \<in> daptrans. Says Server A Success \<in> set evs"
