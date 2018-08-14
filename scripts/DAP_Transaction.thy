@@ -10,11 +10,10 @@ begin
 abbreviation
   Confirmation :: msg where "Confirmation \<equiv> (Number 1)"
 abbreviation
-  Success :: msg where "Success \<equiv> (Number 1)"
+  Success :: msg where "Success \<equiv> (Number 2)"
 
 inductive_set daptrans :: "event list set" where
   Nil: "[] \<in> daptrans"
-
 
   | DT1: "\<lbrakk> evs1 \<in> daptrans \<rbrakk>
     \<Longrightarrow> Says A Server \<lbrace> Agent A, Number T \<rbrace> # evs1 \<in> daptrans"
@@ -68,12 +67,12 @@ inductive_set daptrans :: "event list set" where
             r_u == r' \<rbrakk>
     \<Longrightarrow> Says Server A Success # evs8 \<in> daptrans"
 
-  | Fake: "\<lbrakk> evsf \<in> daptrans; X \<in> synth(analz(knows Spy evsf)) \<rbrakk> \<Longrightarrow> Says Spy B X # evsf \<in> daptrans"
+  | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF)) \<rbrakk> \<Longrightarrow> Says Spy B X # evsF \<in> daptrans"
     
-  | Rcpt: "\<lbrakk> evsr \<in> daptrans; Says A B X \<in> set evsr \<rbrakk> \<Longrightarrow> Gets B X # evsr \<in> daptrans"
+  | Rcpt: "\<lbrakk> evsR \<in> daptrans; Says A B X \<in> set evsR \<rbrakk> \<Longrightarrow> Gets B X # evsR \<in> daptrans"
 
   | Rcpt_s: "\<lbrakk> evsRs \<in> daptrans; Inputs A (Smartphone B) X \<in> set evsRs \<rbrakk> 
-    \<Longrightarrow> Gets_s (Smartphone B) X # evsRc \<in> daptrans"
+    \<Longrightarrow> Gets_s (Smartphone B) X # evsRs \<in> daptrans"
 
   | Rcpt_a: "\<lbrakk> evsRa \<in> daptrans; Outputs (Smartphone A) B X \<in> set evsRa \<rbrakk>
     \<Longrightarrow> Gets_a B X # evsRa \<in> daptrans"
@@ -103,25 +102,43 @@ done
 lemma DT5_happens:
   "\<exists> C. \<exists>evs \<in> daptrans. Inputs A (Smartphone A) C \<in> set evs"
 apply (intro exI bexI)
-(*apply (rule_tac [2] daptrans.Nil
+apply (rule_tac [2] daptrans.Nil
         [THEN daptrans.DT1, THEN daptrans.Rcpt,
         THEN daptrans.DT2, THEN daptrans.Rcpt,
         THEN daptrans.DT3, THEN daptrans.Rcpt_s,
         THEN daptrans.DT4, THEN daptrans.Rcpt_a,
-        THEN daptrans.DT5])*)
-apply (rule_tac [2] daptrans.DT5)
-apply (rule_tac [2] daptrans.Rcpt_a)
-apply (rule_tac [2] daptrans.DT4)
-apply (rule_tac [2] daptrans.Rcpt_s)
-apply (rule_tac [2] daptrans.DT3)
-apply (rule_tac [2] daptrans.Rcpt)
-apply (rule_tac [2] daptrans.DT2)
-apply (rule_tac [2] daptrans.Rcpt)
-apply (rule_tac [2] daptrans.DT1)
-apply (rule_tac [2] daptrans.Nil)
-apply (possibility)
-apply (auto)
+        THEN daptrans.DT5])
+apply (possibility, auto)
 done
+
+lemma DT6_happens :
+  "\<exists> r\<^sub>u. \<exists> evs \<in> daptrans. Outputs (Smartphone A) A r\<^sub>u \<in> set evs"
+apply (intro exI bexI)
+apply (rule_tac [2] daptrans.Nil 
+        [THEN daptrans.DT1, THEN daptrans.Rcpt,
+        THEN daptrans.DT2, THEN daptrans.Rcpt,
+        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
+        THEN daptrans.DT4, THEN daptrans.Rcpt_a,
+        THEN daptrans.DT5, THEN daptrans.Rcpt_s,
+        THEN daptrans.DT6])
+apply (possibility, auto)
+done
+
+lemma DT7_happens :
+  "\<exists> r\<^sub>u. \<exists> evs \<in> daptrans. Says A Server r\<^sub>u \<in> set evs"
+apply (intro exI bexI)
+apply (rule_tac [2] daptrans.Nil 
+        [THEN daptrans.DT1, THEN daptrans.Rcpt,
+        THEN daptrans.DT2, THEN daptrans.Rcpt,
+        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
+        THEN daptrans.DT4, THEN daptrans.Rcpt_a,
+        THEN daptrans.DT5, THEN daptrans.Rcpt_s,
+        THEN daptrans.DT6, THEN daptrans.Rcpt_a,
+        THEN daptrans.DT7])
+apply (possibility)
+apply (simp_all)
+apply (auto)
+oops
 
 lemma Protocol_terminates :
   "\<exists>Success. \<exists>evs \<in> daptrans. Says Server A Success \<in> set evs"
