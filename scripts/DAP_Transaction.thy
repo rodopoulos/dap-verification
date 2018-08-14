@@ -32,9 +32,6 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> Transaction, r', h_s \<rbrace> # evs3 \<in> daptrans"
 
   | DT4: "\<lbrakk> evs4 \<in> daptrans;
-            Says A Server Transaction \<in> set evs4;
-            Says Server A \<lbrace> Transaction, r', h_s \<rbrace> \<in> set evs4;
-            Inputs A (Smartphone A) \<lbrace> Transaction', r', h_s\<rbrace> \<in> set evs4;
             Gets_s (Smartphone A) \<lbrace> Transaction', r', h_s \<rbrace> \<in> set evs4;
             h_u = Hash \<lbrace> Transaction', r' \<rbrace>;
             h_s == h_u \<rbrakk> 
@@ -101,7 +98,7 @@ apply (rule_tac [2] daptrans.Nil
         THEN daptrans.DT3, THEN daptrans.Rcpt_s,
         THEN daptrans.DT4])
 apply (possibility, auto)
-done    
+done
 
 lemma DT5_happens:
   "\<exists> C. \<exists>evs \<in> daptrans. Inputs A (Smartphone A) C \<in> set evs"
