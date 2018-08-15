@@ -15,56 +15,57 @@ abbreviation
 inductive_set daptrans :: "event list set" where
   Nil: "[] \<in> daptrans"
 
-  | DT1: "\<lbrakk> evs1 \<in> daptrans \<rbrakk>
+  | DT1: "\<lbrakk> evs1 \<in> daptrans; A \<noteq> Server \<rbrakk>
     \<Longrightarrow> Says A Server \<lbrace> Agent A, Number T \<rbrace> # evs1 \<in> daptrans"
 
   | DT2: "\<lbrakk> evs2 \<in> daptrans;
           Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2;
           Nonce r \<notin> used evs2;
           r' = Crypt (shrK A) (Nonce r);
-          h_s = Hash \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r' \<rbrace> \<rbrakk>
-    \<Longrightarrow> Says Server A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h_s \<rbrace> # evs2 \<in> daptrans"
+          h\<^sub>s = Hash \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r' \<rbrace> \<rbrakk>
+    \<Longrightarrow> Says Server A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> # evs2 \<in> daptrans"
 
-  | DT3: "\<lbrakk> evs3 \<in> daptrans;
-            Says A Server Transaction \<in> set evs3;
-            Gets A \<lbrace> Transaction, r', h_s \<rbrace> \<in> set evs3 \<rbrakk> 
-    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> Transaction, r', h_s \<rbrace> # evs3 \<in> daptrans"
+  | DT3: "\<lbrakk> evs3 \<in> daptrans; legalUse (Smartphone A);
+            Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs3;
+            Gets A \<lbrace> \<lbrace> Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk> 
+    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> daptrans"
 
   | DT4: "\<lbrakk> evs4 \<in> daptrans;
             legalUse(Smartphone A); A \<noteq> Server;
-            Gets_s (Smartphone A) \<lbrace> Transaction', r', h_s \<rbrace> \<in> set evs4;
-            h_u = Hash \<lbrace> Transaction', r' \<rbrace>;
-            h_s == h_u \<rbrakk> 
+            Gets_s (Smartphone A) \<lbrace> Transaction', r', h\<^sub>s \<rbrace> \<in> set evs4;
+            h\<^sub>u = Hash \<lbrace> Transaction', r' \<rbrace>;
+            h\<^sub>s == h\<^sub>u \<rbrakk> 
     \<Longrightarrow> Outputs (Smartphone A) A Transaction' # evs4 \<in> daptrans"
 
   | DT5: "\<lbrakk> evs5 \<in> daptrans;
             Says A Server Transaction \<in> set evs5;
-            Gets S \<lbrace> Transaction, r', h_u \<rbrace> \<in> set evs5;
-            Inputs A (Smartphone A) \<lbrace> Transaction, r', h_s \<rbrace> \<in> set evs5;
+            Gets A \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs5;
+            Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Gets_a A Transaction' \<in> set evs5;
             Transaction == Transaction' \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) Confirmation # evs5 \<in> daptrans"
 
   | DT6: "\<lbrakk> evs6 \<in> daptrans; A \<noteq> Server;
-            Gets_s (Smartphone A) \<lbrace> Transaction', r', h_s \<rbrace> \<in> set evs6;
+            Gets_s (Smartphone A) \<lbrace> Transaction', r', h\<^sub>s \<rbrace> \<in> set evs6;
             Outputs (Smartphone A) A Transaction' \<in> set evs6; 
             Gets_s (Smartphone A) Confirmation \<in> set evs6;
-            r_u \<notin> used evs6 \<rbrakk> 
+            r_u \<notin> used evs6 (* This must go away *) \<rbrakk>
+            (* TODO: formalize how r_u is obtained *)
    \<Longrightarrow> Outputs (Smartphone A) A r_u # evs6 \<in> daptrans"
 
-  | DT7: "\<lbrakk> evs7 \<in> daptrans;
+  | DT7: "\<lbrakk> evs7 \<in> daptrans; A \<noteq> Server;
             Says A Server Transaction \<in> set evs7;
-            Gets S \<lbrace> Transaction, r', h_u \<rbrace> \<in> set evs7; 
-            Inputs A (Smartphone A) \<lbrace> Transaction, r', h_u\<rbrace> \<in> set evs7;
+            Gets A \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
+            Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Gets_a A Transaction' \<in> set evs7;
             Inputs A (Smartphone A) Confirmation \<in> set evs7;
-            Gets_a A r_u \<in> set evs7 \<rbrakk> 
+            Gets_a A r_u \<in> set evs7 \<rbrakk>
     \<Longrightarrow> Says A Server r_u # evs7 \<in> daptrans"
 
   | DT8: "\<lbrakk> evs8 \<in> daptrans;
             Gets Server Transaction \<in> set evs8;
             Says Server A \<lbrace> Transaction, r', h_u \<rbrace> \<in> set evs8;
-            Gets Server r_u \<in> set evs8; 
+            Gets Server r_u \<in> set evs8;
             r_u == r' \<rbrakk>
     \<Longrightarrow> Says Server A Success # evs8 \<in> daptrans"
 
@@ -79,12 +80,64 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Gets_a B X # evsRa \<in> daptrans"
 
 
+
+lemma Gets_imp_Says :
+  "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Says A B X \<in> set evs"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+lemma Gets_s_imp_Inputs :
+  "\<lbrakk> Gets_s P X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Inputs A P X \<in> set evs"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+lemma Gets_a_imp_Outputs :
+  "\<lbrakk> Gets_a A X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> P. Outputs P A X \<in> set evs"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+
+(* RELIABILITY LEMMAS *)
+lemma Says_Server_DT1_not_evs :
+  "evs \<in> daptrans \<Longrightarrow> Says Server Server \<lbrace> Agent Server, Number T \<rbrace> \<notin> set evs"
+apply (erule daptrans.induct)
+apply (simp_all)
+done
+
+(* TODO: ask Claudia how did I manage to do this *)
+lemma Server_cannot_initiate :
+  "\<lbrakk> evs \<in> daptrans; Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs\<rbrakk> \<Longrightarrow> A \<noteq> Server"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
 lemma Outputs_Server_not_evs [rule_format]:
   "evs \<in> daptrans \<Longrightarrow> Outputs (Smartphone Server) A X \<notin> set evs"
 apply (erule daptrans.induct)
 apply (auto)
 done
 
+lemma Outputs_Server_not_evs2 [rule_format] :
+  "evs \<in> daptrans \<Longrightarrow> Outputs (Smartphone A) Server X \<notin> set evs"
+apply (erule daptrans.induct)
+apply (auto)
+done
+
+
+lemma Inputs_A_Smartphone_3 :
+  "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
+    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> 
+        (Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r, h \<rbrace> \<in> set evs)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+
+
+(* PROTOCOL TERMINATION *)
 lemma DT3_happens:
   "\<exists> T r h. \<exists>evs \<in> daptrans. Inputs A (Smartphone A) \<lbrace> T, r, h \<rbrace> \<in> set evs"
 apply (intro exI bexI)
@@ -92,6 +145,7 @@ apply (rule_tac [2] daptrans.Nil
         [THEN daptrans.DT1, THEN daptrans.Rcpt,
         THEN daptrans.DT2, THEN daptrans.Rcpt,
         THEN daptrans.DT3])
+apply (simp_all)
 apply (possibility)
 apply (auto)
 done
