@@ -27,16 +27,16 @@ inductive_set daptrans :: "event list set" where
 
   | DT3: "\<lbrakk> evs3 \<in> daptrans; legalUse (Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs3;
-            Gets A \<lbrace> \<lbrace> Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk> 
+            Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk> 
     \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> daptrans"
 
   | DT4: "\<lbrakk> evs4 \<in> daptrans;
             legalUse(Smartphone A); A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace> Transaction', r', h\<^sub>s \<rbrace> \<in> set evs4;
-            h\<^sub>s == Hash \<lbrace> Transaction', r' \<rbrace> \<rbrakk> 
+            (h\<^sub>s == Hash \<lbrace> Transaction', r' \<rbrace>) \<rbrakk> 
     \<Longrightarrow> Outputs (Smartphone A) A Transaction' # evs4 \<in> daptrans"
 
-  | DT5: "\<lbrakk> evs5 \<in> daptrans;
+  | DT5: "\<lbrakk> evs5 \<in> daptrans; legalUse(Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5;
             Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Inputs A (Smartphone A) \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
@@ -44,7 +44,7 @@ inductive_set daptrans :: "event list set" where
             Transaction' == \<lbrace> Agent A, Number T \<rbrace> \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) Confirmation # evs5 \<in> daptrans"
 
-  | DT6: "\<lbrakk> evs6 \<in> daptrans; A \<noteq> Server;
+  | DT6: "\<lbrakk> evs6 \<in> daptrans; A \<noteq> Server; legalUse(Smartphone A);
             Gets_s (Smartphone A) \<lbrace> Transaction', r', h\<^sub>s \<rbrace> \<in> set evs6;
             Outputs (Smartphone A) A Transaction' \<in> set evs6; 
             Gets_s (Smartphone A) Confirmation \<in> set evs6;
@@ -69,7 +69,8 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Says Server A Success # evs8 \<in> daptrans"
 
   | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF)); illegalUse(Smartphone B) \<rbrakk> 
-    \<Longrightarrow> Says Spy B X # Inputs Spy (Smartphone B) X # evsF \<in> daptrans"
+    \<Longrightarrow> Says Spy B X # 
+        Inputs Spy (Smartphone B) X # evsF \<in> daptrans"
     
   | Rcpt: "\<lbrakk> evsR \<in> daptrans; Says A B X \<in> set evsR \<rbrakk> \<Longrightarrow> Gets B X # evsR \<in> daptrans"
 
@@ -100,6 +101,16 @@ lemma Gets_a_imp_Outputs :
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
+
+(* Conformity of protocol steps *)
+lemma Inputs_A_Smartphone_3 :
+  "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
+    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> 
+        (Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r, h \<rbrace> \<in> set evs)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
 
 
 (* RELIABILITY LEMMAS *)
@@ -138,13 +149,42 @@ apply (auto)
 done
 
 
-lemma Inputs_A_Smartphone_3 :
-  "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
-    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> 
-        (Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r, h \<rbrace> \<in> set evs)"
+(* GENERAL GUARANTEES FOR INPUTS AND OUPUTS*)
+
+(* Defining legalUse conditions *)
+lemma Inputs_Smartphone_legalUse :
+  "\<lbrakk> Inputs A (Smartphone A) X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> legalUse(Smartphone A)"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
+
+lemma Outputs_Smartphone_legalUse :
+  "\<lbrakk> Outputs (Smartphone A) A X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> legalUse(Smartphone A)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+
+lemma Inputs_Smartphone :
+  "\<lbrakk> Inputs A P X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> P = (Smartphone A) \<and> legalUse(P)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+lemma Outputs_Smartphone :
+  "\<lbrakk> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> P = (Smartphone A) \<and> legalUse(P)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+lemma Inputs_Outputs_Smartphone :
+  "\<lbrakk> Inputs A P X \<in> set evs \<or> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
+     \<Longrightarrow> P = (Smartphone A) \<and> legalUse(Smartphone A)"
+apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
+done
+
 
 
 (* PROTOCOL TERMINATION *)
