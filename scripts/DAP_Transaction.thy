@@ -84,6 +84,8 @@ declare Fake_parts_insert_in_Un  [dest]
 declare analz_into_parts [dest]
 
 (* TECHNICAL LEMMAS *)
+
+(* Facts about message reception *)
 lemma Gets_imp_Says :
   "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Says A B X \<in> set evs"
 apply (erule rev_mp, erule daptrans.induct)
@@ -102,6 +104,23 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
+
+lemma Gets_imp_knows_Spy :
+  "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> analz (knows Spy evs)"
+apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy)
+done
+
+lemma Gets_imp_knows_Spy_parts_Snd: 
+ "\<lbrakk> Gets B \<lbrace>X, Y\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> Y \<in> parts (knows Spy evs)"
+apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy parts.Inj parts.Snd)
+done
+
+lemma Gets_imp_knows_Spy_analz_Snd: 
+ "\<lbrakk> Gets B \<lbrace>X, Y\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> Y \<in> analz (knows Spy evs)"
+apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy analz.Inj analz.Snd)
+done
+
+
 (* Conformity of protocol steps *)
 lemma Inputs_A_Smartphone_3 :
   "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
@@ -111,6 +130,12 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
+lemma Inputs_A_Smartphone_5 :
+  "\<lbrakk> Inputs A P Confirmation \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
 
 
 (* RELIABILITY LEMMAS *)
