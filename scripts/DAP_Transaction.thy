@@ -83,8 +83,11 @@ inductive_set daptrans :: "event list set" where
 declare Fake_parts_insert_in_Un  [dest]
 declare analz_into_parts [dest]
 
-(* TECHNICAL LEMMAS *)
 
+
+
+
+(* TECHNICAL LEMMAS *)
 (* Facts about message reception *)
 lemma Gets_imp_Says :
   "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Says A B X \<in> set evs"
@@ -121,7 +124,10 @@ apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy analz.Inj analz.Snd)
 done
 
 
-(* Conformity of protocol steps *)
+
+
+
+(* CONFORMITY OF PROTOCOL STEPS *)
 lemma Inputs_A_Smartphone_3 :
   "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
     \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> 
@@ -132,7 +138,12 @@ done
 
 lemma Inputs_A_Smartphone_5 :
   "\<lbrakk> Inputs A P Confirmation \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A)"
+    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and>
+        (\<exists> Transaction T r' Checksum. 
+            Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', Checksum \<rbrace> \<in> set evs \<and>
+            Inputs A (Smartphone A) \<lbrace>Transaction, r', Checksum\<rbrace> \<in> set evs \<and>
+            Gets_a A Transaction \<in> set evs \<and>
+            Transaction = \<lbrace>Agent A, Number T\<rbrace> )"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
@@ -174,8 +185,10 @@ apply (auto)
 done
 
 
-(* GENERAL GUARANTEES FOR INPUTS AND OUPUTS*)
 
+
+
+(* GENERAL GUARANTEES FOR INPUTS AND OUPUTS*)
 (* Defining legalUse conditions *)
 lemma Inputs_Smartphone_legalUse :
   "\<lbrakk> Inputs A (Smartphone A) X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> legalUse(Smartphone A)"
@@ -209,6 +222,18 @@ lemma Inputs_Outputs_Smartphone :
      \<Longrightarrow> P = (Smartphone A) \<and> legalUse(Smartphone A)"
 apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
 done
+
+
+(* Outputs guarantees *)
+lemma Outputs_which_Smartphone_4 :
+  "\<lbrakk> Outputs (Smartphone A) A Transaction \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> \<exists> T r' Checksum. Inputs A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', Checksum \<rbrace> \<in> set evs"
+apply (erule rev_mp, erule daptrans.induct)
+apply (simp_all (no_asm_simp))
+apply clarify
+oops
+
+
 
 
 
