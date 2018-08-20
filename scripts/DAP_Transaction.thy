@@ -48,9 +48,9 @@ inductive_set daptrans :: "event list set" where
             Gets_s (Smartphone A) \<lbrace> Transaction', r', h\<^sub>s \<rbrace> \<in> set evs6;
             Outputs (Smartphone A) A Transaction' \<in> set evs6; 
             Gets_s (Smartphone A) Confirmation \<in> set evs6;
-            r_u \<notin> used evs6 (* This must go away *) \<rbrakk>
+            r\<^sub>u \<notin> used evs6 (* This must go away *) \<rbrakk>
             (* TODO: formalize how r_u is obtained *)
-   \<Longrightarrow> Outputs (Smartphone A) A r_u # evs6 \<in> daptrans"
+   \<Longrightarrow> Outputs (Smartphone A) A r\<^sub>u # evs6 \<in> daptrans"
 
   | DT7: "\<lbrakk> evs7 \<in> daptrans; A \<noteq> Server;
             Says A Server Transaction \<in> set evs7;
@@ -58,14 +58,18 @@ inductive_set daptrans :: "event list set" where
             Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Gets_a A Transaction' \<in> set evs7;
             Inputs A (Smartphone A) Confirmation \<in> set evs7;
-            Gets_a A r_u \<in> set evs7 \<rbrakk>
-    \<Longrightarrow> Says A Server r_u # evs7 \<in> daptrans"
+            Gets_a A r\<^sub>u \<in> set evs7 \<rbrakk>
+    \<Longrightarrow> Says A Server r\<^sub>u # evs7 \<in> daptrans"
 
   | DT8: "\<lbrakk> evs8 \<in> daptrans;
             Gets Server Transaction \<in> set evs8;
-            Says Server A \<lbrace> Transaction, r', h_u \<rbrace> \<in> set evs8;
-            Gets Server r_u \<in> set evs8;
-            r_u == r' \<rbrakk>
+            Says Server A \<lbrace>
+              Transaction,
+              Crypt (shrK A) (Nonce r),
+              Hash \<lbrace> Transaction, Crypt (shrK A) (Nonce r) \<rbrace>
+            \<rbrace> \<in> set evs8;
+            Gets Server r\<^sub>u \<in> set evs8;
+            r\<^sub>u == (Nonce r) \<rbrakk>
     \<Longrightarrow> Says Server A Success # evs8 \<in> daptrans"
 
   | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF)); illegalUse(Smartphone B) \<rbrakk> 
@@ -127,28 +131,6 @@ done
 
 
 
-(* CONFORMITY OF PROTOCOL STEPS *)
-lemma Inputs_A_Smartphone_3 :
-  "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
-    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> 
-        (Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r, h \<rbrace> \<in> set evs)"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
-done
-
-lemma Inputs_A_Smartphone_5 :
-  "\<lbrakk> Inputs A P Confirmation \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and>
-        (\<exists> Transaction T r' Checksum. 
-            Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', Checksum \<rbrace> \<in> set evs \<and>
-            Inputs A (Smartphone A) \<lbrace>Transaction, r', Checksum\<rbrace> \<in> set evs \<and>
-            Gets_a A Transaction \<in> set evs \<and>
-            Transaction = \<lbrace>Agent A, Number T\<rbrace> )"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
-done
-
-
 (* RELIABILITY LEMMAS *)
 lemma Says_Server_DT1_not_evs :
   "evs \<in> daptrans \<Longrightarrow> Says Server Server \<lbrace> Agent Server, Number T \<rbrace> \<notin> set evs"
@@ -157,10 +139,10 @@ apply (simp_all)
 done
 
 lemma Says_Server_message_form_DT2 :
-  "\<lbrakk> evs \<in> daptrans; Says Server A \<lbrace> Transaction, r', Checksum \<rbrace> \<in> set evs \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Transaction = \<lbrace> Agent A, Number T \<rbrace>) \<and>
-        (\<exists> r. r' = Crypt (shrK A) (Nonce r)) \<and>
-        Checksum = Hash \<lbrace> Transaction, r' \<rbrace>"
+  "\<lbrakk> evs \<in> daptrans; Says Server A \<lbrace> Transaction, Crypt K (Nonce r), Checksum \<rbrace> \<in> set evs \<rbrakk>
+    \<Longrightarrow> (\<exists> T. Transaction = \<lbrace> Agent A, Number T \<rbrace>) \<and> 
+        K = (shrK A) \<and>
+        Checksum = Hash \<lbrace> Transaction, Crypt K (Nonce r) \<rbrace>"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
@@ -224,7 +206,47 @@ apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
 done
 
 
+(* Inputs guarantees *)
+lemma Inputs_A_Smartphone_3 :
+  "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
+    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> 
+        (Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r, h \<rbrace> \<in> set evs)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+lemma Inputs_A_Smartphone_5 :
+  "\<lbrakk> Inputs A P Confirmation \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and>
+        (\<exists> Transaction T r' Checksum. 
+            Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', Checksum \<rbrace> \<in> set evs \<and>
+            Inputs A (Smartphone A) \<lbrace>Transaction, r', Checksum\<rbrace> \<in> set evs \<and>
+            Gets_a A Transaction \<in> set evs \<and>
+            Transaction = \<lbrace>Agent A, Number T\<rbrace> )"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+
+(* Inputs message form guarantees *)
+lemma Inputs_A_Smartphone_form_3 :
+  "\<lbrakk> Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> T. Transaction = \<lbrace> Agent A, Number T \<rbrace> \<and> h\<^sub>s = Hash \<lbrace> Transaction, r' \<rbrace>)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+oops
+(* TODO: can't guarantee this., The Spy can compromise A ou A's smartphone and change the message *)
+
+
 (* Outputs guarantees *)
+lemma Outputs_A_Smartphone_4 :
+  "\<lbrakk> Outputs P A Transaction' \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and>
+        (\<exists> r' Checksum. Inputs A (Smartphone A) \<lbrace>Transaction', r', Checksum\<rbrace> \<in> set evs)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+oops
+
 lemma Outputs_which_Smartphone_4 :
   "\<lbrakk> Outputs (Smartphone A) A Transaction \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> \<exists> T r' Checksum. Inputs A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', Checksum \<rbrace> \<in> set evs"
