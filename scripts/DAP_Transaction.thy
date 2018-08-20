@@ -44,8 +44,9 @@ inductive_set daptrans :: "event list set" where
             Transaction' == \<lbrace> Agent A, Number T \<rbrace> \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) Confirmation # evs5 \<in> daptrans"
 
-  | DT6: "\<lbrakk> evs6 \<in> daptrans; A \<noteq> Server; legalUse(Smartphone A);
+  | DT6: "\<lbrakk> evs6 \<in> daptrans; legalUse(Smartphone A); A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace> Transaction', r', h\<^sub>s \<rbrace> \<in> set evs6;
+            h\<^sub>s == Hash \<lbrace> Transaction', r' \<rbrace>;
             Outputs (Smartphone A) A Transaction' \<in> set evs6; 
             Gets_s (Smartphone A) Confirmation \<in> set evs6;
             r\<^sub>u \<notin> used evs6 (* This must go away *) \<rbrakk>
@@ -242,7 +243,8 @@ oops
 lemma Outputs_A_Smartphone_4 :
   "\<lbrakk> Outputs P A Transaction' \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and>
-        (\<exists> r' Checksum. Inputs A (Smartphone A) \<lbrace>Transaction', r', Checksum\<rbrace> \<in> set evs)"
+        (\<exists> T r' Checksum. (Inputs A (Smartphone A) 
+          \<lbrace> Transaction', r', Checksum \<rbrace> \<in> set evs))"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 oops
