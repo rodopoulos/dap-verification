@@ -33,7 +33,7 @@ inductive_set daptrans :: "event list set" where
   | DT4: "\<lbrakk> evs4 \<in> daptrans;
             legalUse(Smartphone A); A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace> Transaction', r', h\<^sub>s \<rbrace> \<in> set evs4;
-            h\<^sub>s = Hash \<lbrace> Transaction', r' \<rbrace> \<rbrakk> 
+            h\<^sub>s = Hash \<lbrace> Transaction', r' \<rbrace>; Transaction' = \<lbrace> Agent A, Number T'\<rbrace> \<rbrakk> 
     \<Longrightarrow> Outputs (Smartphone A) A Transaction' # evs4 \<in> daptrans"
 
   | DT5: "\<lbrakk> evs5 \<in> daptrans; legalUse(Smartphone A);
