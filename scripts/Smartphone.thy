@@ -41,7 +41,7 @@ overloading initState \<equiv> initState
   begin
   primrec initState where
     initState_Server : "initState Server = (Key`(range shrK))" |
-    initState_Friend : "initState (Friend i) = {Key (shrK(Friend i))}" |
+    initState_Friend : "initState (Friend i) = {}" |
     initState_Spy : "initState Spy = (Key`((shrK` bad) \<union> (shrK`{A. Smartphone A \<in> (badp \<inter> connected)}) ))"
 end
 
