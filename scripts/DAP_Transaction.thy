@@ -143,9 +143,9 @@ done
 
 lemma Says_Server_message_form_DT2 :
   "\<lbrakk> evs \<in> daptrans; Says Server A \<lbrace> Transaction, Crypt K (Nonce r), Checksum \<rbrace> \<in> set evs \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Transaction = \<lbrace> Agent A, Number T \<rbrace>) \<and> 
+    \<Longrightarrow> (\<exists> T. Transaction = \<lbrace> Agent A, Number T \<rbrace> \<and> 
         K = (shrK A) \<and>
-        Checksum = Hash \<lbrace> Transaction, Crypt K (Nonce r) \<rbrace>"
+        Checksum = Hash \<lbrace> Transaction, Crypt K (Nonce r) \<rbrace>)"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
