@@ -19,11 +19,13 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Says A Server \<lbrace> Agent A, Number T \<rbrace> # evs1 \<in> daptrans"
 
   | DT2: "\<lbrakk> evs2 \<in> daptrans;
-          Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2;
-          Nonce r \<notin> used evs2 \<rbrakk>
-    \<Longrightarrow> Says Server A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, 
-                        Crypt (shrK A) (Nonce r), 
-                        Hash \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> \<rbrace> # evs2 \<in> daptrans"
+            Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2;
+            Nonce r \<notin> used evs2 \<rbrakk>
+    \<Longrightarrow> Says Server A \<lbrace> 
+          \<lbrace> Agent A, Number T \<rbrace>, 
+          Crypt (shrK A) (Nonce r), 
+          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+        \<rbrace> # evs2 \<in> daptrans"
 
   | DT3: "\<lbrakk> evs3 \<in> daptrans; legalUse (Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs3;
@@ -35,14 +37,14 @@ inductive_set daptrans :: "event list set" where
             Gets_s (Smartphone A) \<lbrace> 
               \<lbrace> Agent A, Number T'\<rbrace>, 
               Crypt (shrK A) (Nonce r), 
-              Hash \<lbrace> \<lbrace> Agent A, Number T' \<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+              Crypt (shrk A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
             \<rbrace> \<in> set evs4 \<rbrakk> 
     \<Longrightarrow> Outputs (Smartphone A) A \<lbrace>Agent A, Number T'\<rbrace> # evs4 \<in> daptrans"
 
   | DT5: "\<lbrakk> evs5 \<in> daptrans; legalUse(Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5;
             Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
-            Inputs A (Smartphone A) \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
+            Inputs A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Gets_a A Transaction' \<in> set evs5;
             Transaction' = \<lbrace> Agent A, Number T \<rbrace> \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) Confirmation # evs5 \<in> daptrans"
@@ -51,7 +53,7 @@ inductive_set daptrans :: "event list set" where
             Gets_s (Smartphone A) \<lbrace>
               \<lbrace> Agent A, Number T' \<rbrace>,
               Crypt (shrK A) (Nonce r),
-              Hash \<lbrace> \<lbrace> Agent A, Number T' \<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T'\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
             \<rbrace> \<in> set evs6;
             Outputs (Smartphone A) A \<lbrace> Agent A, Number T' \<rbrace> \<in> set evs6; 
             Gets_s (Smartphone A) Confirmation \<in> set evs6 \<rbrakk>
@@ -63,6 +65,7 @@ inductive_set daptrans :: "event list set" where
             Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Gets_a A Transaction' \<in> set evs7;
             Inputs A (Smartphone A) Confirmation \<in> set evs7;
+            \<forall> p q. Confirmation \<noteq> \<lbrace>p, q\<rbrace>;
             Gets_a A r\<^sub>u \<in> set evs7 \<rbrakk>
     \<Longrightarrow> Says A Server r\<^sub>u # evs7 \<in> daptrans"
 
@@ -141,16 +144,6 @@ apply (erule daptrans.induct)
 apply (simp_all)
 done
 
-lemma Says_Server_message_form_DT2 :
-  "\<lbrakk> evs \<in> daptrans; Says Server A \<lbrace> Transaction, Crypt K (Nonce r), Checksum \<rbrace> \<in> set evs \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Transaction = \<lbrace> Agent A, Number T \<rbrace> \<and> 
-        K = (shrK A) \<and>
-        Checksum = Hash \<lbrace> Transaction, Crypt K (Nonce r) \<rbrace>)"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
-done
-
-(* TODO: ask Claudia how did I manage to do this *)
 lemma Server_cannot_initiate :
   "\<lbrakk> evs \<in> daptrans; Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs\<rbrakk> \<Longrightarrow> A \<noteq> Server"
 apply (erule rev_mp, erule daptrans.induct)
@@ -169,7 +162,15 @@ apply (erule daptrans.induct)
 apply (auto)
 done
 
-
+(* Server expected message to sender *)
+lemma Says_Server_message_form_DT2 :
+  "\<lbrakk> evs \<in> daptrans; Says Server A \<lbrace> Transaction, Crypt K (Nonce r), Checksum \<rbrace> \<in> set evs \<rbrakk>
+    \<Longrightarrow> (\<exists> T. Transaction = \<lbrace> Agent A, Number T \<rbrace> \<and> 
+        K = (shrK A) \<and>
+        Checksum = Crypt K \<lbrace> Transaction, Crypt K (Nonce r) \<rbrace>)"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
 
 
 
@@ -234,8 +235,9 @@ done
 (* Inputs message form guarantees *)
 lemma Inputs_A_Smartphone_form_3 :
   "\<lbrakk> Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
-apply (erule rev_mp, erule daptrans.induct)
+    \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
+apply (erule rev_mp)
+apply (erule daptrans.induct)
 apply (auto)
 done
 
@@ -257,6 +259,8 @@ lemma Outputs_A_Smartphone_6 :
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
+
+
 
 
 
