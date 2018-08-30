@@ -98,7 +98,9 @@ declare analz_into_parts [dest]
 
 
 (* TECHNICAL LEMMAS *)
-(* Facts about message reception *)
+
+(* 1. Facts about message reception: *)
+(*    - considering legal agents (this include the spy) *)
 lemma Gets_imp_Says :
   "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Says A B X \<in> set evs"
 apply (erule rev_mp, erule daptrans.induct)
@@ -117,7 +119,7 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
-
+(*    - considering illegal agents *)
 lemma Gets_imp_knows_Spy :
   "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> analz (knows Spy evs)"
 apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy)
@@ -138,6 +140,8 @@ done
 
 
 (* RELIABILITY LEMMAS *)
+
+(* 1. Server cannot initiate the protocol *)
 lemma Says_Server_DT1_not_evs :
   "evs \<in> daptrans \<Longrightarrow> Says Server Server \<lbrace> Agent Server, Number T \<rbrace> \<notin> set evs"
 apply (erule daptrans.induct)
@@ -150,6 +154,7 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
+(* Also, the Server cannot output something from his smartphone. *)
 lemma Outputs_Server_not_evs [rule_format]:
   "evs \<in> daptrans \<Longrightarrow> Outputs (Smartphone Server) A X \<notin> set evs"
 apply (erule daptrans.induct)
@@ -162,7 +167,7 @@ apply (erule daptrans.induct)
 apply (auto)
 done
 
-(* Server expected message to sender *)
+(* - Server expected message form to the sender *)
 lemma Says_Server_message_form_DT2 :
   "\<lbrakk> evs \<in> daptrans; Says Server A \<lbrace> Transaction, Crypt K (Nonce r), Checksum \<rbrace> \<in> set evs \<rbrakk>
     \<Longrightarrow> (\<exists> T. Transaction = \<lbrace> Agent A, Number T \<rbrace> \<and> 
@@ -174,8 +179,9 @@ done
 
 
 
-(* GENERAL GUARANTEES FOR INPUTS AND OUPUTS*)
-(* Defining legalUse conditions *)
+(* 2. General guarantees for smartphone events *)
+
+(* - Defining legalUse conditions *)
 lemma Inputs_Smartphone_legalUse :
   "\<lbrakk> Inputs A (Smartphone A) X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> legalUse(Smartphone A)"
 apply (erule rev_mp, erule daptrans.induct)
@@ -188,7 +194,7 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
-
+(* - Legal agents firing Inputs/Outputs must performs legal actions from their smartphones *)
 lemma Inputs_Smartphone :
   "\<lbrakk> Inputs A P X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> P = (Smartphone A) \<and> legalUse(P)"
@@ -210,7 +216,7 @@ apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
 done
 
 
-(* Inputs guarantees *)
+(* 3. Inputs events guarantees *)
 lemma Inputs_A_Smartphone_3 :
   "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
     \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> 
@@ -232,7 +238,7 @@ apply (auto)
 done
 
 
-(* Inputs message form guarantees *)
+(* - Inputs message form guarantees *)
 lemma Inputs_A_Smartphone_form_3 :
   "\<lbrakk> Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
@@ -242,8 +248,9 @@ apply (auto)
 done
 
 
-(* Outputs guarantees: 
-    for providing correct outputs, the smartphone must be fed with correct inputs *)
+(* 3. Inputs events guarantees *) 
+
+(* In order to provide correct outputs, the smartphone must be fed with correct inputs *)
 lemma Outputs_A_Smartphone_4 :
   "\<lbrakk> Outputs P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
