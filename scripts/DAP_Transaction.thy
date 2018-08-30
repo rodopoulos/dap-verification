@@ -70,9 +70,9 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Says A Server r\<^sub>u # evs7 \<in> daptrans"
 
   | DT8: "\<lbrakk> evs8 \<in> daptrans;
-            Gets Server Transaction \<in> set evs8;
-            Says Server A \<lbrace> Transaction, Crypt (shrK A) (Nonce r),
-              Hash \<lbrace> Transaction, Crypt (shrK A) (Nonce r) \<rbrace>
+            Gets Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs8;
+            Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r),
+              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs8;
             Gets Server r\<^sub>u \<in> set evs8;
             r\<^sub>u = Nonce r \<rbrakk>
@@ -176,6 +176,22 @@ lemma Says_Server_message_form_DT2 :
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
+
+lemma Says_Server_Success :
+  "\<lbrakk> Says Server A Success \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> \<exists> T r r\<^sub>u.
+          Gets Server \<lbrace> Agent A, Number T\<rbrace> \<in> set evs \<and>
+          Says Server A \<lbrace> 
+            \<lbrace>Agent A, Number T\<rbrace>, 
+            Crypt (shrK A) (Nonce r),
+            Crypt (shrK A) \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r)\<rbrace>
+          \<rbrace> \<in> set evs \<and>
+          Gets Server (Nonce r\<^sub>u) \<in> set evs \<and> 
+          r = r\<^sub>u"
+apply (erule rev_mp)
+apply (erule daptrans.induct)
+apply (auto)
+done 
 
 
 
