@@ -261,6 +261,24 @@ apply (auto)
 done
 
 
+(* Outputs messages form guarantees *)
+lemma Outputs_A_Smartphone_form_4 :
+  "\<lbrakk> Outputs P A Transaction \<in> set evs; evs \<in> daptrans;
+    \<forall> p q. Transaction = \<lbrace>p, q\<rbrace> \<rbrakk>
+    \<Longrightarrow> \<exists> T. Transaction = \<lbrace>Agent A, Number T\<rbrace>"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+lemma Outputs_A_Smartphone_form_6 :
+  "\<lbrakk> Outputs P A TAN \<in> set evs; evs \<in> daptrans;
+    \<forall> p q. TAN \<noteq> \<lbrace>p, q\<rbrace> \<rbrakk>
+    \<Longrightarrow> \<exists> r. TAN = Nonce r"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
+
+
 
 
 
