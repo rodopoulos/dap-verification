@@ -37,7 +37,7 @@ inductive_set daptrans :: "event list set" where
             Gets_s (Smartphone A) \<lbrace> 
               \<lbrace> Agent A, Number T'\<rbrace>, 
               Crypt (shrK A) (Nonce r), 
-              Crypt (shrk A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
             \<rbrace> \<in> set evs4 \<rbrakk> 
     \<Longrightarrow> Outputs (Smartphone A) A \<lbrace>Agent A, Number T'\<rbrace> # evs4 \<in> daptrans"
 
@@ -294,7 +294,7 @@ lemma DT2_happens :
   "\<exists> T r. \<exists>evs \<in> daptrans. 
     Says Server A \<lbrace> \<lbrace> Agent A, Number T\<rbrace>,
       Crypt (shrK A) (Nonce r),
-      Hash \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> \<rbrace> \<in> set evs"
+      Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> \<rbrace> \<in> set evs"
 apply (intro exI bexI)
 apply (rule_tac [2] daptrans.DT2)
 apply (rule_tac [2] daptrans.Rcpt)
