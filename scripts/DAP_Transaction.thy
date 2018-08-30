@@ -238,27 +238,25 @@ lemma Inputs_A_Smartphone_form_3 :
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
-(* TODO: can't guarantee this., The Spy can compromise A ou A's smartphone and change the message *)
 
 
-(* Outputs guarantees *)
+(* Outputs guarantees: 
+    for providing correct outputs, the smartphone must be fed with correct inputs *)
 lemma Outputs_A_Smartphone_4 :
   "\<lbrakk> Outputs P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and>
-        (\<exists> r' Checksum. (Gets_s (Smartphone A) \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', Checksum \<rbrace> \<in> set evs))"
+    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
+        (\<exists> r' h\<^sub>s. Gets_s (Smartphone A) \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs)"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
-lemma Outputs_which_Smartphone_4 :
-  "\<lbrakk> Outputs (Smartphone A) A Transaction' \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> \<exists> T r' Checksum. Inputs A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', Checksum \<rbrace> \<in> set evs"
+lemma Outputs_A_Smartphone_6 :
+  "\<lbrakk> Outputs P A (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
+      Gets_s (Smartphone A) Confirmation \<in> set evs"
 apply (erule rev_mp, erule daptrans.induct)
-apply (simp_all (no_asm_simp))
-apply auto
-oops
-
-
+apply (auto)
+done
 
 
 
