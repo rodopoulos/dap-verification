@@ -22,15 +22,15 @@ inductive_set daptrans :: "event list set" where
             Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2;
             Nonce r \<notin> used evs2 \<rbrakk>
     \<Longrightarrow> Says Server A \<lbrace> 
-          \<lbrace> Agent A, Number T \<rbrace>, 
-          Crypt (shrK A) (Nonce r), 
-          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+          \<lbrace> Agent A, Number T \<rbrace>,
+          Crypt (shrK A) (Nonce r),
+          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
         \<rbrace> # evs2 \<in> daptrans"
 
   | DT3: "\<lbrakk> evs3 \<in> daptrans; legalUse (Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs3;
-            Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk> 
-    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> daptrans"
+            Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk>
+    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> daptrans"
 
   | DT4: "\<lbrakk> evs4 \<in> daptrans;
             legalUse(Smartphone A); A \<noteq> Server;
@@ -38,7 +38,7 @@ inductive_set daptrans :: "event list set" where
               \<lbrace> Agent A, Number T'\<rbrace>, 
               Crypt (shrK A) (Nonce r), 
               Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
-            \<rbrace> \<in> set evs4 \<rbrakk> 
+            \<rbrace> \<in> set evs4 \<rbrakk>
     \<Longrightarrow> Outputs (Smartphone A) A \<lbrace>Agent A, Number T'\<rbrace> # evs4 \<in> daptrans"
 
   | DT5: "\<lbrakk> evs5 \<in> daptrans; legalUse(Smartphone A);
@@ -78,9 +78,11 @@ inductive_set daptrans :: "event list set" where
             r\<^sub>u = Nonce r \<rbrakk>
     \<Longrightarrow> Says Server A Success # evs8 \<in> daptrans"
 
-  | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF)); illegalUse(Smartphone B) \<rbrakk> 
-    \<Longrightarrow> Says Spy B X # 
-        Inputs Spy (Smartphone B) X # evsF \<in> daptrans"
+  | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF)); illegalUse(Smartphone A); 
+             A \<noteq> Server; C \<noteq> Server \<rbrakk> 
+    \<Longrightarrow> Says Spy B X #
+        Inputs Spy (Smartphone A) X #
+        evsF \<in> daptrans"
     
   | Rcpt: "\<lbrakk> evsR \<in> daptrans; Says A B X \<in> set evsR \<rbrakk> \<Longrightarrow> Gets B X # evsR \<in> daptrans"
 
@@ -100,7 +102,7 @@ declare analz_into_parts [dest]
 (* TECHNICAL LEMMAS *)
 
 (* 1. Facts about message reception: *)
-(*    - considering legal agents (this include the spy) *)
+(*   - considering legal agents (this include the spy) *)
 lemma Gets_imp_Says :
   "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Says A B X \<in> set evs"
 apply (erule rev_mp, erule daptrans.induct)
@@ -119,7 +121,7 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
-(*    - considering illegal agents *)
+(*  - considering illegal agents *)
 lemma Gets_imp_knows_Spy :
   "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> analz (knows Spy evs)"
 apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy)
@@ -154,7 +156,7 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
-(* Also, the Server cannot output something from his smartphone. *)
+(* - Also, the Server cannot output something from his smartphone. *)
 lemma Outputs_Server_not_evs [rule_format]:
   "evs \<in> daptrans \<Longrightarrow> Outputs (Smartphone Server) A X \<notin> set evs"
 apply (erule daptrans.induct)
@@ -211,6 +213,8 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
+
+
 (* - Legal agents firing Inputs/Outputs must performs legal actions from their smartphones *)
 lemma Inputs_Smartphone :
   "\<lbrakk> Inputs A P X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
@@ -231,6 +235,7 @@ lemma Inputs_Outputs_Smartphone :
      \<Longrightarrow> P = (Smartphone A) \<and> legalUse(Smartphone A)"
 apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
 done
+
 
 
 (* 3. Inputs events guarantees *)
@@ -257,7 +262,7 @@ apply (auto)
 done
 
 
-(* - Inputs message form guarantees *)
+(* 4. Inputs message form guarantees *)
 lemma Inputs_A_Smartphone_form_3 :
   "\<lbrakk> Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
@@ -267,18 +272,18 @@ apply (auto)
 done
 
 
-(* 4. Outputs events guarantees *) 
+(* 5. Outputs events guarantees *) 
 
 (* In order to provide correct outputs, the smartphone must be fed with correct inputs *)
-lemma Outputs_A_Smartphone_4 :
+lemma Outputs_honest_A_Smartphone_4 :
   "\<lbrakk> Outputs P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
-        (\<exists> r' h\<^sub>s. Gets_s (Smartphone A) \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs)"
+        (\<exists> r' h\<^sub>s. Gets_s (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs)"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
-lemma Outputs_A_Smartphone_6 :
+lemma Outputs_honest_A_Smartphone_6 :
   "\<lbrakk> Outputs P A (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
       Gets_s (Smartphone A) Confirmation \<in> set evs"
@@ -286,8 +291,23 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
+(* - Weaker guarantees for outputs include 
+Even weaker versions: if the agent can't check the forms of the verifiers
+  and the agent may be the spy, then we must know what card the agent
+  is getting the output from. 
+*)
+lemma Outputs_which_Smartphone_4 :
+  "\<lbrakk> Outputs (Smartphone A) A Transaction \<in> set evs; 
+    \<forall> p q. Transaction = \<lbrace>p, q\<rbrace>;  evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> r' h\<^sub>s. Gets_s (Smartphone A) \<lbrace>Transaction, r', h\<^sub>s\<rbrace> \<in> set evs)"
+apply (erule rev_mp)
+apply (erule rev_mp)
+apply (erule daptrans.induct)
+apply (auto)
+done
 
-(* Outputs messages form guarantees *)
+(* 6. Outputs messages form guarantees *)
+
 lemma Outputs_A_Smartphone_form_4 :
   "\<lbrakk> Outputs P A Transaction \<in> set evs; evs \<in> daptrans;
     \<forall> p q. Transaction = \<lbrace>p, q\<rbrace> \<rbrakk>
