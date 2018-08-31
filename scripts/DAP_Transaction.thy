@@ -177,6 +177,7 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
+(* - The Server authorizes a transaction given a received nonce matches the produced TAN *)
 lemma Says_Server_Success :
   "\<lbrakk> Says Server A Success \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> \<exists> T r r\<^sub>u.
@@ -241,6 +242,8 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
+(* - This is an important guarantee: the protocol legally continues if the agent confirms the 
+     ouputed message, which contains the transaction *)
 lemma Inputs_A_Smartphone_5 :
   "\<lbrakk> Inputs A P Confirmation \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and>
@@ -264,7 +267,7 @@ apply (auto)
 done
 
 
-(* 3. Inputs events guarantees *) 
+(* 4. Outputs events guarantees *) 
 
 (* In order to provide correct outputs, the smartphone must be fed with correct inputs *)
 lemma Outputs_A_Smartphone_4 :
