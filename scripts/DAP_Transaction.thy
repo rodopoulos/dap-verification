@@ -78,11 +78,12 @@ inductive_set daptrans :: "event list set" where
             r\<^sub>u = Nonce r \<rbrakk>
     \<Longrightarrow> Says Server A Success # evs8 \<in> daptrans"
 
-  | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF)); illegalUse(Smartphone A); 
-             A \<noteq> Server; C \<noteq> Server \<rbrakk> 
+  (* Rule modeling the illegal behavior of the Spy *)
+  | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF));
+             illegalUse(Smartphone A); C \<noteq> Server; C \<noteq> Spy \<rbrakk>
     \<Longrightarrow> Says Spy B X #
         Inputs Spy (Smartphone A) X #
-        evsF \<in> daptrans"
+        Outputs (Smartphone Spy) C X # evsF \<in> daptrans"
     
   | Rcpt: "\<lbrakk> evsR \<in> daptrans; Says A B X \<in> set evsR \<rbrakk> \<Longrightarrow> Gets B X # evsR \<in> daptrans"
 
@@ -215,27 +216,42 @@ done
 
 
 
-(* - Legal agents firing Inputs/Outputs must performs legal actions from their smartphones *)
+(* - Legal agents firing Inputs/Outputs must performs legal actions from their smartphones or Spy
+  performing illegal actions*)
 lemma Inputs_Smartphone :
   "\<lbrakk> Inputs A P X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> P = (Smartphone A) \<and> legalUse(P)"
+    \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(P)) \<or> (P = (Smartphone Spy) \<and> illegalUse(P))"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
+(* TROUBLING LEMMA: if there is an Outputs event towards an legal agent, then 2 things are possible
+    - The smartphone belongs to the agent and we have a legal usage of the phone
+    - The smartphone belongs to the Spy and we have an illegal usage of the phone *)
 lemma Outputs_Smartphone :
   "\<lbrakk> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> P = (Smartphone A) \<and> legalUse(P)"
+    \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(P)) \<or> (P = (Smartphone Spy) \<and> illegalUse(P))"
 apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+apply (simp_all)
+(* you could also use apply (auto) to see 2 left subgoals*)
 done
 
 lemma Inputs_Outputs_Smartphone :
   "\<lbrakk> Inputs A P X \<in> set evs \<or> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
-     \<Longrightarrow> P = (Smartphone A) \<and> legalUse(Smartphone A)"
+     \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(Smartphone A)) \<or> (P = (Smartphone Spy) \<and> illegalUse(P))"
 apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
 done
 
+
+
+(* - The spy can act both legally (using her smartphone) or illegally (using someone else) *)
+lemma Inputs_Smartphone_Spy : 
+  "\<lbrakk> Inputs Spy P X \<in> set evs \<or> Outputs P Spy X \<in> set evs; evs \<in> daptrans \<rbrakk>  
+      \<Longrightarrow> P = (Smartphone Spy) \<and> legalUse(Smartphone Spy) \<or>  
+          (\<exists> A. P = (Smartphone A) \<and> illegalUse(Smartphone A))"
+apply (erule rev_mp, erule daptrans.induct)
+apply (auto)
+done
 
 
 (* 3. Inputs events guarantees *)
