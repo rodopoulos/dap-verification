@@ -28,7 +28,6 @@ datatype
 
 consts
   bad        :: "agent set"      (* compromised agents *)
-  connected  :: "smartphone set" (* network connected smartphones *)
   badp       :: "smartphone set" (* compromised smartphones *)
   stolen     :: "smartphone set" (* stolen smartphones *)
 
@@ -74,14 +73,13 @@ primrec knows :: "agent \<Rightarrow> event list \<Rightarrow> msg set" where
         else knows A evs
 
       (* Agents knowledge set is already enriched in Inputs event.
-         However, compromised smartphones which are connected to the unreliable channel
-         disclose their secrets to the Spy *)
+         However, compromised smartphones disclose their secrets to the Spy *)
       | Gets_s P X \<Rightarrow>
-        if (A = Spy & P \<in> connected & P \<in> badp) then insert X (knows A evs)
+        if (A = Spy & P \<in> badp) then insert X (knows A evs)
         else knows A evs
 
       | Outputs P A' X \<Rightarrow>
-        if (A = A' | (A = Spy & P \<in> connected & P \<in> badp)) then insert X (knows A evs)
+        if (A = A' | (A = Spy & P \<in> badp)) then insert X (knows A evs)
         else knows A evs
 
       | Gets_a A' X \<Rightarrow>
@@ -164,14 +162,14 @@ by simp
 
 lemma knows_Spy_Gets_s [simp] :
   "knows Spy (Gets_s P X # evs) =
-    (if (P \<in> connected & P \<in> badp) then insert X (knows Spy evs)
+    (if P \<in> badp then insert X (knows Spy evs)
      else knows Spy evs)"
 by simp
 
 lemma knows_Spy_Outputs [simp] :
   "knows Spy (Outputs P A X # evs) =
     (if A = Spy then insert X (knows Spy evs)
-     else if (P \<in> connected & P \<in> badp) then insert X (knows Spy evs)
+     else if P \<in> badp then insert X (knows Spy evs)
      else knows Spy evs)"
 by simp
 
@@ -228,7 +226,7 @@ apply (simp_all (no_asm_simp) split: event.split)
 done
 
 lemma Gets_s_imp_knows_Spy [rule_format] :
-  "Gets_s P X \<in> set evs \<longrightarrow> (P \<in> connected & P \<in> badp) \<longrightarrow> X \<in> knows Spy evs"
+  "Gets_s P X \<in> set evs \<longrightarrow> P \<in> badp \<longrightarrow> X \<in> knows Spy evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) split: event.split)
 done
@@ -240,7 +238,7 @@ apply (simp_all (no_asm_simp) split: event.split)
 done
 
 lemma Outputs_imp_knows_Spy_by_smartphone [rule_format] :
-  "Outputs P A X \<in> set evs \<longrightarrow> (P \<in> connected & P \<in> badp) \<longrightarrow> X \<in> knows Spy evs"
+  "Outputs P A X \<in> set evs \<longrightarrow> P \<in> badp \<longrightarrow> X \<in> knows Spy evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) split: event.split)
 done
