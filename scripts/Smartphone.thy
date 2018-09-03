@@ -8,8 +8,7 @@ Theory for offline and out-of-band channels, defined by the communications
 
 Definitions for keys, initial state of agents and smartphone's usability.
 
-An agent is bad if her smartphone is both connected to the unreliable channel 
-  and compromised.
+An agent is bad if her smartphone is compromised.
 
 *)
 
@@ -31,8 +30,8 @@ definition legalUse :: "smartphone \<Rightarrow> bool" ("legalUse (_)") where
   "legalUse P == P \<notin> stolen"
 
 (* Smartphones are prone to theft. The Spy may use it if she have stole it. *)
-primrec illegalUse :: "smartphone \<Rightarrow> bool" where
-  illegalUse_def: "illegalUse (Smartphone A) = ((Smartphone A) \<in> stolen)"
+primrec illegalUse :: "smartphone \<Rightarrow> bool" ("illegalUse (_)") where
+  illegalUse_def: "illegalUse (Smartphone A) = ((Smartphone A) \<in> stolen \<or> (Smartphone A) \<in> badp)"
 
 
   
@@ -42,7 +41,7 @@ overloading initState \<equiv> initState
   primrec initState where
     initState_Server : "initState Server = (Key`(range shrK))" |
     initState_Friend : "initState (Friend i) = {}" |
-    initState_Spy : "initState Spy = (Key`((shrK` bad) \<union> (shrK`{A. Smartphone A \<in> (badp \<inter> connected)}) ))"
+    initState_Spy : "initState Spy = (Key`((shrK` bad) \<union> (shrK`{A. Smartphone A \<in> badp}) ))"
 end
 
 axiomatization where
@@ -128,16 +127,16 @@ declare shrK_neq [THEN not_sym, simp]
 
 
 (* FUNCTION KNOWS *)
-(* An agent's compromised and connected Smartphone disclose hers shared keys *)
+(* An agent's compromised Smartphone disclose hers shared keys *)
 lemma Spy_knows_bad [intro!] :
-  "\<lbrakk>Smartphone A \<in> connected; Smartphone A \<in> badp\<rbrakk> \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
+  "Smartphone A \<in> badp \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) add: imageI knows_Cons split: event.split)
 done
 
 (* Case analysis on whether or not an agent is compromised *)
 lemma Crypt_Spy_analz_bad :
-  "\<lbrakk> Crypt (shrK A) X \<in> analz (knows Spy evs); Smartphone A \<in> badp; Smartphone A \<in> connected \<rbrakk> 
+  "\<lbrakk> Crypt (shrK A) X \<in> analz (knows Spy evs); Smartphone A \<in> badp \<rbrakk> 
     \<Longrightarrow> X \<in> analz (knows Spy evs)"
 apply (erule analz.Decrypt)
 apply (simp add: Spy_knows_bad)
