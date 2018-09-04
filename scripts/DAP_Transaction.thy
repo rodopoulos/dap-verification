@@ -230,15 +230,14 @@ done
     - The smartphone belongs to the Spy and we have an illegal usage of the phone *)
 lemma Outputs_Smartphone :
   "\<lbrakk> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(P)) \<or> (P = (Smartphone Spy) \<and> illegalUse(P))"
+    \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(P)) \<or> (P = (Smartphone Spy))"
 apply (erule rev_mp, erule daptrans.induct)
 apply (simp_all)
-(* you could also use apply (auto) to see 2 left subgoals*)
 done
 
 lemma Inputs_Outputs_Smartphone :
   "\<lbrakk> Inputs A P X \<in> set evs \<or> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
-     \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(Smartphone A)) \<or> (P = (Smartphone Spy) \<and> illegalUse(P))"
+     \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(Smartphone A)) \<or> (P = (Smartphone Spy))"
 apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
 done
 
