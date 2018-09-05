@@ -316,6 +316,7 @@ apply (erule daptrans.induct)
 apply (auto)
 done
 
+
 (* 6. Outputs messages form guarantees *)
 
 lemma Outputs_A_Smartphone_form_4 :
@@ -335,97 +336,13 @@ apply (auto)
 done
 
 
-
-
-
-(* PROTOCOL TERMINATION *)
-lemma DT2_happens :
-  "\<exists> T r. \<exists>evs \<in> daptrans. 
-    Says Server A \<lbrace> \<lbrace> Agent A, Number T\<rbrace>,
-      Crypt (shrK A) (Nonce r),
-      Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> \<rbrace> \<in> set evs"
-apply (intro exI bexI)
-apply (rule_tac [2] daptrans.DT2)
-apply (rule_tac [2] daptrans.Rcpt)
-apply (rule_tac [2] daptrans.DT1)
-apply (rule_tac [2] daptrans.Nil)
-apply (simp_all)
-apply (possibility, auto)
-oops
-
-lemma DT3_happens:
-  "\<exists> T r h. \<exists>evs \<in> daptrans. Inputs A (Smartphone A) \<lbrace> T, r, h \<rbrace> \<in> set evs"
-apply (intro exI bexI)
-apply (rule_tac [2] daptrans.DT3)
-apply (rule_tac [2] daptrans.Rcpt)
-apply (rule_tac [2] daptrans.DT2)
-apply (rule_tac [2] daptrans.Rcpt)
-apply (rule_tac [2] daptrans.DT1)
-apply (rule_tac [2] daptrans.Nil)
-apply (simp_all)
-(* apply (rule_tac [2] daptrans.Nil 
-        [THEN daptrans.DT1, THEN daptrans.Rcpt,
-        THEN daptrans.DT2, THEN daptrans.Rcpt,
-        THEN daptrans.DT3]) *)
-apply (possibility, auto)
-oops
-
-lemma DT4_happens:
-  "\<exists> T. \<exists>evs \<in> daptrans. Outputs (Smartphone A) A T \<in> set evs"
-apply (intro exI bexI)
-apply (rule_tac [2] daptrans.Nil 
-        [THEN daptrans.DT1, THEN daptrans.Rcpt,
-        THEN daptrans.DT2, THEN daptrans.Rcpt,
-        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
-        THEN daptrans.DT4])
-apply (possibility, auto)
-oops
-
-lemma DT5_happens:
-  "\<exists> C. \<exists>evs \<in> daptrans. Inputs A (Smartphone A) C \<in> set evs"
-apply (intro exI bexI)
-apply (rule_tac [2] daptrans.Nil
-        [THEN daptrans.DT1, THEN daptrans.Rcpt,
-        THEN daptrans.DT2, THEN daptrans.Rcpt,
-        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
-        THEN daptrans.DT4, THEN daptrans.Rcpt_a,
-        THEN daptrans.DT5])
-apply (possibility, auto)
-oops
-
-lemma DT6_happens :
-  "\<exists> r\<^sub>u. \<exists> evs \<in> daptrans. Outputs (Smartphone A) A r\<^sub>u \<in> set evs"
-apply (intro exI bexI)
-apply (rule_tac [2] daptrans.Nil 
-        [THEN daptrans.DT1, THEN daptrans.Rcpt,
-        THEN daptrans.DT2, THEN daptrans.Rcpt,
-        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
-        THEN daptrans.DT4, THEN daptrans.Rcpt_a,
-        THEN daptrans.DT5, THEN daptrans.Rcpt_s,
-        THEN daptrans.DT6])
-apply (possibility, auto)
-oops
-
-lemma DT7_happens :
-  "\<exists> r\<^sub>u. \<exists> evs \<in> daptrans. Says A Server r\<^sub>u \<in> set evs"
-apply (intro exI bexI)
-apply (rule_tac [2] daptrans.Nil 
-        [THEN daptrans.DT1, THEN daptrans.Rcpt,
-        THEN daptrans.DT2, THEN daptrans.Rcpt,
-        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
-        THEN daptrans.DT4, THEN daptrans.Rcpt_a,
-        THEN daptrans.DT5, THEN daptrans.Rcpt_s,
-        THEN daptrans.DT6, THEN daptrans.Rcpt_a,
-        THEN daptrans.DT7])
-apply (simp_all)
-apply (possibility)
-apply (auto)
-oops
+(* 7 Protocol termination  *)
 
 lemma Protocol_terminates :
-  "\<exists>Success. \<exists>evs \<in> daptrans. Says Server A Success \<in> set evs"
-apply (intro exI bexI)
-apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
+  "\<exists> A Success. \<exists> evs \<in> daptrans. A \<noteq> Server \<and> Says Server A Success \<in> set evs"
+
+  apply (intro exI bexI)
+  apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
         THEN daptrans.DT2, THEN daptrans.Rcpt,
         THEN daptrans.DT3, THEN daptrans.Rcpt_s,
         THEN daptrans.DT4, THEN daptrans.Rcpt_a,
@@ -433,8 +350,8 @@ apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
         THEN daptrans.DT6, THEN daptrans.Rcpt_a,
         THEN daptrans.DT7, THEN daptrans.Rcpt,
         THEN daptrans.DT8])
-apply (possibility, auto)
-oops
+  apply (possibility, auto)
+done
 
 
 
