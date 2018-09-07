@@ -2,6 +2,10 @@
 \label{chap:inductive}
 This chapter brings a brief introduction on formal verification and a more detailed explanation on the selected approach to be used in this work: the Inductive Method. Its syntax will be restrained for comprehension of the proposed problem.
 
+
+
+
+
 \section{Formal Verification}
 Using the previous definitions for security protocols, it is easy to perceive that one can reason about protocol rules, \textit{verifying} if they are correct with respect to the protocol's goals.
 
@@ -14,38 +18,41 @@ Formal verification requires the definition of such protocols in a proper langua
 \begin{itemize}
   \item \textbf{Model checking}: protocol behaviors can be modeled as a finite set of states. Such proposal is suitable for checking if a given configuration satisfy a set of correctness conditions and analyze a certain past configuration, searching for attacks attempts. This approach is more appropriate for finding inconsistencies and attacks in the protocol rather than proving its correctness;
 
-  \item \textbf{Theorem proving}: postulating the protocol as a theorem, taking into account \textit{all} possible protocol behaviors, and checking its correctness through the verification of the theorem claims. This method is more suitable for proving the correctness of the protocol rather than finding possible attacks on them.
+  \item \textbf{Theorem proving}: postulating the protocol as a model, taking into account \textit{all} possible protocol behaviors, and checking its correctness through the verification of the theorem claims. This method is more suitable for proving the correctness of the protocol rather than finding possible attacks on them.
 \end{itemize}
 
 Both methods are aided by computer assistance, where theorem proving may be a less automated approach. Concerning the protocol analyzed in this document and our goal to prove its correctness, it is trivial to guess that our chosen method fits the theorem proving set.
 
+
+
+
+
 \section{Method Introduction}
-Induction has been a commonly used mathematical proof method among theorem proving literature. Proving inductively a certain property $P(n)$ demands a base case $P(0)$ and the validation of general formula $P(i) \Rightarrow P(i + 1)$, for all $i > 0$, concluding that $P(n)$ is true, for any positive integer $n$. It is reasonable to apply this procedure on security protocols, where one can check if a security property is preserved along a large population of participants and all possible system executions. The work of L.~Paulson \cite{paulson-inductive} was the first to propose such idea and it has been extended by G.~Bella in \cite{bella-book}.
+The Inductive Method aims for both formalization and verification of security protocols, being based on model checking and structural induction. First, the intended protocol $\mathcal{P}$ must be defined as a inductively constructed model $P$, composed by rules describing the real world steps of $\mathcal{P}$.
 
-The model considers a protocol $\mathcal{P}$ and an unlimited set of agents, which includes the Spy, an omnipotent entity. Agents actions result in network traffic, which is abstracted as a \textbf{trace}: a history of events in the network, displayed in reversed chronological order. Therefore, we can define the set $P$, containing all possible traces of infinite length as a formal model of the environment where the protocol ran. Such set is defined inductively by the rules of $\mathcal{P}$.
+An unlimited set of agents is considered, who can fire events accordingly with model $P$, in any desired order or regularity, composing the network traffic. Agents can interleave between protocol sessions indefinitely. Among the agents, relies a special one, the Spy, who has control over the network and compromised agents, modeling the threat scenario.
 
-This approach has much in common with CSP formalizations \cite{ryan-schneider}, although the traces considered here are infinite. Besides, the method only focus on security properties, not considering liveness (denial of service), for example.
+At a second stage, the model is verified towards proposed properties, reasoning along technical and theoretical traits. Here, structural induction takes crucial role. If a security property must hold for the protocol, it must hold for all possible traces derived from the formal model $P$, hence induction over the set of possible network traces is main proof tool used in this phase.
+
+Induction has been previously used in the literature \cite{meadows} and the Inductive Method has similarities with other model checking theories, like CSP \cite{ryan-schneider}. It comprehends a strong threat model and concurrency among peers, while it does not check liveness properties. Moreover, the framework which it is built on provides easy ways for extension, allowing steady formalizations of atypical systems, a feature which interests us.
+
+The method was first proposed by L.~Paulson \cite{paulson-inductive} and extended by G.~Bella \cite{bella-book} and has presented verifications for many deployed and significant protocols \cite{inductive-on-tls} % TODO: colocar mais protocolos aqui.
+
+
 
 \subsection{Isabelle}
-One of the most interesting characteristics of the Inductive Method is the possibility of proof mechanization by means of the theorem prover Isabelle \cite{isabelle}. The generated proofs are machine checkable, enabling a deep understanding of its anatomy and easy error maintenance.
+Given the considerably great number of possible traces which can be derived by a model, proofs can take a substantial amount of work. As a result, the use of a automatic theorem prover is suitable, being Isabelle~\cite{isabelle} the system where the theory framework is built. Thus, the generated proofs are machine checkable, enabling a deep understanding of its anatomy and easy error maintenance.
 
-Isabelle is a generic theorem prover, meaning that it is able to reason over several formal systems, in an interactive way: its not entirely automatic, requiring certain human interaction for concluding proofs. At the same time, it offers automatic provers, which can deal with several simple proofs, and it also provides simplifiers methods, enabling rewriting of expressions with adequate arithmetic procedures.
+Isabelle is a generic theorem prover, which can reason over several formal systems, in an interactive way. Hence, proofs are not entirely automatic, requiring certain user guidance. It combines high order logic, typed formalism and quantifiers for functions, predicates and sets. Also, the system has great proof tools, specially its simplifiers, induction-oriented commands and some automatic provers, offering a valuable automation for proofs.
 
-The version in which this document is based is Isabelle/HOL \cite{isabelle-hol}, based on high-order logics. This kind of logics can quantify over functions, predicates and sets, based on a strongly typed formalism. Moreover, most of the proofs may be produced inductively, where often subgoals are left for being simplified. In case any subgoals are left unsimplified, the user must provide lemmas for complementing the rewriting rules and finally proving the main theorem.
+Lemmas and theorems are stated as goals, where the user must apply proof tactics, such as simplification, application of proved lemmas and others. Such process may derive subgoals, which also need to be dealt with. If a user fail to find a proof for a certain property, this may not be a certification of proof unsatisfiability. Despite, the proof or somes of its aspects may be built on top of wrong formalizations, meaning the user is not skilled enough. Thereby, the process is arduous and must be done with care.
 
-Due to that, some proofs may take time and patience. If a user fail to find a proof for a certain property, this may not be a certification of proof unsatisfiability. Despite, the proof or somes of its aspects may be built on top of wrong formalizations, meaning the user is not skilled enough.
-
-Along this chapter, Isabelle syntax on security protocol properties will be presented. Basic operations and symbols will be explained when convenient, but aiming document readability, most part of the syntax will be omitted. An extensive and reliable literature on theorem proving on Isabelle is available in \cite{isabelle-hol} and security protocol proofs in \cite{bella-book}.
+Each formalized theory in Isabelle is contained in a proof script and each system distribution comes with a library of such formalizations. The Inductive Method framework is defined in the \textit{Auth} library \cite{isabelle-hol-auth}, comprised in three files: \texttt{Message.thy}, \texttt{Event.thy} and \texttt{Public.thy}. These files will be depicted over the rest of this chapter, where some of Isabelle syntax will be presented, when convenient.
 
 
-
-\section{Formalizing Entities}
-For a suitable verification of the system, a prior definition of it is necessary. In the context of Isabelle, a theory is such specification, containing a set of definitions and theorems which need to be proven for a solid formalization. Isabelle has a large collection of theories, within many areas, including the one concerning this work \cite{isabelle-hol-auth}.
-
-The \texttt{Auth} library from Isabelle/HOL distribution \cite{isabelle-hol-auth} provides a set of theories, which consist of sets of definitions and theorems for reasoning about security protocols, enabling a researcher to build proofs with solid base and quick setup. Here, we introduce such concepts, which are essential for understanding the inductive way to work with formal verification of security protocols.
 
 \subsection{Agents}
-This is the basic type for defining participants in a protocol session. The model considers an infinite set, due to the possible large population of active peers. A simple bijection with the set of natural numbers can shape the main principals of a protocol: Friend, Spy and Server. Such entities can be compactly defined in Isabelle syntax as follows:
+Agents are defined in the This is the basic type for defining participants in a protocol session. The model considers an infinite set, due to the possible large population of active peers. A simple bijection with the set of natural numbers can shape the main principals of a protocol: Friend, Spy and Server. Such entities can be compactly defined in Isabelle syntax as follows:
 
 \begin{center}
   $\texttt{datatype agent} \triangleq \texttt{Server } | \texttt{ Spy } | \texttt{  Friend nat}$
@@ -53,11 +60,13 @@ This is the basic type for defining participants in a protocol session. The mode
 
 The \texttt{Friend} definition is the common peer in a session. Since we can have a positive infinite number of participants, we simply define the $i$-th peer as \texttt{Friend $i$}. The entity \texttt{Spy} is used as a formal representation of a threat model (which will be defined later), defined with a nullary constructor. Finally, the \texttt{Server} entity, often represented as \texttt{S}, is a commonly trusted third-party agent, used for symmetric key generation operations. Additionally, this peer has access to all agents long-term secrets, i.e., the private keys of other agents or servers.
 
+% TODO: Essa seção pode ser inserida na nova seção Threat Model que planejo inserir
 Thus, a characterization of compromised agents is made. These are embedded in an unspecified set named \texttt{bad}, where the Spy is also included. All elements within this set have their knowledge set exposed to the Spy, which includes private keys, shared keys with the Server and any other secrets. This property takes action along all protocol run, which means that if the agent notes any information during a session, the Spy is able to retrieve it.
 
 \subsection{Cryptographic Keys}
 Keys are the base entity for providing encryption and they have several groups. Here, they are declared as a free type, but interpreted as an integer and each kind of key has intrinsic properties, as follows.
 
+% TODO: arrumar isso. As chaves não são necessariamente trocadas com o servidor, mas são um segredo previamente compartilhado entre cliente e servidor.
 For cryptographic symmetric keys, exchanged with trusted servers - the \texttt{Server} entity - the key is previously stored by an agent. So, it is defined as a agent dependent value:
 
 \begin{center}
@@ -66,6 +75,7 @@ For cryptographic symmetric keys, exchanged with trusted servers - the \texttt{S
 
 This declaration is also applicable for asymmetric keys, where the notation is \texttt{priK} for private one and \texttt{pubK} for the public. This notation may differ when a signature key is used.
 
+% TODO: retirar a menção à symmetric keys aqui. Não parece muito importante falar disso. É melhor focar nas chaves de sessão
 Symmetric keys are a bigger scope for other keys, belonging to a proper set \texttt{symKeys}. One example are session keys, which are used by peers for establishing a single private session of communication. Therefore, the valid definition is:
 
 \begin{center}
@@ -73,6 +83,10 @@ Symmetric keys are a bigger scope for other keys, belonging to a proper set \tex
 \end{center}
 
 Such definition implies that the set of shared keys is different from the one containing session keys. Any other kind of keys not mentioned here must be manually defined.
+
+
+
+
 
 \subsection{Messages}
 A message is any kind of information that can be transmitted during the execution of a protocol. This includes agents names, keys, nonces, timestamps, and so on. Therefore, the constructor of a \texttt{Message} variable accepts many kinds of formats, as stated below:
@@ -93,6 +107,10 @@ Some of the accepted datatypes are constructors and others are simply natural nu
 
 Another important concept is the \texttt{Crypt} directive. This is used for representing encryption of messages, such as message $M$, with key $K$, denoted by \texttt{Crypt K M}. In this model, encryption is perfect and collision-free, so the $M$ is only accessible if the peer have the key $K$.
 
+
+
+
+
 \subsection{Events}
 Events are a basic entity along protocols. Here we present the definition of the three main kinds of events, suitable for the analyzed protocol in this work, although there are more available for others protocols:
 
@@ -111,6 +129,10 @@ However, it is necessary to settle the difference between \texttt{Notes} and \te
 
 Now, the definition of a \textbf{trace} can be done. Intending to keep an history of the network, a trace is a list of events that occur in the network, displayed in reverse chronological order. Therefore, every single event that occurred in the network while the protocol was active must be present in the trace. Besides, the trace must respect the protocol model, since it can only be constructed upon a valid run of the given protocol.
 
+
+
+
+% TODO: passar essa seção para cima da seção de eventos. Além disso, é necessário ponderar se ela será estritamente necessária ao fim do trabalho
 \subsection{Nonces, Timestamps and Guessable Numbers}
 Security protocols often resort on numeric entities for soundness of some properties. These numbers are modeled as well, but they come with premises for being compatible with reality.
 
@@ -131,6 +153,9 @@ This definition makes sense, since the time of the last event dictates the curre
 \end{center}
 
 
+
+
+% TODO: é interessante criarmos um seção de Threat Model aqui. Ela vai abordar de forma mais apropriada o espião, além introduzir da onde vem a necessidade dos operadores abaixo
 \subsection{Operators}
 In the Inductive Method, the actions of reasoning about and composing messages are treated as operations over sets of messages. In that way, the operators \texttt{analz}, \texttt{synth} and \texttt{parts} are defined upon operations on this kind of data:
 
@@ -158,6 +183,7 @@ The \texttt{analz} operator denotes the act of inspecting the components of a me
   \end{center}
 \end{enumerate}
 
+% TODO: Isso deve entrar na seção de Threat Model
 It is significant to mention the set \texttt{analz(spies) \textit{evs}}. This set holds all data that the Spy could gather from the network in the trace \textit{evs}, either by decomposing it from another messages or obtaining from decrypted ciphertexts, defining its current knowledge set. Thus, saying a set of message $X$ does not belong to this set is equivalent to state the confidentiality of $X$ in such trace.
 
 The second operator is the \texttt{synth}, which basically denotes the action of composing messages from given components. Its rules are the following:
@@ -197,6 +223,7 @@ Complementing the crucial sets for the method, it is introduced the set \texttt{
   \texttt{used : event list} $\longrightarrow$ \texttt{msg set}
 \end{center}
 
+
 \subsection{Initial Assumptions}
 \label{sec:initial-assumptions}
 In order to be compatible with real world context, the Inductive Method provide some basic initial definitions concerning several aspects of the environment and principals.
@@ -234,7 +261,6 @@ For every different kind of agent, we have a different type of initial knowledge
     \end{split}
   \end{equation*}
 
-
   \item The Spy knows all secrets from the agents who belong to the compromised set, which includes shared and private keys, including herself, since she is included in the set of compromised peers. Additionally, she also knows all public keys.
 
   \begin{equation*}
@@ -248,6 +274,7 @@ For every different kind of agent, we have a different type of initial knowledge
 
 \end{enumerate}
 
+% TODO: isso deve entrar na seção de Threat Model
 Concerning the attacker formalization, some properties are defined to properly model the attacker behavior based on \cite{dolev-yao}. The earlier definition of agents formally characterizes the Spy as a legitimate agent. The definitions of \texttt{synth} operator details how any agent, including the Spy, are able to generate all kind of legal messages, but excluding nonces, which are treated as unguessable elements. Now, the property that gives full control of the network to the attacker must be described. For that, the function \texttt{spies} is presented, where its syntax follows:
 
 \begin{center}
