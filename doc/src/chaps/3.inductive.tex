@@ -117,7 +117,7 @@ Events, defined in theory \texttt{Event.thy}, are the basic unit that composes n
 
 \begin{equation*}
   \begin{split}
-    \texttt{datatype} \triangleq
+    \texttt{datatype} \triangleq\
     & \texttt{\textbf{Says} agent agent msg} \\
     & \texttt{\textbf{Notes} agent msg} \\
     & \texttt{\textbf{Gets} agent msg}
@@ -147,16 +147,115 @@ Thus, the function receives a trace and returns a natural number, which will be 
 Precisely, the timestamp for a trace which has $n$ events will be $n$ and, consequently, an event happening at that moment will receive a timestamp value of $n$. Note that such definition does not allow that two distinct events have the same timestamp, eliminating concurrency among events in the same trace. Further, this concept is properly guaranteed by the existence of two distinct traces, where such two events happens at switched positions, defining two corresponding sequential approximations.
 
 
+\subsection{Threat Model}
+The standard thread model used in the Inductive Method is based upon the Dolev-Yao \cite{dolev-yao} approach, introducing three main characteristics concerning the Spy:
 
-% TODO: é interessante criarmos um seção de Threat Model aqui. Ela vai abordar de forma mais apropriada o espião, além introduzir da onde vem a necessidade dos operadores abaixo
+\begin{enumerate}
+  \item \textit{The Spy is a legitimate agent:} since the she can act as a legal agent, she has the same features as legal agents, such shared keys with the Server, public asymmetric keys, etc.;
+
+  \item \textit{The Spy controls the network traffic:} this copes with the capability of the Spy on monitoring and obtaining messages sent on network channel and  preventing the delivery or redirecting messages;
+
+  \item \textit{The Spy can perform any message operation, except cryptanalysis:} with this abilities, the Spy can break, compose and modify messages on-the-fly, being able to alter legal messages or create fake ones. In respect with the exception, she must hold the correspondent key to a cipher in order to obtain the plain text, which guarantees that any encryption is perfect.
+\end{enumerate}
+
+The Inductive Method implements all of these three aspects. The first one is already assured by the definitions of agents and cryptographic keys. Moreover, the protocols models should enable the Spy to participate as a legal action along their runs.
+
+The set \texttt{bad} contains all agents which are compromised by the Spy. These agents disclose all their secrets to the malicious peer, both prior and during the protocol run. The Spy herself is also included in this set. Secrets are contained in the agent's knowledge set, which is a crucial concept for meeting the second requirement of the threat model.
+
+We introduce the function \textit{initState}, which describes the peer knowledge set prior to any protocol interaction, defined as follows:
+
+\begin{center}
+  {\ttfamily $initState$ : agent $\longrightarrow$ msg set}
+\end{center}
+
+\begin{enumerate}
+  \item The Server initially knows all shared and public keys and its own private keys;
+  %
+  \begin{equation*}
+    \begin{split}
+      initState\ \texttt{Server} \triangleq\
+      & (\texttt{Key range}\ shrK) \cup (\texttt{Key range}\ pubK)\ \cup \\
+      & \{\texttt{Key}\ (priK\ \texttt{Server})\}
+    \end{split}
+  \end{equation*}
+  %
+  \item Each legitimate agent initially knows its own shared and private keys and all public keys;
+  %
+  \begin{equation*}
+    \begin{split}
+      initState (\texttt{Friend}\ \textit{i}) \triangleq\
+      & \{ \texttt{Key}\ (shrK\ (\texttt{Friend}\ i))\}\ \cup \\
+      & \{ \texttt{Key}\ (priK\ (\texttt{Friend}\ i))\}\ \cup \\
+      & (\texttt{Key range}\ pubK)
+    \end{split}
+  \end{equation*}
+  %
+  \item The Spy knows all secrets from compromised agent, which includes herself. Additionally, she also knows all public keys.
+  %
+  \begin{center}
+    $initState$ \texttt{Spy} $\triangleq$ (\texttt{Key} $shrK$ \texttt{bad}) $\cup$ (\texttt{Key} $priK$ \texttt{bad}) $\cup$ (\texttt{Key range} $pubK$)
+  \end{center}
+\end{enumerate}
+
+Now we must define agents' dynamic knowledge, which is built during protocol run. This is formalized through the following function and definitions:
+
+\begin{center}
+  $knows$ : [\texttt{agent, event list}] $\longrightarrow$ \texttt{msg set}
+\end{center}
+
+\begin{enumerate}
+  \item An agent knows his initial state
+  %
+  \begin{center}
+    $knows\ A\ [] \triangleq\ initState\ A$
+  \end{center}
+  %
+  \item An agent knows what he sends to anyone in a trace and the Spy knows all messages ever sent on it.
+  %
+  \begin{center}
+    $knows\ A$ ((\texttt{Says} $A'\ B \ X$) \# $evs$) $\triangleq$
+    $\left\{
+      \begin{array}{@{}ll@{}}
+        {X} \cup knows\ A\ evs, & \text{if } A \in \texttt{bad} \\
+        knows\ A\ evs, & \text{otherwise}
+      \end{array} \right.$
+  \end{center}
+  %
+  \item An agent knows what she notes in a trace, while the Spy also knows the compromised agents' notes
+  %
+  \begin{center}
+    $knows\ A$ ((\texttt{Notes} $A'\ X$) \# $evs$) $\triangleq$
+    $\left\{
+      \begin{array}{@{}ll@{}}
+        {X} \cup knows\ A\ evs, & \text{if } A = A' \text{ or } \\ & (A = \texttt{Spy} \text{ and } A' \in \texttt{bad}) \\
+        knows\ A\ evs, & \text{otherwise}
+      \end{array} \right.$
+  \end{center}
+  %
+  \item An agent, except the Spy, knows what he receive in a trace. The Spy knowledge is not enriched here since he already knows by case 2 and by the reception invariant.
+  %
+  \begin{center}
+    $knows\ A$ ((\texttt{Gets} $A'\ X$) \# $evs$) $\triangleq$
+    $\left\{
+      \begin{array}{@{}ll@{}}
+        {X} \cup knows\ A\ evs, & \text{if } A = A' \text{ and } A \neq \texttt{Spy} \\
+        knows\ A\ evs, & \text{otherwise}
+      \end{array} \right.$
+  \end{center}
+\end{enumerate}
+
+It is important to note that the expression $knows$ \texttt{Spy} $evs$ expresses the entire network traffic occurred to the point registered in $evs$. With these formalizations, the second requirement for the threat model is fulfilled. For the third one, the definition os message operations will be necessary.
+
+
+
 \subsection{Operators}
-In the Inductive Method, the actions of reasoning about and composing messages are treated as operations over sets of messages. In that way, the operators \texttt{analz}, \texttt{synth} and \texttt{parts} are defined upon operations on this kind of data:
+Operators are functions for reasoning with message sets. They translate the act of exploring and producing messages, being defined as follows:
 
 \begin{center}
   \texttt{analz, synth, parts : msg set $\longrightarrow$ msg set}
 \end{center}
 
-The \texttt{analz} operator denotes the act of inspecting the components of a message and then breaking it up. Therefore, using the set of messages $H$, the set \texttt{analz} $H$ uses the following rules:
+The \texttt{analz} operator denotes the act of inspecting the components of a message, breaking it up. Therefore, considering the messages set $H$, the set \texttt{analz} $H$ uses the following rules:
 
 \begin{enumerate}
   \item Any element of a message set $H$ can be analyzed from it;
@@ -176,8 +275,7 @@ The \texttt{analz} operator denotes the act of inspecting the components of a me
   \end{center}
 \end{enumerate}
 
-% TODO: Isso deve entrar na seção de Threat Model
-It is significant to mention the set \texttt{analz(spies) \textit{evs}}. This set holds all data that the Spy could gather from the network in the trace \textit{evs}, either by decomposing it from another messages or obtaining from decrypted ciphertexts, defining its current knowledge set. Thus, saying a set of message $X$ does not belong to this set is equivalent to state the confidentiality of $X$ in such trace.
+The set \texttt{analz(spies) \textit{evs}} holds all data that the Spy could gather from the network in the trace \textit{evs}, either by decomposition or decryption of ciphers. Thus, saying a set of message $X$ does not belong to this set is equivalent to state the confidentiality of $X$ in such trace.
 
 The second operator is the \texttt{synth}, which basically denotes the action of composing messages from given components. Its rules are the following:
 
@@ -204,115 +302,62 @@ The second operator is the \texttt{synth}, which basically denotes the action of
   \end{center}
 \end{enumerate}
 
-Finally, the last operator \texttt{parts} is very similar to the \texttt{analz} operator, hence its rules are similar to the latter, except the one concerning encryption. In this operator, the extraction of a ciphertext from a encrypted message does not require a key. Thus, we can relate both operators in such way: \texttt{analz} $\subseteq$ \texttt{parts}. Such concept simulates unbounded computational power and so, the rule is rewritten as follows:
+Finally, the last operator \texttt{parts} is very similar to the \texttt{analz} operator, hence its rules are similar to the latter, except the one concerning encryption:
 
-\begin{center}
-  $\texttt{Crypt } K X \in \texttt{parts } H \Longrightarrow X \in$ \texttt{parts} $H$
-\end{center}
-
-Complementing the crucial sets for the method, it is introduced the set \texttt{used}, which is used to delimit the set of already used message components, belonging to some agent initial knowledge or which have appeared at some moment in the network. Such concept is important due to the necessity of working with the freshness concept and properly modeling it. The definition of the set follows:
-
-\begin{center}
-  \texttt{used : event list} $\longrightarrow$ \texttt{msg set}
-\end{center}
-
-
-% TODO: Essa seção pode ser inserida na nova seção Threat Model que planejo inserir
-Thus, a characterization of compromised agents is made. These are embedded in an unspecified set named \texttt{bad}, where the Spy is also included. All elements within this set have their knowledge set exposed to the Spy, which includes private keys, shared keys with the Server and any other secrets. This property takes action along all protocol run, which means that if the agent notes any information during a session, the Spy is able to retrieve it.
-
-
-\subsection{Initial Assumptions}
-\label{sec:initial-assumptions}
-In order to be compatible with real world context, the Inductive Method provide some basic initial definitions concerning several aspects of the environment and principals.
-
-First, a formalization of agents initial knowledge set is provided. Such definition is important not only for stating the protocol initial premises, but for constructing the initial knowledge of the attacker, based in the compromised agents. Thereby, we define the function \texttt{initState}, which receives an agent as argument and returns the agent's initial knowledge message set:
-
-\begin{center}
-  \texttt{initState : agent} $\longrightarrow$ \texttt{msg set}
-\end{center}
-
-For every different kind of agent, we have a different type of initial knowledge set:
-
-\begin{enumerate}
-  \item The Server initially knows all shared and public keys and its own private keys;
-
-  \begin{equation*}
-    \begin{split}
-      \texttt{initState Server} \triangleq
-      & (\texttt{Key range shrK}) \  \cup \\
-      & \{\texttt{Key (priEK Server)}\} \cup \{\texttt{Key (priSK Server)}\}\  \cup \\
-      & \texttt{(Key range pubEK)} \cup \texttt{(Key range pubSK)}
-    \end{split}
-  \end{equation*}
-
-
-  \item Each legitimate agent (\texttt{Friend}) initially knows its own shared and private keys and all public keys;
-
-  \begin{equation*}
-    \begin{split}
-      \texttt{initState (Friend \textit{i})} \triangleq
-      & \{ \texttt{Key (shrK (Friend \textit{i}))} \} \ \cup \\
-      & \{ \texttt{Key (priEK (Friend \textit{i}))} \} \ \cup \\
-      & \{ \texttt{Key (priSK (Friend \textit{i}))} \} \ \cup \\
-      & \texttt{(Key range pubEK)} \cup \texttt{(Key range pubSK)}
-    \end{split}
-  \end{equation*}
-
-  \item The Spy knows all secrets from the agents who belong to the compromised set, which includes shared and private keys, including herself, since she is included in the set of compromised peers. Additionally, she also knows all public keys.
-
-  \begin{equation*}
-    \begin{split}
-      \texttt{initState Spy} \triangleq
-      & (\texttt{Key shrK bad}) \ \cup \\
-      & (\texttt{Key priEK bad}) \cup (\texttt{Key priSK bad}) \ \cup \\
-      & (\texttt{Key range pubSK}) \cup (\texttt{Key range pubSK})
-    \end{split}
-  \end{equation*}
-
-\end{enumerate}
-
-% TODO: isso deve entrar na seção de Threat Model
-Concerning the attacker formalization, some properties are defined to properly model the attacker behavior based on \cite{dolev-yao}. The earlier definition of agents formally characterizes the Spy as a legitimate agent. The definitions of \texttt{synth} operator details how any agent, including the Spy, are able to generate all kind of legal messages, but excluding nonces, which are treated as unguessable elements. Now, the property that gives full control of the network to the attacker must be described. For that, the function \texttt{spies} is presented, where its syntax follows:
-
-\begin{center}
-  \texttt{spies : event list} $\longrightarrow$ \texttt{msg set}
-\end{center}
-
-And its recursive definition is provided:
-
-\begin{enumerate}
-  \item The Spy knows her initial state at any trace, including the empty one;
+\begin{enumerate} \setcounter{enumi}{3}
+  \item The contents of any ciphertext can be obtained.
+  %
   \begin{center}
-    \texttt{spies[]} $\triangleq$ \texttt{initState Spy}
-  \end{center}
-
-  \item Any message sent by anyone in the network is know to the Spy at that trace;
-  \begin{center}
-    \texttt{spies} ((\texttt{Says} A B X) \# \texttt{evs}) $\triangleq$ {$X$} $\cup$ \texttt{spies evs}
-  \end{center}
-
-  \item Any message noted by a compromised agent in a trace is known to the Spy at that trace.
-  \begin{center}
-    $$
-      \texttt{spies} ((\texttt{Notes A X}) \text{ \# } \texttt{evs}) \triangleq \left\{
-        \begin{array}{@{}ll@{}}
-          {X} \cup \texttt{spies \textit{evs}}, &  \text{if } A \in \texttt{bad} \\
-          \texttt{spies \textit{evs}}, & \text{otherwise}
-        \end{array} \right.
-    $$
+    $\texttt{Crypt } K X \in \texttt{parts } H \Longrightarrow X \in$ \texttt{parts} $H$
   \end{center}
 \end{enumerate}
 
-Such definition also aims to provide a formal scope for the dynamic nature of the Spy knowledge during the protocol run.
+Thereby, the extraction of messages from ciphers does not require a key, simulating unbounded computational power. This operators is mainly used in analysis of agents' knowledge sets along proofs and the following relation can be derived concerning the last two operators:
 
-\subsection{Assembling the Model}
-Since all elements are properly defined, we are able to formally define the protocol model. As previously stated, the model will be structured as an unbounded set of lists of traces (events), where each trace will represent a possible network history, induced by the protocol.
+\begin{center}
+  \texttt{analz} $\subseteq$ \texttt{parts}
+\end{center}
 
-Since the technique relies on induction, the base case, where no events occurs, is the first defined rule. Furthermore, each protocol step is formalized, where the main strategy consists in extending the previous rule, adding the new event which will properly formalize the legal step or any valid action. Note that, if a protocol has $n$ steps defined in its specification, the model must have $n$ \texttt{Says} events in its formal model, at least. At the end, a vast possibility of runs can be modeled which this method.
+Finally, aspects of \textit{freshness} can be defines. Normally, nonces and session keys demand to be freshly generated in order to increase security. To analyze this properties for a given message the following function is defined, which receives a trace and return the messages used in that trace:
 
-We define a constant, which contains the model traces. Each rule is composed by a set of preconditions and a postcondition. The latter will add the rule event at the beginning of the trace, suiting the trace reverse order condition. At the end, the rule add the possible trace to the constant.
+\begin{center}
+  $used$ \texttt{: event list} $\longrightarrow$ \texttt{msg set}
+\end{center}
 
-We use the previously defined protocol given in Figure~\ref{prt:notation-example} and its proper model, Model~\ref{fig:notation-example-model}, as examples for illustrating the model construction process. In this example, each rule can refer to a generic trace, but it is also possible to use a single trace as well. For both rules formalizing the protocol steps, \texttt{DSP1} and \texttt{DSP2}, its possible to see that if the initial trace, \textit{evs1} and \textit{evs2} belongs to the protocol model, then its extensions, defined at the end of the rule, will also belong to it.
+\begin{enumerate}
+  \item All components of any agent's initial state are used in a trace, including the empty one
+  %
+  \begin{center}
+    $used\ [] \triangleq \Cup A.$ \texttt{parts}($initState\ A$)
+  \end{center}
+  %
+  \item All components of messages sent in a trace are used in that trace
+  %
+  \begin{center}
+    $used\ A$ ((\texttt{Says} $A\ B\ X$) \# $evs$) $\triangleq$ \texttt{parts}$\{X\} \cup\ used\ evs$
+  \end{center}
+  \item All components of messages noted in a trace are used in that trace
+  %
+  \begin{center}
+    $used\ A$ ((\texttt{Notes} $A\ X$) \# $evs$) $\triangleq$ \texttt{parts}$\{X\} \cup\ used\ evs$
+  \end{center}
+  \item All components of messages received in a trace do not count as used, due to reception invariant and hence, they are already considered as used.
+  %
+  \begin{center}
+    $used\ A$ ((\texttt{Gets} $A\ X$) \# $evs$) $\triangleq$ \texttt{parts}$\{X\} \cup\ used\ evs$
+  \end{center}
+\end{enumerate}
+
+
+
+\subsection{Protocol Model}
+Since all elements are properly defined, we are able to formally define the protocol model. As previously stated, the model will be structured as a set of unlimited traces, representing all possible network histories induced by the protocol. Here, we use Protocol~\ref{prt:notation-example} as the basis for our example. The corresponding model is presented in Model~\ref{fig:notation-example-model}.
+
+Model rules are composed by two parts. The first are the preconditions, a list of clauses that need to be true in order to fire the correspondent event. The latter are the postconditions, which states which events will be added to the head of the trace, composing the network history.
+
+Rule \textit{Nil} is the base case, where the empty trace is a valid trace in a protocol session. Rules \textit{DP1} and \textit{DP2} emulate the protocol steps, hence if a protocol has $n$ parts, the model should contain at least $n$ rules. A regular precondition among rules are that the trace must be faithful to the model, thus, considering a trace $evs$, then $evs$ should belong to the model. In rule DP2, we see that the preconditions contains a \texttt{Gets} event resembling rule DP1, showing a common formalization of how rules demand previous ones.
+
+Rule \textit{Fake} aides the of the threat context, where the Spy can fake a message $X$ once she has the necessary knowledge, i.e., $X$ belongs to the set of data which can be constructed based on her knowledge set. Rule \textit{Oops}, abstracts the loss of a session key to the Spy, which is treated as a local security breach. This flaw may affect the whole system and this rule allows to detect such situations.
 
 \begin{figure}
   \centering
@@ -321,9 +366,10 @@ We use the previously defined protocol given in Figure~\ref{prt:notation-example
   \caption{Formal model for the protocol displayed in Figure \ref{prt:notation-example}. Figure is already following Isabelle's syntax}
 \end{figure}
 
-Two extra rules are defined. The first, \textit{Fake} relates to the spy ability to send any message that she can fake, i.e., any message $X \in \texttt{synth(analz(spies }\textit{evs} \texttt{))}$. Such rule is consistent with the Dolev-Yao attacker abstraction. The last rule, \textit{Oops}, abstracts the loss of a session key to the Spy, which is treated as a local security breach. This flaw may affect the whole system and this rule allows to detect such situations. Such rules may arise as a subgoal in the Isabelle system, needed to be manually stated, implying that the protocol has a natural flaw.
+Using this model, the great majority of possible traces can be derived, but not every conceivable one, since the model should impose some restrictions on traces.
 
-Using this model, a large gamma of traces can be constructed, although not every conceivable trace can be derived from it, since the model should impose some restrictions to the traces. Also, any desired protocol property should be verified against each model rule, a process which Isabelle helps to automatize. Thus, we defined that any property of the model is an attempt to formalize a protocol goal.
+
+
 
 
 \section{Goals Verification}
