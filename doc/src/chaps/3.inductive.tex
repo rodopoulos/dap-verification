@@ -151,7 +151,7 @@ Precisely, the timestamp for a trace which has $n$ events will be $n$ and, conse
 The standard thread model used in the Inductive Method is based upon the Dolev-Yao \cite{dolev-yao} approach, introducing three main characteristics concerning the Spy:
 
 \begin{enumerate}
-  \item \textit{The Spy is a legitimate agent:} since the she can act as a legal agent, she has the same features as legal agents, such shared keys with the Server, public asymmetric keys, etc.;
+  \item \textit{The Spy is a legitimate agent:} since she can act as a legal agent, she has their same features, such as shared keys with the Server, public asymmetric keys, etc.;
 
   \item \textit{The Spy controls the network traffic:} this copes with the capability of the Spy on monitoring and obtaining messages sent on network channel and  preventing the delivery or redirecting messages;
 
@@ -373,14 +373,22 @@ Using this model, the great majority of possible traces can be derived, but not 
 
 
 \section{Goals Verification}
-Having a consistent model of the protocol is the first step to its full verification. Thus, it is necessary to identify the model properties and correlate them with its goals. Since it is an inductive method, a given property must be checked against all system points, including its rules. The formalization and latter verification of the goals innate to the protocol are the last part of the Inductive Method.
+Security protocols have technical properties that are inherent to its system, outlining how peers should communicate and the protocol proceed. Meanwhile, other important security aspects, introduced in Chapter~\ref{chap:sec-protocols}, are another kind of features that should be part of such specifications, being them another crucial role.
+
+When the protocol formal model is defined, its underlying characteristics are not explicit. We need to present them, precisely stating its form, and proving that are valid to the model, i.e., they hold in all conceivable trace. This is the \textit{goal verification} stage, where each desired protocol feature is modeled as a goal and formal proofs build their validation to the model. Goals are divided in types, concerning the protocol property scope.
+
+At the end, we also try to show that \textit{goal availability} is present in the model. This property provides formal guarantees to the agents that a given goal is present in that model, even under a threat model. Hence, this agents are assured that the protocol is reliably faithful to what it intends to offer.
+
+
 
 \subsection{Reliability}
 Reliability relates to how close a model is to the system it is representing. Note that such crucial property may not be really related to the security protocol goals but to system goals itself. As a result, the number of reliability theorems may vary from a protocol to another.
 
 However, some basic properties, which are common for many protocols, are already defined and likely to be used in new formalizations. Some of them may seem obvious, but are important for formal systems. As examples, we can cite the idempotence of \texttt{analz} operator, fresh keys and session keys proper distinction, and the certainty of messages composition correctness.
 
-The theorems of this class are easy to proof. Many of these proofs are aided by Isabelle's simplifiers, which can easily reason about an given property inductively.
+The theorems of this class are easy to proof. They mainly use induction and simplification as its main proof strategy. Providing such goals gives us assurance that our model is reliable to the real world.
+
+
 
 \subsection{Regularity}
 The regularity lemmas are facts that can be proved from any message that appears in the traffic. Such properties may be applied to specific protocol goals, but some other broader properties can be guaranteed using them.
@@ -391,6 +399,8 @@ For example, regularity lemmas hold for long-term keys (or private keys), which 
   Key(priK A) $\in$ parts(spies \textit{evs}) $\leftrightarrow$ $A \in bad$ \\
   Key(priK A) $\in$ analz(spies \textit{evs}) $\leftrightarrow$ $A \in bad$
 \end{center}
+
+
 
 \subsection{Confidentiality}
 Holding confidentiality in a protocol can be simply translated as to preventing the disclosure of certain message to the Spy, that is, a message $X$ cannot belong the Spy knowledge set. Since messages are usually protected by encryption, this property is highly related to the use of keys. Precisely, the confidentiality of session keys is a major issue for the protocol confidentiality, because if a spy obtain a given session key, all messages encrypted with it could be easily altered by her. If we define a session key $K_{AB}$, we have to be certain that at the end of all traces the key does not belong to the knowledge set of the Spy. That said, we have the following:
@@ -404,6 +414,7 @@ Note that, if key $K_{AB}$ is encrypted with some other private key of an agent,
 Confidentiality is also interesting for nonces. Nonces are commonly used for computation of other protocol details, as keys and MACs \cite{bella-book}. Therefore, the model must provide confidentiality to all nonces used for composing important protocol pieces.
 
 
+
 \subsection{Unicity}
 The creation of fresh components in protocol is vastly used. It is seen in the production of keys, nonces and other entities and they are mostly used for a single session, identifying it. Therefore, providing freshness in a protocol resembles unicity, a concept that establishes bounds between a message and its fresh components.
 
@@ -413,13 +424,10 @@ A formalization for this definition prompted the creation of a new predicate in 
 
 
 
-
 \subsection{Authenticity}
 This property can also be read as legitimacy. In the method, the guarantee of a message's authorship is presented as synonym of integrity, since if the message is unaltered (integrity), then the authorship must be preserved. Even if the Spy intercepts the message and them relays it to the recipient, if integrity is preserved, then legitimacy is still preserved, since the Spy acted as a channel relay.
 
 As a result, it is important that the message's author does not belong to the compromised agent set. Conversely, any messages sent by him would be compromised as well and authenticity would not hold. Such concept may seem obvious for integrity matters, but it is important to enforce the authorship interest. Therefore, both properties are attached during our verifications.
-
-
 
 
 
@@ -438,3 +446,7 @@ The Inductive Method does not provide formalisms to reason about the fourth poin
 Specifically, non-injective agreements have a bigger focus. Regarding key distribution protocols, such property applied to session keys establishes a trust relation between the two agents, with a given key as a validation of such relationship, since both agents are uncompromised.
 
 Eventually, \textbf{key distribution} becomes a major goal to be checked. Since this concept is related to the agreement of two agents in a mutual secret, it is stated in \cite{auth:bellare-rogaway} that this property is, indeed, stronger than authentication and thus, authentication itself relies on key distribution. Additionally, the authors of the Inductive Method proves that if authentication holds, so does key distribution, specifically non-injective agreement on a session key.
+
+
+
+\subsection{Goal Availability}
