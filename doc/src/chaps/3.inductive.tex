@@ -9,11 +9,11 @@ This chapter brings a brief introduction on formal verification and a more detai
 \section{Formal Verification}
 Using the previous definitions for security protocols, it is easy to perceive that one can reason about protocol rules, \textit{verifying} if they are correct with respect to the protocol's goals.
 
-Informal reasoning on verifying protocols was the first attempt to guarantee their correctness, succeeding in recognizing some flaws and weaknesses quickly and providing a good understanding about protocols designs \cite{bella-book}. However, not finding an error does not mean that a certain model does not hold one. Such method was failing to identify critical flaws in major security protocols, where the classical example of the Needham-Schroeder protocol \cite{needham-schroeder} can be cited. The techniques in \cite{lowe96} exposed the protocol's limitations, despite the authors efforts on its specification and informal verification.
+Informal reasoning on verifying protocols was the first attempt to guarantee their correctness, succeeding in recognizing some flaws and weaknesses quickly and providing a good understanding about protocols designs \cite{Bella2007}. However, not finding an error does not mean that a certain model does not hold one. Such method was failing to identify critical flaws in major security protocols, where the classical example of the Needham-Schroeder protocol \cite{NeedhamSchroeder78} can be cited. The techniques in \cite{Lowe96} exposed the protocol's limitations, despite the authors efforts on its specification and informal verification.
 
-This scenario was optimal for the rise of formal verification on security protocols such as in the works presented in \cite{meadows-old-survey}, \cite{kemmerer-verification} and \cite{ban}, allowing a mathematical and profitable procedure for reasoning about abstract protocols models. Thus, it is important to emphasize that the method focus on the protocol properties and rules, and rarely on its execution.
+This scenario was optimal for the rise of formal verification on security protocols \cite{Meadows96, Meadows94, Kemmerer94, Burrows90}, allowing a mathematical and profitable procedure for reasoning about abstract protocols models. Thus, it is important to emphasize that the method focus on the protocol properties and rules, and rarely on its execution.
 
-Formal verification requires the definition of such protocols in a proper language, suitable for the application of such methods and deservedly automated through computational methods. Formal methods can be divided in two major categories, according to \cite{boyd-mathuria}:
+Formal verification requires the definition of such protocols in a proper language, suitable for the application of such methods and deservedly automated through computational methods. Formal methods can be divided in two major categories, according to \cite{BoydMathuria2008}:
 
 \begin{itemize}
   \item \textbf{Model checking}: protocol behaviors can be modeled as a finite set of states. Such proposal is suitable for checking if a given configuration satisfy a set of correctness conditions and analyze a certain past configuration, searching for attacks attempts. This approach is more appropriate for finding inconsistencies and attacks in the protocol rather than proving its correctness;
@@ -35,9 +35,9 @@ An unlimited set of agents is considered, who can fire events accordingly with m
 
 At a second stage, the model is verified towards proposed properties, reasoning along technical and theoretical traits. Here, structural induction takes crucial role. If a security property must hold for the protocol, it must hold for all possible traces derived from the formal model $P$, hence induction over the set of possible network traces is main proof tool used in this phase.
 
-Induction has been previously used in the literature \cite{meadows} and the Inductive Method has similarities with other model checking theories, like CSP \cite{ryan-schneider}. It comprehends a strong threat model and concurrency among peers, however it does not check liveness properties. Moreover, the framework which it is built on provides easy ways for extension, allowing steady formalizations of atypical systems, a feature which interests us.
+Induction has been previously used in the literature, for example in the NRL Protocol Analyzaer by C.~Meadows~\cite{Meadows96}, and the Inductive Method has similarities with other model checking theories, like CSP \cite{RyanSchneider2010}. It comprehends a strong threat model and concurrency among peers, however it does not check liveness properties. Moreover, the framework which it is built on provides easy ways for extension, allowing steady formalizations of atypical systems, a feature which interests us.
 
-The method was first proposed by L.~Paulson \cite{paulson-inductive} and extended by G.~Bella \cite{bella-book} and has presented verifications for many deployed and significant protocols \cite{inductive-on-tls} % TODO: colocar mais protocolos aqui.
+The method was first proposed by L.~Paulson \cite{Paulson98} and extended by G.~Bella \cite{Bella2007} and has presented verifications for many deployed and significant protocols \cite{Paulson99, BellaPaulson2006, Bella2003}.
 
 
 
@@ -53,7 +53,7 @@ Each formalized theory in Isabelle is contained in a proof script. Also, each Is
 
 
 \subsection{Agents}
-Agents are described in the \texttt{Message.thy} file, being the basic type for specifying participants in a protocol session. Three main entities are defined as free types: legal agents, the Spy and the Server.
+Agents are described in the \texttt{Message.thy} file, being the basic type for specifying participants in a protocol session. Three main entities are defined as free types: legal agents, the Spy and the Server. Below, the $\triangleq$ operator defines
 
 \begin{center}
   {\ttfamily datatype agent $\triangleq$ Server | Spy | Friend $nat$}
@@ -99,7 +99,7 @@ A message is any kind of information that can be transmitted during the executio
 
 Some of the accepted datatypes are constructors and others are simply natural numbers. If any other datatype is needed, the definition of this scope must be extended. It is important to notice that the \texttt{Mpair} constructor enables the definition of recursive concatenation of messages.
 
-Another important concept is the \texttt{Crypt} directive. It receives a message $M$ and a key $K$ and produces the corresponding cipher, i.e., \texttt{Crypt} $M\ K$. In this model, encryption is perfect and collision-free, so a message is only accessible within cipher by a peer if she has the proper key.
+Another important concept is the \texttt{Crypt} directive. It receives a message $M$ and a key $K$ and produces the corresponding cipher, i.e. \texttt{Crypt} $M\ K$. In this model, encryption is perfect and collision-free, so a message is only accessible within cipher by a peer if she has the proper key.
 
 Some protocol formalizations demand new types of message, since security protocols often resort on numeric entities for soundness of some properties. Significant ones are described below:
 
@@ -129,7 +129,7 @@ The action of \texttt{Says} is straightforward and it follows easily from its sy
 
 Both events \texttt{Notes} and \texttt{Gets} are related to information acquisition by an agent. The former is the literal action of an agent obtaining and storing a given message, enabling them to explore messages contents, deriving new information, and the Spy on collecting data from the network.
 
-The latter event denotes message reception by an agent, but without enrichment of agent's knowledge. It was a late extension of the Inductive Method \cite[Ch. 8]{bella-book}, in order to explore agents' knowledge set of messages. Without this, agents' knowledge would be constrained to past events only. Additionally, the creation of such event, introduces the concept of \textit{reception invariant}, demanding that \texttt{Gets} events are preceded by a \texttt{Says} event. This guarantee must be enforced by the protocol model.
+The latter event denotes message reception by an agent, but without enrichment of agent's knowledge. It was a late extension of the Inductive Method \cite[Ch. 8]{Bella2007}, in order to explore agents' knowledge set of messages. Without this, agents' knowledge would be constrained to past events only. Additionally, the creation of such event, introduces the concept of \textit{reception invariant}, demanding that \texttt{Gets} events are preceded by a \texttt{Says} event. This guarantee must be enforced by the protocol model.
 
 A \textit{trace} can now be defined: a list of network events occurring while an unbounded population of agents are running the protocol. Specifically, the trace is a list of such events, disposed in reverse chronological order, since events are added at the list head. Hence, traces may have many configurations, but must stay faithful to the protocol model. The set of possible traces of a given protocol characterizes its formal model.
 
@@ -150,7 +150,7 @@ Precisely, the timestamp for a trace which has $n$ events will be $n$ and, conse
 
 \subsection{Threat Model}
 \label{ssec:threat-model}
-The standard thread model used in the Inductive Method is based upon the Dolev-Yao \cite{dolev-yao} approach, introducing three main characteristics concerning the Spy:
+The standard thread model used in the Inductive Method is based upon the Dolev-Yao \cite{DolevYao81} approach, introducing three main characteristics concerning the Spy:
 
 \begin{enumerate}
   \item \textit{The Spy is a legitimate agent:} since she can act as a legal agent, she has their same features, such as shared keys with the Server, public asymmetric keys, etc.;
@@ -360,7 +360,7 @@ Model rules are composed by two parts. The first are the preconditions, a list o
 
 Rule \textit{Nil} is the base case, where the empty trace is a valid trace in a protocol session. Rules \textit{DP1} and \textit{DP2} emulate the protocol steps, hence if a protocol has $n$ parts, the model should contain at least $n$ rules. A regular precondition among rules are that the trace must be faithful to the model, thus, considering a trace $evs$, then $evs$ should belong to the model. In rule DP2, we see that the preconditions contains a \texttt{Gets} event resembling rule DP1, showing a common formalization of how rules demand previous ones.
 
-Rule \textit{Fake} aides the of the threat context, where the Spy can fake a message $X$ once she has the necessary knowledge, i.e., $X$ belongs to the set of data which can be constructed based on her knowledge set. Rule \textit{Oops}, abstracts the loss of a session key to the Spy, which is treated as a local security breach. This flaw may affect the whole system and this rule allows to detect such situations.
+Rule \textit{Fake} aides the of the threat context, where the Spy can fake a message $X$ once she has the necessary knowledge, i.e. $X$ belongs to the set of data which can be constructed based on her knowledge set. Rule \textit{Oops}, abstracts the loss of a session key to the Spy, which is treated as a local security breach. This flaw may affect the whole system and this rule allows to detect such situations.
 
 \begin{figure}
   \centering
@@ -378,7 +378,7 @@ Using this model, the great majority of possible traces can be derived, but not 
 \section{Goals Verification}
 Security protocols have technical properties that are inherent to its system, outlining how peers should communicate and the protocol proceed. Meanwhile, other important security aspects, introduced in Chapter~\ref{chap:sec-protocols}, are another kind of features that should be part of such specifications, being them another crucial role.
 
-When the protocol formal model is defined, its underlying characteristics are not explicit. We need to present them, precisely stating its form, and proving that are valid to the model, i.e., they hold in all conceivable trace. This is the \textit{goal verification} stage, where each desired protocol feature is modeled as a goal and formal proofs build their validation to the model. Goals are divided in types, concerning the protocol property scope.
+When the protocol formal model is defined, its underlying characteristics are not explicit. We need to present them, precisely stating its form, and proving that are valid to the model, i.e. they hold in all conceivable trace. This is the \textit{goal verification} stage, where each desired protocol feature is modeled as a goal and formal proofs build their validation to the model. Goals are divided in types, concerning the protocol property scope.
 
 At the end, we also try to show that \textit{goal availability} is present in the model. This property provides formal guarantees to the agents that a given goal is present in that model, even under a threat model. Hence, this agents are assured that the protocol is reliably faithful to what it intends to offer.
 
@@ -443,16 +443,16 @@ As discussed in Section \ref{sec:protocols:auth}, authentication may assume many
   \item \textbf{Injective agreement of $B$ with $A$ on $H$}, meaning the non-injective agreement of $B$ with $A$, using the set $H$ of message components, where $B$ did not respond more than once on each session with $A$.
 \end{enumerate}
 
-The Inductive Method does not provide formalisms to reason about the fourth point. Although, it is claimed on \cite{bella-book} that such formalization can be easily constructed by simply verification of repetition of a given event \textit{ev} in the analyzed trace, restraining the agents to single responses. However, the method mainly tries to provide models that are more permissive as possible, stating that any message could be repeated over traces with no harm to model.
+The Inductive Method does not provide formalisms to reason about the fourth point. Although, it is claimed on \cite{Bella2007} that such formalization can be easily constructed by simply verification of repetition of a given event \textit{ev} in the analyzed trace, restraining the agents to single responses. However, the method mainly tries to provide models that are more permissive as possible, stating that any message could be repeated over traces with no harm to model.
 
 Specifically, non-injective agreements have a bigger focus. Regarding key distribution protocols, such property applied to session keys establishes a trust relation between the two agents, with a given key as a validation of such relationship, since both agents are uncompromised.
 
-Eventually, \textbf{key distribution} becomes a major goal to be checked. Since this concept is related to the agreement of two agents in a mutual secret, it is stated in \cite{auth:bellare-rogaway} that this property is, indeed, stronger than authentication and thus, authentication itself relies on key distribution. Additionally, the authors of the Inductive Method proves that if authentication holds, so does key distribution, specifically non-injective agreement on a session key.
+Eventually, \textbf{key distribution} becomes a major goal to be checked. Since this concept is related to the agreement of two agents in a mutual secret, it is stated in \cite{BellareRogaway93} that this property is, indeed, stronger than authentication and thus, authentication itself relies on key distribution. Additionally, the authors of the Inductive Method proves that if authentication holds, so does key distribution, specifically non-injective agreement on a session key.
 
 
 
 \subsection{Goal Availability}
-The concept of goal availability is one of the main contributions in the work of G.~Bella~\cite{bella-book}. In summary, it establishes a formal guarantee that the protocol model could met a given goal and, once this is true, the validity of such goal can be applied to all peers within their assumptions. If such property holds to the model, but cannot be checked by the peers, it is argued that this goal is not available and thus, not fully assured.
+The concept of goal availability is one of the main contributions in the work of G.~Bella~\cite{Bella2007}. In summary, it establishes a formal guarantee that the protocol model could met a given goal and, once this is true, the validity of such goal can be applied to all peers within their assumptions. If such property holds to the model, but cannot be checked by the peers, it is argued that this goal is not available and thus, not fully assured.
 
 Also, goal availability is closely related to the threat model considered by the protocol and its peers minimal trust. Considering the former, our the adopted model is the Dolev-Yao, faithfully implemented by the Inductive Method using abstractions described in Sections \ref{ssec:threat-model} and \ref{ssec:operators}. If a different threat model is considered, important aspects of the model context are also altered, which may change the validity of previous goals.
 
