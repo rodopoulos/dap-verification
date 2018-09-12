@@ -53,7 +53,7 @@ Each formalized theory in Isabelle is contained in a proof script. Also, each Is
 
 
 \subsection{Agents}
-Agents are described in the \texttt{Message.thy} file, being the basic type for specifying participants in a protocol session. Three main entities are defined as free types: legal agents, the Spy and the Server. Below, the $\triangleq$ operator defines
+Agents are described in the \texttt{Message.thy} file, being the basic type for specifying participants in a protocol session. Three main entities are defined as free types: legal agents, the Spy and the Server. Below, the $\triangleq$ symbol reads as a definition equality operator for a keyword and $|$ symbol is the disjunction operator, separating possible types for \texttt{agent} datatype.
 
 \begin{center}
   {\ttfamily datatype agent $\triangleq$ Server | Spy | Friend $nat$}
@@ -66,13 +66,13 @@ The nullary constructor \textit{Server} defines the trusted third part entity, p
 
 
 \subsection{Cryptographic Keys}
-Also defined in \texttt{Message.thy}, cryptographic keys are bounded to the natural numbers, but constrained within a proper set. Later, each type of key is normally defined as a relation between the sets of agents and keys. For instance, the habitual specification of shared keys is defined as follows:
+Also defined in \texttt{Message.thy}, cryptographic keys are bounded to the natural numbers, but constrained within a proper set. Later, each type of key is normally defined as a relation between the sets of agents and keys. For instance, the habitual specification of shared keys is defined as follows, where $\rightarrow$ symbol defines de relation flow between the types.
 
 \begin{center}
   {\ttfamily $shrK$ : agent $\rightarrow$ key}
 \end{center}
 
-The description of public and private keys structures uses a similar construction. The set \texttt{symKeys} helps in the distinction between of long-term keys and session keys. Both types are considered shared keys, but the latter is commonly a fresh entity generated at protocol runtime and distributed among peers, hence they are characterized as:
+The description of public and private keys structures uses a similar construction. The set \texttt{symKeys} helps in the distinction between of long-term keys and session keys. Both types are considered shared keys, but the latter is commonly a fresh entity generated at protocol runtime and distributed among peers. Belows, \texttt{range} is a function which gives us the image of a given function.
 
 \begin{center}
   {\ttfamily $K \in$ symKeys} and {\ttfamily $K \notin$ range $shrK$}
@@ -139,7 +139,7 @@ We can now recall some aspects concerning timestamps. In the Inductive Method, a
   {\ttfamily CT : event list $\longrightarrow$ nat}
 \end{center}
 
-Thus, the function receives a trace and returns a natural number, which will be the length of that trace, leading to:
+Thus, the function receives a trace and returns a natural number, which will be the length of that trace, leading to the following definition, where \texttt{length} trivially denotes the function that returns the length of a trace.
 
 \begin{center}
   {\ttfamily CT $evs \triangleq$ length $evs$}
@@ -164,7 +164,7 @@ The Inductive Method implements all of these three aspects. The first one is alr
 
 The set \texttt{bad} contains all agents which are compromised by the Spy. These agents disclose all their secrets to the malicious peer, both prior and during the protocol run. The Spy herself is also included in this set. Secrets are contained in the agent's knowledge set, which is a crucial concept for meeting the second requirement of the threat model.
 
-We introduce the function \textit{initState}, which describes the peer knowledge set prior to any protocol interaction, defined as follows:
+We introduce the function \textit{initState}, which describes the peer knowledge set prior to any protocol interaction, defined as follows.
 
 \begin{center}
   {\ttfamily $initState$ : agent $\longrightarrow$ msg set}
@@ -199,7 +199,7 @@ We introduce the function \textit{initState}, which describes the peer knowledge
   \end{center}
 \end{enumerate}
 
-Now we must define agents' dynamic knowledge, which is built during protocol run. This is formalized through the following function and definitions:
+Now we must define agents' dynamic knowledge, which is built during protocol run. This is formalized through the following function and definitions. Symbol $\Longrightarrow$ denotes a sequent and the \# operator is the concatenation of an element at the head of a list.
 
 \begin{center}
   $knows$ : [\texttt{agent, event list}] $\longrightarrow$ \texttt{msg set}
@@ -252,7 +252,7 @@ It is important to note that the expression $knows$ \texttt{Spy} $evs$ expresses
 
 \subsection{Operators}
 \label{ssec:operators}
-Operators are functions for reasoning with message sets. They translate the act of exploring and producing messages, being defined as follows:
+Operators are functions for reasoning with message sets. They translate the act of exploring and producing messages, being defined as follows. The $\lBrack$ and $\rBrack$ symbols are a shorthand syntax for the \texttt{Mpair} constructor, denoting concatenation of messages, while $\lBrace$ and $\rBrace$ are concatenation of clauses in a list.
 
 \begin{center}
   \texttt{analz, synth, parts : msg set $\longrightarrow$ msg set}
@@ -399,7 +399,7 @@ The regularity lemmas are facts that can be proved from any message that appears
 For example, regularity lemmas hold for long-term keys which can never be sent through the channel, since they are never meant to be used over the network, just in a agent local context. Therefore, it such agent key is seen in the traffic it is easy to derive that this agent is compromised, as stated below.
 
 \begin{center}
-  \texttt{Key} ($shrK\ A$) $\in$ \texttt{parts} ($knows$ \texttt{Spy} \textit{evs}) $\Longleftrightarrow$ $A \in bad$
+  \texttt{Key} ($shrK\ A$) $\in$ \texttt{parts} ($knows$ \texttt{Spy} \textit{evs}) if and only if $A \in bad$
 \end{center}
 
 
