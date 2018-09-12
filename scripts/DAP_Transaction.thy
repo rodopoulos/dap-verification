@@ -298,6 +298,7 @@ lemma Outputs_honest_A_Smartphone_6 :
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
       Gets_s (Smartphone A) Confirmation \<in> set evs"
 apply (erule rev_mp, erule daptrans.induct)
+apply (simp_all)
 apply (auto)
 done
 

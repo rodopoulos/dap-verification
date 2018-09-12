@@ -19,18 +19,18 @@ In order to understand the protocol context, we first present a brief introducti
 
 
 \section{Internet Banking}
-Internet banking is an online environment which provides a communication channel between bank and client, where the latter can perform financial transactions and other banking operations. It is aimed to fulfill the customer demand, reduce costs and increase efficiency at the bank side \cite{banking-security}.
+Internet banking is an online environment which provides a communication channel between bank and client, where the latter can perform financial transactions and other banking operations. It is aimed to fulfill the customer demand, reduce costs and increase efficiency at the bank side \cite{Hutchinson2003}.
 
-As claimed by DAP authors \cite[p.8]{bbcode-thesis} and further proved by literature review \cite{banking-security}, there are few formal definitions which applies exclusively to internet banking systems. Those systems are usually constructed within simple architectures and scale up to large environments, with a series of interconnected devices. However, the model can be simplified by focusing on three entities - user, bank and Internet - resembling a client-server model architecture. This pattern is commonly used over the literature \cite{banking-security}.
+As claimed by DAP authors \cite[p.8]{Peotta2012} and further proved by literature review \cite{Hutchinson2003}, there are few formal definitions which applies exclusively to internet banking systems. Those systems are usually constructed within simple architectures and scale up to large environments, with a series of interconnected devices. However, the model can be simplified by focusing on three entities - user, bank and Internet - resembling a client-server model architecture. This pattern is commonly used over the literature \cite{Hutchinson2003}.
 
-At the client side, many communication channels can be used, where the personal computer (PC) is the classical and most common case. As new technologies arise, smartphones are also a widely accepted option. In \cite{bbcode-thesis}, a large private base of 1.3 million clients was analyzed to attest this claim.
+At the client side, many communication channels can be used, where the personal computer (PC) is the classical and most common case. As new technologies arise, smartphones are also a widely accepted option. In \cite{Peotta2012}, a large private base of 1.3 million clients was analyzed to attest this claim.
 
 \subsection{Security Issues}
 Since internet banking deals with sensible and financial data, those systems urges for strict security assurances. Such pledges bring reliability to the system and for its client base.
 
-Specifically, authenticating clients and further operations carried by them are the key point for providing a reliable internet banking framework. Further, authorization, integrity and confidentiality are commonly cited qualities and finally, non-repudiation, availability and auditability are also desired properties for those systems \cite{banking-security}.
+Specifically, authenticating clients and further operations carried by them are the key point for providing a reliable internet banking framework. Further, authorization, integrity and confidentiality are commonly cited qualities and finally, non-repudiation, availability and auditability are also desired properties for those systems \cite{Hutchinson2003}.
 
-At the same time, such systems are a highly sought target among hackers and other ciber-criminals \cite{peotta-classification, banking-security}. Several techniques for credential robbery and transaction manipulation for internet banking systems have been developed over the years, where a formal classification attempt can be find on \cite{peotta-classification} and \cite{attacks-on-internet-banking}. It is interesting to cite some common attack patterns:
+At the same time, such systems are a highly sought target among hackers and other ciber-criminals \cite{Peotta2011, Hutchinson2003}. Several techniques for credential robbery and transaction manipulation for internet banking systems have been developed over the years, with formal classification studies made \cite{Peotta2011, Adham2013}. It is interesting to cite some common attack patterns:
 
 \begin{itemize}
   \item \textbf{Channel Breaking:} intercepting the communication between client and bank, and impersonating any of the entities in order to fake a legal identity and trying to perform actions as a legal user or as the server;
@@ -42,11 +42,11 @@ At the same time, such systems are a highly sought target among hackers and othe
 
 \textbf{Credential Thief} is a broader technique category, which envolves the robbery of user credentials in any viable way. Therefore, phishing attacks also fall into this category.
 
-Accordingly, many security schemes were developed in order to oppose against such attacking strategies. Also in \cite{peotta-classification} and \cite{attacks-on-internet-banking}, the authors provides a listing of current common security models found among banks.
+Accordingly, many security schemes were developed in order to oppose against such attacking strategies. Also in \cite{Peotta2011} and \cite{Adham2013}, the authors provides a listing of current common security models found among banks.
 
-Still in \cite{peotta-classification} and \cite{attacks-on-internet-banking}, the authors also cite how these models fail to provide reliability to the system, describing possible flaws which are passive of exploitation and strategies used by attackers. In short, such proposals are not enough for providing security for banking transactions.
+Still in \cite{Peotta2011, Adham2013}, the authors also cite how these models fail to provide reliability to the system, describing possible flaws which are passive of exploitation and strategies used by attackers. In short, such proposals are not enough for providing security for banking transactions.
 
-One promising method, highlighted in \cite[p.61]{bbcode-thesis}, is the \textit{One Time Password} (OTP) model combined with an external authentication channel. Particularly, in \cite{otp-mobile}, a smartphone is used as the external entity to validate messages exchanged between the user PC and the server, requiring that the smartphone could communicate with the server. Further, in \cite{otp-qrcode}, the QR-Code technology is added to the scheme in order to provide a more reliable approach.
+One promising method, highlighted in \cite[p.61]{Peotta2012}, is the \textit{One Time Password} (OTP) model combined with an external authentication channel. Particularly, in \cite{Starnberger2009}, a smartphone is used as the external entity to validate messages exchanged between the user PC and the server, requiring that the smartphone could communicate with the server. Further, in \cite{LeeHyunLim2010}, the QR-Code technology is added to the scheme in order to provide a more reliable approach.
 
 However, it is claimed that both schemes focus on transaction authentication, which may fail when a message is not associated to a session key. Therefore it will be a more secure approach to authorize transactions with OTP models, under a valid authenticated session. Additionally, the necessity of connectivity between the smartphone and server is a limitation that should be removed.
 
@@ -98,7 +98,7 @@ First, we define the types of agents available in the system. The protocol infor
 
 Each device has its proper role. Both smartphone and, mainly, the personal computer, act as the protocol initiator, for generating the shared key between User and Bank. At the User side, this key will be store at the smartphone only. The ATM machine acts as a middle communicator, intended to give a part of the shared key to the User. In special, the personal computer is the only communication channel able to issue banking transactions to the Server.
 
-Also, in the symmetric key generation phase, the User must use a personal smartcard for authentication. Such concept is vastly used among literature \cite{smartcard:shoup-robin} for providing an extra authentication layer for protocols.
+Also, in the symmetric key generation phase, the User must use a personal smartcard for authentication. Such concept is vastly used among literature \cite{ShoupRubin96} for providing an extra authentication layer for protocols.
 
 
 
@@ -237,9 +237,9 @@ The asymmetric scheme resembles the public key RSA algorithm \cite{RSA}. The Use
 
 As soon the Server acknowledge the User public key, he signs it with his private key $sK_S$ and sends his public key to the User. When the latter notes the Server's public key, he stores it, encrypting it with his private key.
 
-This process, described in \cite[p.78]{bbcode-thesis}, seems to have some inconsistencies. In private conversation with the protocol authors, we identified that the document needs reviews in this part. The text claims to describe a model based in public key infrastructure and RSA algorithm, but the presented scheme does not match the assertion. Thus, some naming conventions in the specification are not clear enough.
+This process, described in \cite[p.78]{Peotta2012}, seems to have some inconsistencies. In private conversation with the protocol authors, we identified that the document needs reviews in this part. The text claims to describe a model based in public key infrastructure and RSA algorithm, but the presented scheme does not match the assertion. Thus, some naming conventions in the specification are not clear enough.
 
-Therefore, we decided to provide the described methodology in \cite{bbcode-thesis}, but noting that it will be revised and further altered for consistency.
+Therefore, we decided to provide the described methodology in \cite{Peotta2012}, but noting that it will be revised and further altered for consistency.
 
 
 
@@ -263,7 +263,7 @@ Therefore, we decided to provide the described methodology in \cite{bbcode-thesi
 \section{Message Transactions}
 Once the shared key $K$ is available for both the User and the Server, they can perform secure banking transactions, with atomic authorization for each operation. Initially, the User must be authenticated in the Internet Banking system, for requesting transactions. Note that this security layer is not enough for guaranteeing reliability, since the Spy has full control of the User's personal computer.
 
-Additionally, the key $K$ is divided into two others: $k_1$ and $k_2$. The former is used for message integrity, as an input for HMAC-SHA1 protocol \cite{bellare-hmac}, providing consistency checks among messages exchanged between the Server and the User. The latter is used for message secrecy, as an input for AES protocol ciphers \cite{AES}, protecting messages or its components over clear channels.
+Additionally, the key $K$ is divided into two others: $k_1$ and $k_2$. The former is used for message integrity, as an input for HMAC-SHA1 protocol \cite{Bellare96}, providing consistency checks among messages exchanged between the Server and the User. The latter is used for message secrecy, as an input for AES protocol ciphers \cite{AES}, protecting messages or its components over clear channels.
 
 Figure \ref{fig:dap-transaction} explain the message transaction whole process, which is based in the following steps:
 

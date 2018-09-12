@@ -13,11 +13,11 @@ This chapter surveys the main aspects of security protocols, explaining its comm
 
 
 \section{Basic Notions}
-Security protocols are handy tools for providing protection among communication protocols and systems. They can be informally defined as a set of steps executed between multiple entities, aiming to ensure a reliable and secure communication between them. Current protocol specifications vary in quality, purpose and syntax, although they are the base documents for formally reasoning about these protocols \cite{abadi-secprotocols}. More definitions on security protocols can be obtained at \cite{boyd-mathuria} and \cite{ryan-schneider}.
+Security protocols are handy tools for providing protection among communication protocols and systems. They can be informally defined as a set of steps executed between multiple entities, aiming to ensure a reliable and secure communication between them. Current protocol specifications vary in quality, purpose and syntax, although they are the base documents for formally reasoning about these protocols \cite{Abadi99}. More definitions on security protocols can be obtained at \cite{BoydMathuria2008} and \cite{RyanSchneider2010}.
 
-As a communication agreement, security protocols are inherently concurrent, leading to a big spectrum of possibilities among its steps, peers behavior and system states. When considering the attacker factor - an agent who can both act as a legal participant or produce and inject fake information to exploit the protocol - the difficult in designing a reliable solution can grow dramatically. For the very same reason, it is difficult to design a good security protocol and easy to develop a defective one \cite{bella-book}.
+As a communication agreement, security protocols are inherently concurrent, leading to a big spectrum of possibilities among its steps, peers behavior and system states. When considering the attacker factor - an agent who can both act as a legal participant or produce and inject fake information to exploit the protocol - the difficult in designing a reliable solution can grow dramatically. For the very same reason, it is difficult to design a good security protocol and easy to develop a defective one \cite{Bella2007}.
 
-Protocol goals are subtle: they depend on the environment, resources and the protocol architecture itself. Many goals may be present as, for instance, authentication, key establishment, confidentiality, integrity, availability and others. Some of those goals may have varying definitions in the literature, like authentication \cite{abadi-secprotocols}. Nevertheless, some properties and concepts can be universal among security protocols, as well as some goals are a consensus in the literature \cite{ryan-schneider}.
+Protocol goals are subtle: they depend on the environment, resources and the protocol architecture itself. Many goals may be present as, for instance, authentication, key establishment, confidentiality, integrity, availability and others. Some of those goals may have varying definitions in the literature, like authentication \cite{Abadi99}. Nevertheless, some properties and concepts can be universal among security protocols, as well as some goals are a consensus in the literature \cite{RyanSchneider2010}.
 
 
 
@@ -38,9 +38,9 @@ Protocol goals are subtle: they depend on the environment, resources and the pro
 
 
 \section{Attacker Assumptions}
-A basic assumption for every entity engaged in a security protocol session is that the knowledge about the environment is uncertain. In other words, agents will interact with other participants, which can be hostile or not, and the communication channel is generally untrusted. Moreover, it is wise to expect the worse, since security properties are relative to the resource of attackers \cite{boyd-mathuria}. It is common to provide guarantees assuming that attackers could perform unlikely achievements, like obtaining session keys or acting as a legal peer. This can improve the system resilience.
+A basic assumption for every entity engaged in a security protocol session is that the knowledge about the environment is uncertain. In other words, agents will interact with other participants, which can be hostile or not, and the communication channel is generally untrusted. Moreover, it is wise to expect the worse, since security properties are relative to the resource of attackers \cite{BoydMathuria2008}. It is common to provide guarantees assuming that attackers could perform unlikely achievements, like obtaining session keys or acting as a legal peer. This can improve the system resilience.
 
-A suitable approach for attacker modeling is the classic work of Dolev-Yao \cite{dolev-yao}. In this model, the attacker is described in a general way, giving her full control of the network and protocol operation. Therefore, it is interesting to model her capabilities in the following assumptions, based on \cite{boyd-mathuria}:
+A suitable approach for attacker modeling is the classic work of Dolev-Yao \cite{DolevYao81}. In this model, the attacker is described in a general way, giving her full control of the network and protocol operation. Therefore, it is interesting to model her capabilities in the following assumptions, based on \cite{BoydMathuria2008}:
 
 \begin{enumerate}
   \item The adversary is able to eavesdrop on all messages sent on the network;
@@ -77,7 +77,7 @@ Despite being a crucial basis on the success of a reliable protocol, cryptograph
   \item An on-line public infrastructure may be used, where peers share a key with a trusted third-party entity.
 \end{enumerate}
 
-Concerning the user entity and based on these concepts, the generation of session keys can be based on a \textit{key transport} or \textit{key agreement} protocol. The first is associated with protocols where participants use on-line servers, which generates keys and transfers them to users. The second is often associated with the off-line infrastructures, which generates the key based on inputs provided by the peers. Hybrid protocols for key generation based on these two approaches also exist \cite{boyd-mathuria}.
+Concerning the user entity and based on these concepts, the generation of session keys can be based on a \textit{key transport} or \textit{key agreement} protocol. The first is associated with protocols where participants use on-line servers, which generates keys and transfers them to users. The second is often associated with the off-line infrastructures, which generates the key based on inputs provided by the peers. Hybrid protocols for key generation based on these two approaches also exist \cite{BoydMathuria2008}.
 
 
 
@@ -103,7 +103,7 @@ Concerning the user entity and based on these concepts, the generation of sessio
 
 
 \section{Notation}
-Through this document, we will need a consistent notation for expressing protocol actions and symbols. We will use a system based on the one presented in \cite{bella-book}, which brings aspects from the seminal work of \cite{ban}, since it is our main reference method for verification in this work.
+Through this document, we will need a consistent notation for expressing protocol actions and symbols. We will use a system based on the one presented in \cite{Bella2007}, which brings aspects from the seminal work of \cite{Burrows90}, since it is our main reference method for verification in this work.
 
 Primitive data instances, such messages, timestamps and \textit{nounces} can be represented as simple mnemonic letters and the encryption of such entities are represented with subscripts, for example, a message $M$ using a key $K$ is represented by $M_K$. When giving authorship to a given resource, we also use subscripts, such a key from agent $A$ resulting in the symbol $K_A$. Accordingly, the session key established between agents $A$ and $B$ is represented by the symbol $K_{AB}$. On further examples or proofs, the definitions will be straightforward.
 
@@ -173,9 +173,9 @@ Confidentiality (or secrecy) is a required aspect when systems should not leak i
   \item \textbf{Decryption:} taking a ciphertext $c \in \mathcal{C}$ and decryption key $K^{-1} \in \mathcal{K}$, it outputs the message $m \in \mathcal{M}$, which is defined as $m = D_{K^{-1}}(c)$.
 \end{itemize}
 
-Considering key properties, when a given encryption key $K$ is the same as the decryption key $K^{-1}$, e.g.\ $K = K^{-1}$, it is stated that they are \emph{symmetric} keys. Otherwise, they are \emph{non-symmetric} keys, normally engaged in a process of public key encryption, commonly used nowadays \cite{ryan-schneider}.
+Considering key properties, when a given encryption key $K$ is the same as the decryption key $K^{-1}$, e.g.\ $K = K^{-1}$, it is stated that they are \emph{symmetric} keys. Otherwise, they are \emph{non-symmetric} keys, normally engaged in a process of public key encryption, commonly used nowadays \cite{RyanSchneider2010}.
 
-Secrecy consistency can be discussed with respect to some degree of flexibility. An active spy should not be able to learn something on generated ciphertexts. The property of \textit{semantic security} states that if an attacker can compute something from a ciphertext, it must also be able to compute it from its equivalent message. Stronger than that, \textit{non-malleability} makes impossible to transform a given ciphertext in a related one without knowing the input plaintext. A detailed discussion on this topic is provided in \cite{abadi-secprotocols}.
+Secrecy consistency can be discussed with respect to some degree of flexibility. An active spy should not be able to learn something on generated ciphertexts. The property of \textit{semantic security} states that if an attacker can compute something from a ciphertext, it must also be able to compute it from its equivalent message. Stronger than that, \textit{non-malleability} makes impossible to transform a given ciphertext in a related one without knowing the input plaintext. A detailed discussion on this topic is provided in \cite{Abadi99}.
 
 Considering our previously presented example, it is easy to state that confidentiality is compromised in the protocol. The session key $K_{AB}$ is transmitted in cleartext over the network, so an active spy could simply extract it from the channel and use it for decipher subsequent messages exchanged between $A$ and $B$.
 
@@ -217,15 +217,15 @@ If the agents are not compromised, then the spy cannot retrieve the session key 
 
 \section{Authentication}
 \label{sec:protocols:auth}
-Authentication is a vastly studied topic among security researchers, since its definition is not really well-established, causing problems for a correct implementation of this property among protocols. Such topic is well discussed in \cite{gollmann-authentication}.
+Authentication is a vastly studied topic among security researchers, since its definition is not really well-established, causing problems for a correct implementation of this property among protocols. Such topic is well discussed in \cite{Gollmann2000}.
 
-Here, we recall some definitions provided in \cite{diffie-authentication} and \cite{ryan-schneider}. Authentication can be defined as the oath on a communication session where peers can be assured about each others identity. Similarly, the establishment of trust in a peer identity, can be related to the generation of a session key for further communication among the peers involved in the session, validating each message.
+Here, we recall some definitions provided in \cite{Diffie92} and \cite{RyanSchneider2010}. Authentication can be defined as the oath on a communication session where peers can be assured about each others identity. Similarly, the establishment of trust in a peer identity, can be related to the generation of a session key for further communication among the peers involved in the session, validating each message.
 
 Concerning the authentication of origin, confirming the authorship of $A$ of a given message received by $B$, in a given protocol session, gives some guarantees. The first one is that $A$ is alive and she must have sent the message. Further, a stronger property claims that she truly intended to communicate with $B$, agreeing in following the protocol directives.
 
 Thus, the received message must not get altered in any way. This assurance implies the property of \textbf{integrity}, which means that no message can be corrupted along its way to the recipient. For this reason, authentication and integrity are commonly associated into a single property. Ensuring such feature may be achieved by the use of manipulation detection codes (MDC) or message authentication codes (MAC) \cite{ross-security}.
 
-Other stronger properties may be needed. One is the pledge of the received message to be the first and original one, avoiding the acceptance of repeated messages. Concerning the protocol which will be studied in Chapter \ref{chap:dap}, this notion is crucial. A good discussion on this is also given in \cite{gollmann-authentication}.
+Other stronger properties may be needed. One is the pledge of the received message to be the first and original one, avoiding the acceptance of repeated messages. Concerning the protocol which will be studied in Chapter \ref{chap:dap}, this notion is crucial. A good discussion on this is also given in \cite{Gollmann2000}.
 
 Now we focus on our working example. As stated, the attacker can intercept and modify messages, since it has full control of the network. We consider two situations, presented in Figures~\ref{fig:auth-attack1} and \ref{fig:auth-attack2}.
 
@@ -313,7 +313,7 @@ In the previous section we have presented the two most desirable goals in securi
 
 Even if it is not the focus of this work, \textbf{availability} is considered as a desired goal in protocols, since it is crucial for systems properly maintain ongoing sessions. Not only keeping a peer available is important, but guaranteeing a session key or message reception is also a concern. Thus, modeling the attacker ability of killing protocol messages and reliable defenses against denial of service attacks is a valid concern among protocol designers.
 
-Based on common errors found in published protocols, the work in \cite{abadi-needham-practices} presents interesting guidelines for designing reliable security protocols. Although these guidelines are not sufficient for building correctness, the document offers examples of protocols that do not follow the displayed principles and fails to fulfill its goals, arguing that such principles are indeed a convenient starting point for formulating protocols.
+Based on common errors found in published protocols, the work in \cite{AbadiNeedham96} presents interesting guidelines for designing reliable security protocols. Although these guidelines are not sufficient for building correctness, the document offers examples of protocols that do not follow the displayed principles and fails to fulfill its goals, arguing that such principles are indeed a convenient starting point for formulating protocols.
 
 \begin{figure}[!ht]
   \centering
@@ -332,9 +332,9 @@ Based on common errors found in published protocols, the work in \cite{abadi-nee
   \label{fig:attack-ex-replay}
 \end{figure}
 
-We now do a final analysis over the working example, considering the freshness property. A possible attack, extracted from \cite{boyd-mathuria}, is represented in Figure \ref{fig:attack-ex-replay}, where the Spy impersonates the server and follow the protocol structure, but instead of using a new session key $K_{AB}$, she uses an old $K'_{AB}$ key, used in past protocol runs. Even if the spy does not know the value of $K'_{AB}$, she can replay previous messages encrypted with $K'_{AB}$ and gather more data for post cryptanalysis.
+We now do a final analysis over the working example, considering the freshness property. A possible attack, extracted from \cite{BoydMathuria2008}, is represented in Figure \ref{fig:attack-ex-replay}, where the Spy impersonates the server and follow the protocol structure, but instead of using a new session key $K_{AB}$, she uses an old $K'_{AB}$ key, used in past protocol runs. Even if the spy does not know the value of $K'_{AB}$, she can replay previous messages encrypted with $K'_{AB}$ and gather more data for post cryptanalysis.
 
-An attempt for fixing such flaw is the classical protocol of Needham-Schroeder \cite{needham-schroeder}, which uses nonces, ciphered with shared keys, for guaranteeing freshness of the session key. However, this approach was proven to contain failures \cite{lowe96}. That said, we will focus on a reliable solution, also described in \cite{boyd-mathuria} and illustrated in Figure~\ref{prt:session-key-complete}.
+An attempt for fixing such flaw is the classical protocol of Needham-Schroeder \cite{NeedhamSchroeder78}, which uses nonces, ciphered with shared keys, for guaranteeing freshness of the session key. However, this approach was proven to contain failures \cite{Lowe96}. That said, we will focus on a reliable solution, also described in \cite{BoydMathuria2008} and illustrated in Figure~\ref{prt:session-key-complete}.
 
 \begin{figure}[ht]
   \centering
@@ -374,7 +374,7 @@ The solution relies in two fresh nonces, $N_A$ and $N_B$. Now, $B$ will start th
 
 
 \section{Attack Approaches}
-Complementing the notes on security protocols, it is interesting to provide a section about the classical and most common attack approaches studied in the literature, aiming in understanding how such threats scaled up. A non-exhaustive list, adapted from \cite{boyd-mathuria}, is presented in Table \ref{protocol-attacks}, introducing its names and a brief explanation of its strategy.
+Complementing the notes on security protocols, it is interesting to provide a section about the classical and most common attack approaches studied in the literature, aiming in understanding how such threats scaled up. A non-exhaustive list, adapted from \cite{BoydMathuria2008}, is presented in Table \ref{protocol-attacks}, introducing its names and a brief explanation of its strategy.
 
 It is essential to note that this list is not a complete guide, but an attempt to picture the mainstream on attack methods. Many attacks against systems and protocols involves combinations of several of these approaches and not all of them are applicable to all protocols. Different protocols have different purposes, therefore, the strategies for attacking them may vary.
 
