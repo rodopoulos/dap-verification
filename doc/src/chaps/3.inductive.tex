@@ -28,6 +28,7 @@ Both methods are aided by computer assistance, where theorem proving may be a le
 
 
 \section{Method Introduction}
+\label{sec:inductive-method}
 The Inductive Method aims for both formalization and verification of security protocols, being based on model checking and structural induction. First, the intended protocol $\mathcal{P}$ must be defined as a inductively constructed model $P$, composed by rules describing the real world steps of $\mathcal{P}$.
 
 An unlimited set of agents is considered, who can fire events accordingly with model $P$, in any desired order or regularity, composing the network traffic. Agents can interleave between protocol sessions indefinitely. Among the agents, relies a special one, the Spy, who has control over the network and compromised agents, modeling the threat scenario.
@@ -148,6 +149,7 @@ Precisely, the timestamp for a trace which has $n$ events will be $n$ and, conse
 
 
 \subsection{Threat Model}
+\label{ssec:threat-model}
 The standard thread model used in the Inductive Method is based upon the Dolev-Yao \cite{dolev-yao} approach, introducing three main characteristics concerning the Spy:
 
 \begin{enumerate}
@@ -249,6 +251,7 @@ It is important to note that the expression $knows$ \texttt{Spy} $evs$ expresses
 
 
 \subsection{Operators}
+\label{ssec:operators}
 Operators are functions for reasoning with message sets. They translate the act of exploring and producing messages, being defined as follows:
 
 \begin{center}
@@ -393,32 +396,31 @@ The theorems of this class are easy to proof. They mainly use induction and simp
 \subsection{Regularity}
 The regularity lemmas are facts that can be proved from any message that appears in the traffic. Such properties may be applied to specific protocol goals, but some other broader properties can be guaranteed using them.
 
-For example, regularity lemmas hold for long-term keys (or private keys), which can never be sent through the channel, since they are never meant to be used over the network, just in a agent local context. Therefore, it is easy to derive rules such:
+For example, regularity lemmas hold for long-term keys which can never be sent through the channel, since they are never meant to be used over the network, just in a agent local context. Therefore, it such agent key is seen in the traffic it is easy to derive that this agent is compromised, as stated below.
 
 \begin{center}
-  Key(priK A) $\in$ parts(spies \textit{evs}) $\leftrightarrow$ $A \in bad$ \\
-  Key(priK A) $\in$ analz(spies \textit{evs}) $\leftrightarrow$ $A \in bad$
+  \texttt{Key} ($shrK\ A$) $\in$ \texttt{parts} ($knows$ \texttt{Spy} \textit{evs}) $\Longleftrightarrow$ $A \in bad$
 \end{center}
 
 
 
 \subsection{Confidentiality}
-Holding confidentiality in a protocol can be simply translated as to preventing the disclosure of certain message to the Spy, that is, a message $X$ cannot belong the Spy knowledge set. Since messages are usually protected by encryption, this property is highly related to the use of keys. Precisely, the confidentiality of session keys is a major issue for the protocol confidentiality, because if a spy obtain a given session key, all messages encrypted with it could be easily altered by her. If we define a session key $K_{AB}$, we have to be certain that at the end of all traces the key does not belong to the knowledge set of the Spy. That said, we have the following:
+Holding confidentiality in a protocol can be simply translated as to preventing the disclosure of certain messages to the Spy, that is, a message $X$ cannot belong to the Spy knowledge set. Since messages are usually protected by encryption, this property is highly related to the use of cryptographic keys.
+
+Precisely, the confidentiality of such keys is a major issue for the protocol confidentiality, specially session keys, because if the Spy obtains them, all messages encrypted under these keys could be easily acquired and altered by her. Hence, given a key $K$, we have to be certain that at the end of all traces the key does not belong to the Spy knowledge set, as defined below.
 
 \begin{center}
-  Key $K_{AB} \notin$ analz(spies \textit{evs})
+  \texttt{Key} $K \notin$ \texttt{analz} ($knows$ \texttt{Spy} \textit{evs})
 \end{center}
 
-Note that, if key $K_{AB}$ is encrypted with some other private key of an agent, the latter cannot be part of the compromised agents set. Otherwise, the Spy could easily retrieve the key from the compromised agent, obtaining the session key and further messages.
-
-Confidentiality is also interesting for nonces. Nonces are commonly used for computation of other protocol details, as keys and MACs \cite{bella-book}. Therefore, the model must provide confidentiality to all nonces used for composing important protocol pieces.
+Note that if $K$ is encrypted with some other private key of an agent, the latter cannot be part of the compromised agents set. Otherwise, the Spy could easily retrieve the key from the compromised agent, obtaining the session key and further messages. Confidentiality is also interesting for nonces, which are commonly used assuring authenticity, computing checksum and other operations.
 
 
 
 \subsection{Unicity}
-The creation of fresh components in protocol is vastly used. It is seen in the production of keys, nonces and other entities and they are mostly used for a single session, identifying it. Therefore, providing freshness in a protocol resembles unicity, a concept that establishes bounds between a message and its fresh components.
+The creation of fresh components in protocol is vastly used. It is seen in the production of session keys, nonces and other entities and they are mostly used for a single session, identifying it. Therefore, providing freshness in a protocol resembles unicity, a concept that establishes bounds between a message and its fresh components.
 
-More precisely, if two events contain the same fresh message component, then the events are identical. Further, events containing fresh message components cannot occur more than once, otherwise they violate the unicity concept.
+More precisely, if two events contain the same fresh message component, then they must be identical. Further, events containing fresh message components cannot occur more than once, otherwise they violate the unicity concept. Such lemmas are deeply explore when protocols apply the use of nonces and timestamps.
 
 A formalization for this definition prompted the creation of a new predicate in Isabelle/HOL \textit{Auth} library, the \texttt{Unique} predicate. It takes an event and a trace as parameters, holding if the given event is unique in the given trace. Such formalization is crucial for detecting replay attacks over traces.
 
@@ -450,3 +452,26 @@ Eventually, \textbf{key distribution} becomes a major goal to be checked. Since 
 
 
 \subsection{Goal Availability}
+The concept of goal availability is one of the main contributions in the work of G.~Bella~\cite{bella-book}. In summary, it establishes a formal guarantee that the protocol model could met a given goal and, once this is true, the validity of such goal can be applied to all peers within their assumptions. If such property holds to the model, but cannot be checked by the peers, it is argued that this goal is not available and thus, not fully assured.
+
+Also, goal availability is closely related to the threat model considered by the protocol and its peers minimal trust. Considering the former, our the adopted model is the Dolev-Yao, faithfully implemented by the Inductive Method using abstractions described in Sections \ref{ssec:threat-model} and \ref{ssec:operators}. If a different threat model is considered, important aspects of the model context are also altered, which may change the validity of previous goals.
+
+\textit{Minimal trust} concerns facts that agents must assume true, due to inability to verify them, in order to check a protocol guarantee from their point of view. Precisely, agents can only verify what they send and receive from the network, having no guarantees at all about other peers. Likewise, agents cannot state if they are compromised. Therefore, they must take such facts as true, in order to establish a suitable set of clauses to attest some goal. We formally define minimal trust below.
+
+\begin{definition}
+  Let $\mathcal{P}$ be a security protocol, $P$ be a formal model for $\mathcal{P}$, and $A$ be an agent's name. The \textit{minimal trust} of $A$ is the set of environmental facts formalised in $P$ whose truth values $A$ needs to know but can never verify.
+\end{definition}
+
+Having notion of what agents can verify, an \textit{aplicable guarantee} can be defined.
+
+\begin{definition}
+  Let $\mathcal{P}$ be a security protocol, $P$ be a formal model for $\mathcal{P}$, and $A$ be an agent's name. A formal guarantee in $P$ is \textit{applicable} by $A$ if it is established on the bais of assumptions that $A$ is able to verify in $P$ within her minimal trust.
+\end{definition}
+
+In these previous definitions, it is clear that guarantees that are applicable by an honest agent $A$ are not necessarily applicable by another honest agent $B$. Hence, this strengths the argument that only proved assumptions concerning protocol messages, specially the ones related to the agent, are the valid formal guarantees for a given protocol goal.
+
+Finally, the definition of available goal can be made. The principle should be used to guide the formal proofs about goals. As a result, whenever a goal is not available to some peer, it is not guaranteed at that model and so, it does not hold for the given protocol.
+
+\begin{definition}
+  Let $\mathcal{P}$ be a security protocol, $P$ be a formal model for $\mathcal{P}$, $g$ be a goal for $\mathcal{P}$, and $A$ be an agent's name. The goal $g$ is \textit{available} to $A$ in $P$ if there exists a formal guarantee in $P$ that confirms $g$ and that is applicable by $A$ in $P$.
+\end{definition}
