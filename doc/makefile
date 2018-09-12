@@ -10,13 +10,24 @@ clean:
 	@rm -f *.aux *.blg *.out *.bbl *.log *.toc *.lot *.lof *.flo *.fls *.brf *.acn *.glsdefs *.fdb_latexmk *.ist *.glo *.synctex.gz
 
 build:
-	@echo "Compilando Latex com PDFLatex e BibTeX..."
+	@echo "Building..."
+	@echo "warn: pdflatex and bibtex output is ommited. For verbosity, use 'make debug'"
 	@pdflatex $(FILE) > /dev/null
 	@pdflatex $(FILE) > /dev/null
 	@bibtex $(FILE) > /dev/null
 	@pdflatex $(FILE) > /dev/null
 	@pdflatex $(FILE) > /dev/null
-	@echo "Feito."
+	@echo "Done."
+
+debug:
+	@echo "Building..."
+	@pdflatex $(FILE)
+	@pdflatex $(FILE) > /dev/null
+	@bibtex $(FILE)
+	@pdflatex $(FILE)
+	@pdflatex $(FILE) > /dev/null
+	@echo "Done."
+
 
 cacau: clean
-	cp -r * $(CLAUDIA_PATH)
+	@rsync -r * $(CLAUDIA_PATH)
