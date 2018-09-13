@@ -221,21 +221,24 @@ done
 lemma Inputs_Smartphone :
   "\<lbrakk> Inputs A P X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(P)) \<or> (P = (Smartphone Spy) \<and> illegalUse(P))"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+  
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 lemma Outputs_Smartphone :
   "\<lbrakk> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(P)) \<or> (P = (Smartphone Spy))"
-apply (erule rev_mp, erule daptrans.induct)
-apply (simp_all)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (simp_all)
 done
 
 lemma Inputs_Outputs_Smartphone :
   "\<lbrakk> Inputs A P X \<in> set evs \<or> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
      \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(Smartphone A)) \<or> (P = (Smartphone Spy))"
-apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
+
+  apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
 done
 
 (* - The spy can act both legally (using her smartphone) or illegally (using someone else) *)
@@ -243,8 +246,9 @@ lemma Inputs_Smartphone_Spy :
   "\<lbrakk> Inputs Spy P X \<in> set evs \<or> Outputs P Spy X \<in> set evs; evs \<in> daptrans \<rbrakk>  
       \<Longrightarrow> (P = (Smartphone Spy)) \<and> (legalUse(Smartphone Spy)) \<or>  
           (\<exists> A. P = (Smartphone A) \<and> illegalUse(Smartphone A))"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 
@@ -253,8 +257,9 @@ lemma Inputs_A_Smartphone_3 :
   "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and> 
         (Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r, h \<rbrace> \<in> set evs)"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 (* - This is an important guarantee: the protocol legally continues if the agent confirms the 
@@ -267,8 +272,9 @@ lemma Inputs_A_Smartphone_5 :
             Inputs A (Smartphone A) \<lbrace>Transaction, r', Checksum\<rbrace> \<in> set evs \<and>
             Gets_a A Transaction \<in> set evs \<and>
             Transaction = \<lbrace>Agent A, Number T\<rbrace> )"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 
@@ -276,9 +282,10 @@ done
 lemma Inputs_A_Smartphone_form_3 :
   "\<lbrakk> Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
-apply (erule rev_mp)
-apply (erule daptrans.induct)
-apply (auto)
+  
+  apply (erule rev_mp)
+  apply (erule daptrans.induct)
+  apply (auto)
 done
 
 
@@ -289,17 +296,19 @@ lemma Outputs_honest_A_Smartphone_4 :
   "\<lbrakk> Outputs P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
         (\<exists> r' h\<^sub>s. Gets_s (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs)"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 lemma Outputs_honest_A_Smartphone_6 :
   "\<lbrakk> Outputs P A (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
       Gets_s (Smartphone A) Confirmation \<in> set evs"
-apply (erule rev_mp, erule daptrans.induct)
-apply (simp_all)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (simp_all)
+  apply (auto)
 done
 
 (* - Weaker guarantees for outputs include 
@@ -311,33 +320,36 @@ lemma Outputs_which_Smartphone_4 :
   "\<lbrakk> Outputs (Smartphone A) A Transaction \<in> set evs; 
     \<forall> p q. Transaction = \<lbrace>p, q\<rbrace>;  evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (\<exists> r' h\<^sub>s. Gets_s (Smartphone A) \<lbrace>Transaction, r', h\<^sub>s\<rbrace> \<in> set evs)"
-apply (erule rev_mp)
-apply (erule rev_mp)
-apply (erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp)
+  apply (erule rev_mp)
+  apply (erule daptrans.induct)
+  apply (auto)
 done
 
 
 (* 6. Outputs messages form guarantees *)
 
 lemma Outputs_A_Smartphone_form_4 :
-  "\<lbrakk> Outputs P A Transaction \<in> set evs; evs \<in> daptrans;
+  "\<lbrakk> Outputs (Smartphone A) A Transaction \<in> set evs; evs \<in> daptrans;
     \<forall> p q. Transaction = \<lbrace>p, q\<rbrace> \<rbrakk>
     \<Longrightarrow> \<exists> T. Transaction = \<lbrace>Agent A, Number T\<rbrace>"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 lemma Outputs_A_Smartphone_form_6 :
-  "\<lbrakk> Outputs P A TAN \<in> set evs; evs \<in> daptrans;
+  "\<lbrakk> Outputs (Smartphone A) A TAN \<in> set evs; evs \<in> daptrans;
     \<forall> p q. TAN \<noteq> \<lbrace>p, q\<rbrace> \<rbrakk>
     \<Longrightarrow> \<exists> r. TAN = Nonce r"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 
-(* 7 Protocol termination  *)
+(* 7. Protocol termination  *)
 
 lemma Protocol_terminates :
   "\<exists> A Success. \<exists> evs \<in> daptrans. A \<noteq> Server \<and> Says Server A Success \<in> set evs"
