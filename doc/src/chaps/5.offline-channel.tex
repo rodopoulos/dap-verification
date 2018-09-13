@@ -9,7 +9,7 @@ As stated in Chapter \ref{chap:inductive}, the Inductive Method has proper forma
 
 
 
-\section{Context Analysis}
+\section{DAP Analysis}
 The DAP specification describes the User Smartphone as a key component for the protocol operation and, further, vital for its security. In the following, based on the protocol operational steps, we identify and list the required set of actions for a device rightly fulfill the protocol's goals:
 
 \begin{description}
@@ -30,8 +30,6 @@ However, the protocol authors enjoyed the convenience of the smartphone. Not onl
 
 
 
-
-
 \subsection{Smartphone Scope}
 \label{sec:smartphone-first-analysis}
 Smartphones are portable devices that have an operational system, which provides the capacity to perform some actions like a personal computer. They can process data, store information and communicate through a network channel.
@@ -46,15 +44,11 @@ However, it is important to note that the smartphone performs more actions than 
 
 
 
-
-
 \subsection{DAP Assumptions \textit{vs.} Real World Scenarios}
 \label{sec:dap-assumptions}
 Before going further, it is important to discuss the environment described in the DAP specification and contrast it with the real world. The protocol specification makes strong assumptions about the User smartphone, stating that it cannot be directly accessed or operated by the Spy. We argue that such claim is idealistic, since recent studies have shown critical security flaws and attacks in the major mobile phones operating systems \cite{ZhouJiang2012,Han2013}, enabling remote operations by an attacker, for instance, which goes directly against the security requirement dictated by the protocol. Moreover, it is reasonable to consider the situation of theft, a scenario which is effectively contemplated in Inductive Method extended theory for smartcards \cite[Ch. 10]{Bella2007}.
 
 Therefore, in contrast with DAP specification, but in accordance with the formal method for verifying a protocol \cite[Ch. 11]{Bella2007}, we must consider the real world scenario cases, where the Spy can exploit or steal the User smartphone. We stress that these situations provide different sets of information to the Spy. Thus, we present two possible distinct formalizations for both of them in the following sections.
-
-
 
 
 
@@ -66,8 +60,6 @@ Given the fact that the smartphone can connect to the default network channel, i
 At the same time, such attack is only possible when the smartphone is connected to the network channel, i.e., the Internet. Thus, we must properly formalize the possible states of mobile phones connectivity with the cited channel. Also, note that the offline channel remains secure and what is compromised it is only the User device.
 
 Finally, the situation of smartphone robbery must also be taken in account. Here, the Spy could not only operate the smartphone but, if she is skilled enough, she could also exploit the device, obtaining the same privileges as if the smartphone is compromised.
-
-
 
 
 
@@ -87,8 +79,6 @@ However, these details are confined to the protocol implementation in the underl
 
 
 
-
-
 \subsection{Vulnerabilities}
 An evaluation of realistic vulnerabilities for smartphones is presented, in order to fully comprehend how such aspects must be formalized in our final model:
 
@@ -98,19 +88,17 @@ An evaluation of realistic vulnerabilities for smartphones is presented, in orde
   \item \textbf{Device control:} mobile phones are reduced personal computers, which can be held by users. As noted, they can also be exploited and controlled remotely by the Spy, giving her the ability to request computational actions and access device data. Therefore, compromised smartphones could be added to the set \texttt{badp}, of compromised agents. However, such capacities are limited to the set of computational operations, which does not include physical actions with the smartphone, like pointing its camera to something. As a result, the formalization of a compromised device must not include such actions, but only the ones achievable by computational means.
 \end{itemize}
 
-Additionally, once robbed by the Spy, a smartphone may be in possession of a skilled attacker, which now can easily compromise and exploit the device. Even if it is unlikely, this claim is not idealistic {\color{blue} REFERENCIA}. Hence, we state that if a smartphone is robbed, it is automatically compromised:
+Additionally, once robbed by the Spy, a smartphone may be in possession of a skilled attacker, which now can easily compromise and exploit the device. Even if it is unlikely, this claim is not idealistic {\color{blue} REFERENCIA}. Hence, we state that if a smartphone is robbed, it is automatically compromised, leading to the relation below.
 %
 $$stolen \subseteq badp$$
 
 
 
-
-
 \subsection{Keys}
 In this model, agents' long-term keys are now stored in the Smartphone and agents do not have direct access to it anymore. Thus, such keys are left out of agents' initial state. However, key formalization is kept, since it belongs to the agent:
-
+%
 $$\texttt{shrK} : agent \longrightarrow key$$
-
+%
 How such keys are stored does not require an explicit formalization by the Smartphone model, but does require a description of how they are handled by agents and their devices. This approach flexibilize our specification process for smartphones, leaving any specific aspects to the protocol model specification.
 
 Several smartphone's operational systems present to their users the possibility to be operated until a passphrase is inputted, protecting them from any unwanted access and further illegal actions. However, such behavior is not required by the DAP specification and, given the fact that stolen devices are automatically considered compromised, such security scheme is irrelevant. Thus, we do not present a formalization of PIN-required actions on the smartphone.
@@ -119,10 +107,8 @@ Finally, we mention the QR code ciphering scheme that happens over some steps of
 
 
 
-
-
-
 \subsection{Usability}
+\label{ssec:usability}
 Usability concerns the characterization of smartphone operations, hence modeling this property affects both legal agents and the Spy. Legal agents only perform legal actions, while the Spy can perform both legal and illegal actions. We investigate which actions are interesting to focus, perceiving how the mobile devices communicate with agents.
 
 The set of Smartphone actions is constrained to physical operations, so stolen devices are prone to illegal actions by the Spy. However, as stated in
@@ -138,7 +124,7 @@ As discussed, the illegal action is constrained to physical actions, thus, for p
 \begin{center}
   \textit{illegalUse}(\texttt{Smartphone} $A$) $\triangleq$ \texttt{Smartphone} $A \in$ \texttt{stolen}
 \end{center}
-
+%
 It is important to also discuss the smartphone usability for the Spy, given that she can also perform legal actions. In that sense, we stress that she does not need to use her own card illegally, given that such action would not result in any more relevant information to her knowledge set. Hence:
 %
 \begin{center}
@@ -146,8 +132,6 @@ It is important to also discuss the smartphone usability for the Spy, given that
 \end{center}
 %
 The same is assumed to the server, since it does not use any smartphone.
-
-
 
 
 
@@ -215,9 +199,8 @@ Finally, we need to extend the formal definition of the \textit{used} function, 
 
 
 
-
-
 \subsection{Agents' Knowledge}
+\label{ssec:agents-knowledge-smartphone}
 With new the events, the agents' knowledge sets are now subject to changes compared to the ones defined in Chapter \ref{chap:inductive}. The smartphone is a device that does not necessarily disclose its data to its agents, but it requires communication in order to enrich the agent's knowledge set. At the same time, we observe that compromised devices will disclose its secrets to the Spy. However, we stress that such situation only happens to smartphones connected to the unreliable channel, that is, the Internet.
 
 The definitions on the agents' initial knowledge set are properly updated, following the guideline of Section \ref{ssec:threat-model} and taking into account the secrets held by the smartphone. We omit asymmetric long-term keys for readability:
@@ -289,12 +272,12 @@ The function \textit{knows} will also be extended. The new events impacts both o
 
 
 
-
-
 \section{Threat Model}
+Traditional protocols could have their threat model defined by rule \texttt{Fake} and some other definitions concerning agents knowledge. The introduction of smartphone events and further modifications in knowledge sets induce new kinds of aspects to be considered.
 
+Smartphones can be exploited through illegal actions, as defined in Section~\ref{ssec:usability}. Our model does not allow the Spy to control the offline channel, but she has control over Smartphone inputs and outputs. Therefore, given a illegally usable smartphone, the Spy can send fake messages to it or outputs fake messages to agents from her smartphone, pretending to be the compromised one. Such events should not be mixed with the ability of faking message in the regular network channel, in order to preserve behaviors linked to reception of messages from a specific channel.
 
-
+Finally, rule \texttt{Fake} is extend in order to embrace such details, producing two more events besides the regular one. All other aspects concerning agents' knowledge sets are already described in Section~\ref{ssec:agents-knowledge-smartphone}.
 
 
 \section{Protocol Model}
