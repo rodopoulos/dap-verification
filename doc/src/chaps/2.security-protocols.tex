@@ -6,32 +6,12 @@ This chapter surveys the main aspects of security protocols, explaining its comm
 
 
 
-
-
-
-
-
-
 \section{Basic Notions}
 Security protocols are handy tools for providing protection among communication protocols and systems. They can be informally defined as a set of steps executed between multiple entities, aiming to ensure a reliable and secure communication between them. Current protocol specifications vary in quality, purpose and syntax, although they are the base documents for formally reasoning about these protocols \cite{Abadi99}. More definitions on security protocols can be obtained at \cite{BoydMathuria2008} and \cite{RyanSchneider2010}.
 
 As a communication agreement, security protocols are inherently concurrent, leading to a big spectrum of possibilities among its steps, peers behavior and system states. When considering the attacker factor - an agent who can both act as a legal participant or produce and inject fake information to exploit the protocol - the difficult in designing a reliable solution can grow dramatically. For the very same reason, it is difficult to design a good security protocol and easy to develop a defective one \cite{Bella2007}.
 
 Protocol goals are subtle: they depend on the environment, resources and the protocol architecture itself. Many goals may be present as, for instance, authentication, key establishment, confidentiality, integrity, availability and others. Some of those goals may have varying definitions in the literature, like authentication \cite{Abadi99}. Nevertheless, some properties and concepts can be universal among security protocols, as well as some goals are a consensus in the literature \cite{RyanSchneider2010}.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -53,21 +33,6 @@ A suitable approach for attacker modeling is the classic work of Dolev-Yao \cite
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{Cryptography and Key Management}
 Despite being a crucial basis on the success of a reliable protocol, cryptography will be treated in an abstract way here, since what matters are its concepts and its impact on the protocol behavior. Cryptographic keys are the basis for generating a secure communication, where it is used for enciphering all data transmitted along the channels. However, creating a valid new session key demands a previous secured channel. Indeed, the establishment of such key may occur in one of these three contexts:
 
@@ -78,25 +43,6 @@ Despite being a crucial basis on the success of a reliable protocol, cryptograph
 \end{enumerate}
 
 Concerning the user entity and based on these concepts, the generation of session keys can be based on a \textit{key transport} or \textit{key agreement} protocol. The first is associated with protocols where participants use on-line servers, which generates keys and transfers them to users. The second is often associated with the off-line infrastructures, which generates the key based on inputs provided by the peers. Hybrid protocols for key generation based on these two approaches also exist \cite{BoydMathuria2008}.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -146,22 +92,6 @@ In Figure \ref{prt:naive-session-key}, a protocol is designed as first and naive
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{Confidentiality}
 Confidentiality (or secrecy) is a required aspect when systems should not leak information to untrusted peers, guaranteeing access only for the trusted ones. Also, it is one of the most required properties among security protocols. As seem previously, cryptography is a suitable method for generating keys used for securing messages. We define a encryption scheme consisting of a key set $\mathcal{K}$, a message set $\mathcal{M}$ and a ciphertext set $\mathcal{C}$ and three main algorithms:
 
@@ -195,21 +125,6 @@ We redesign our first attempt, given in Figure~\ref{prt:session-key-confidential
 \end{figure}
 
 If the agents are not compromised, then the spy cannot retrieve the session key $K_{AB}$, since she does not know the shared keys from $A$ and $B$. Consequently, the communication between Alice and Bob is protected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -291,19 +206,6 @@ We rewrite our approach, redefining the protocol, which is given in Figure~\ref{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{Other Goals}
 In the previous section we have presented the two most desirable goals in security protocols, but it is important to mention other properties that are also cited in literature. In the following, we give brief descriptions of such properties. We opted for a non-exhaustive description, as those properties are more loosely used among protocols, even though their importance is uprising.
 
@@ -351,23 +253,6 @@ An attempt for fixing such flaw is the classical protocol of Needham-Schroeder \
 \end{figure}
 
 The solution relies in two fresh nonces, $N_A$ and $N_B$. Now, $B$ will start the protocol, sending her identity and nonce to $A$. $A$ sends hers and $B$'s identities and nonces to the Server, who responds $A$ with $K_{AB}$, $B$ identity and $N_A$ encrypted with $A$'s shared key with the Server and an equivalent instance, encrypted with $B$'s shared key $K_{BS}$. Finally, Alice sends $B$'s instance to her, properly distributing the session key $K_{AB}$. The nonces allows the agents to check freshness of messages and its contents, the keys protect the integrity of data exchanged among peers, and the protocol is sound.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
