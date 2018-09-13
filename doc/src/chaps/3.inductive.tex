@@ -362,11 +362,13 @@ Rule \textit{Nil} is the base case, where the empty trace is a valid trace in a 
 
 Rule \textit{Fake} aides the of the threat context, where the Spy can fake a message $X$ once she has the necessary knowledge, i.e. $X$ belongs to the set of data which can be constructed based on her knowledge set. Rule \textit{Oops}, abstracts the loss of a session key to the Spy, which is treated as a local security breach. This flaw may affect the whole system and this rule allows to detect such situations.
 
+Finally, rule \texttt{Rcpt} is meant to fulfill the \textit{reception invariant}, i.e. a message can only be received if it as previously sent. Note that it does not guarantee that sent messages will ever be received, but only enforces that traces with \texttt{Gets} events must have a matching \texttt{Says} event.
+
 \begin{figure}
   \centering
   \includegraphics[width=0.8\textwidth]{img/prt-example-model}
   \label{fig:notation-example-model}
-  \caption{Formal model for the protocol displayed in Figure \ref{prt:notation-example}. Figure is already following Isabelle's syntax}
+  \caption{Formal model for the protocol displayed in Figure \ref{prt:notation-example}. {\color{blue} essa imagem vai ser trocada para abarcar todos os eventos citados acima}}
 \end{figure}
 
 Using this model, the great majority of possible traces can be derived, but not every conceivable one, since the model should impose some restrictions on traces.
