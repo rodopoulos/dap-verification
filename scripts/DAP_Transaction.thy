@@ -376,5 +376,15 @@ done
 
 (* 5. Regularity lemmas *)
 
+lemma Spy_analz_shrK :
+  "evs \<in> daptrans \<Longrightarrow> (Key (shrK A) \<in> analz (knows Spy evs)) = (Smartphone A \<in> badp)"
+apply (auto dest!: Spy_knows_bad_phones)
+done
+
+lemma Spy_knows_Transaction : 
+  "\<lbrakk> Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
+     \<Longrightarrow> Number T \<in> analz (knows Spy evs)"
+apply (blast dest!: Says_imp_knows_Spy [THEN analz.Inj, THEN analz.Snd])
+done
 
 end
