@@ -34,28 +34,27 @@ inductive_set daptrans :: "event list set" where
 
   | DT4: "\<lbrakk> evs4 \<in> daptrans;
             legalUse(Smartphone A); A \<noteq> Server;
-            Gets_s (Smartphone A) \<lbrace> 
-              \<lbrace> Agent A, Number T'\<rbrace>, 
-              Crypt (shrK A) (Nonce r), 
+            Gets_s (Smartphone A) \<lbrace>
+              \<lbrace>Agent A, Number T\<rbrace>,
+              Crypt (shrK A) (Nonce r),
               Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
             \<rbrace> \<in> set evs4 \<rbrakk>
-    \<Longrightarrow> Outputs (Smartphone A) A \<lbrace>Agent A, Number T'\<rbrace> # evs4 \<in> daptrans"
+    \<Longrightarrow> Outputs (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> # evs4 \<in> daptrans"
 
   | DT5: "\<lbrakk> evs5 \<in> daptrans; legalUse(Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5;
             Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Inputs A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
-            Gets_a A Transaction' \<in> set evs5;
-            Transaction' = \<lbrace> Agent A, Number T \<rbrace> \<rbrakk>
+            Gets_a A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5 \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) Confirmation # evs5 \<in> daptrans"
 
   | DT6: "\<lbrakk> evs6 \<in> daptrans; legalUse(Smartphone A); A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace>
-              \<lbrace> Agent A, Number T' \<rbrace>,
+              \<lbrace> Agent A, Number T \<rbrace>,
               Crypt (shrK A) (Nonce r),
-              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T'\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
             \<rbrace> \<in> set evs6;
-            Outputs (Smartphone A) A \<lbrace> Agent A, Number T' \<rbrace> \<in> set evs6; 
+            Outputs (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6; 
             Gets_s (Smartphone A) Confirmation \<in> set evs6 \<rbrakk>
    \<Longrightarrow> Outputs (Smartphone A) A (Nonce r) # evs6 \<in> daptrans"
 
@@ -84,7 +83,8 @@ inductive_set daptrans :: "event list set" where
     \<Longrightarrow> Says Spy B X #
         Inputs Spy (Smartphone A) X #
         Outputs (Smartphone Spy) C X # evsF \<in> daptrans"
-    
+  
+  (* Reception invariant rules *)
   | Rcpt: "\<lbrakk> evsR \<in> daptrans; Says A B X \<in> set evsR \<rbrakk> \<Longrightarrow> Gets B X # evsR \<in> daptrans"
 
   | Rcpt_s: "\<lbrakk> evsRs \<in> daptrans; Inputs A (Smartphone B) X \<in> set evsRs \<rbrakk> 
@@ -252,7 +252,27 @@ lemma Inputs_Smartphone_Spy :
 done
 
 
-(* 3. Inputs events guarantees *)
+
+(* 3. Protocol termination  *)
+
+lemma Protocol_terminates :
+  "\<exists> A Success. \<exists> evs \<in> daptrans. A \<noteq> Server \<and> Says Server A Success \<in> set evs"
+
+  apply (intro exI bexI)
+  apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
+        THEN daptrans.DT2, THEN daptrans.Rcpt,
+        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
+        THEN daptrans.DT4, THEN daptrans.Rcpt_a,
+        THEN daptrans.DT5, THEN daptrans.Rcpt_s,
+        THEN daptrans.DT6, THEN daptrans.Rcpt_a,
+        THEN daptrans.DT7, THEN daptrans.Rcpt,
+        THEN daptrans.DT8])
+  apply (possibility, auto)
+done
+
+
+
+(* 4. Inputs events guarantees *)
 lemma Inputs_A_Smartphone_3 :
   "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and> 
@@ -262,8 +282,8 @@ lemma Inputs_A_Smartphone_3 :
   apply (auto)
 done
 
-(* - This is an important guarantee: the protocol legally continues if the agent confirms the 
-     ouputed message, which contains the transaction *)
+(* This is an important guarantee: the protocol legally continues if the agent confirms the 
+     outputed message, which contains the transaction *)
 lemma Inputs_A_Smartphone_5 :
   "\<lbrakk> Inputs A P Confirmation \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> (P = (Smartphone A)) \<and>
@@ -278,7 +298,7 @@ lemma Inputs_A_Smartphone_5 :
 done
 
 
-(* 4. Inputs message form guarantees *)
+(* - message form guarantees *)
 lemma Inputs_A_Smartphone_form_3 :
   "\<lbrakk> Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
@@ -289,46 +309,50 @@ lemma Inputs_A_Smartphone_form_3 :
 done
 
 
+
 (* 5. Outputs events guarantees *) 
 
-(* In order to provide correct outputs, the smartphone must be fed with correct inputs *)
-lemma Outputs_honest_A_Smartphone_4 :
-  "\<lbrakk> Outputs P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
-        (\<exists> r' h\<^sub>s. Gets_s (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs)"
-
-  apply (erule rev_mp, erule daptrans.induct)
-  apply (auto)
-done
-
-lemma Outputs_honest_A_Smartphone_6 :
-  "\<lbrakk> Outputs P A (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and> A \<noteq> Server \<and>
-      Gets_s (Smartphone A) Confirmation \<in> set evs"
-
-  apply (erule rev_mp, erule daptrans.induct)
-  apply (simp_all)
-  apply (auto)
-done
-
-(* - Weaker guarantees for outputs include 
-Even weaker versions: if the agent can't check the forms of the verifiers
-  and the agent may be the spy, then we must know what card the agent
-  is getting the output from. 
-*)
+(* First, we state that Smartphones provide correct outputs when fed with expected inputs.
+   Such lemmas guarantee that Smartphones cannot produce unexpected outputs, giving the Spy
+   unlimited resources *)
 lemma Outputs_which_Smartphone_4 :
-  "\<lbrakk> Outputs (Smartphone A) A Transaction \<in> set evs; 
-    \<forall> p q. Transaction = \<lbrace>p, q\<rbrace>;  evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> r' h\<^sub>s. Gets_s (Smartphone A) \<lbrace>Transaction, r', h\<^sub>s\<rbrace> \<in> set evs)"
+  "\<lbrakk> Outputs (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> r. Gets_s (Smartphone A) \<lbrace>
+          \<lbrace>Agent A, Number T\<rbrace>,
+          Crypt (shrK A) (Nonce r),
+          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+        \<rbrace> \<in> set evs)"
 
-  apply (erule rev_mp)
   apply (erule rev_mp)
   apply (erule daptrans.induct)
   apply (auto)
 done
 
+lemma Outputs_which_Smartphone_6 :
+  "\<lbrakk> Outputs (Smartphone A) A (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> Gets_s (Smartphone A) Confirmation \<in> set evs"
 
-(* 6. Outputs messages form guarantees *)
+  apply (erule rev_mp)
+  apply (erule daptrans.induct)
+  apply (auto)
+done
+
+(* lemma Outputs_A_Smartphone_4 :
+  "\<lbrakk> Outputs P A \<lbrace> Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
+        (\<exists> r. Gets_s (Smartphone A) \<lbrace> 
+          \<lbrace>Agent A, Number T\<rbrace>,
+          Crypt (shrK A) (Nonce r),
+          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+        \<rbrace> \<in> set evs)"
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
+done *)
+
+
+
+(* - Outputs messages form guarantees *)
 
 lemma Outputs_A_Smartphone_form_4 :
   "\<lbrakk> Outputs (Smartphone A) A Transaction \<in> set evs; evs \<in> daptrans;
@@ -349,23 +373,8 @@ lemma Outputs_A_Smartphone_form_6 :
 done
 
 
-(* 7. Protocol termination  *)
 
-lemma Protocol_terminates :
-  "\<exists> A Success. \<exists> evs \<in> daptrans. A \<noteq> Server \<and> Says Server A Success \<in> set evs"
-
-  apply (intro exI bexI)
-  apply (rule_tac [2] daptrans.Nil [THEN daptrans.DT1, THEN daptrans.Rcpt,
-        THEN daptrans.DT2, THEN daptrans.Rcpt,
-        THEN daptrans.DT3, THEN daptrans.Rcpt_s,
-        THEN daptrans.DT4, THEN daptrans.Rcpt_a,
-        THEN daptrans.DT5, THEN daptrans.Rcpt_s,
-        THEN daptrans.DT6, THEN daptrans.Rcpt_a,
-        THEN daptrans.DT7, THEN daptrans.Rcpt,
-        THEN daptrans.DT8])
-  apply (possibility, auto)
-done
-
+(* 5. Regularity lemmas *)
 
 
 end
