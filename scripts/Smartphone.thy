@@ -128,7 +128,7 @@ declare shrK_neq [THEN not_sym, simp]
 
 (* FUNCTION KNOWS *)
 (* An agent's compromised Smartphone disclose hers shared keys *)
-lemma Spy_knows_bad [intro!] :
+lemma Spy_knows_bad_phones [intro!] :
   "Smartphone A \<in> badp \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) add: imageI knows_Cons split: event.split)
@@ -139,7 +139,7 @@ lemma Crypt_Spy_analz_bad :
   "\<lbrakk> Crypt (shrK A) X \<in> analz (knows Spy evs); Smartphone A \<in> badp \<rbrakk> 
     \<Longrightarrow> X \<in> analz (knows Spy evs)"
 apply (erule analz.Decrypt)
-apply (simp add: Spy_knows_bad)
+apply (simp add: Spy_knows_bad_phones)
 done
 
 
