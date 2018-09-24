@@ -3,24 +3,24 @@ If computers were a well welcomed tool for improving work and life, then compute
 
 \textit{Internet banking} is one of these areas, where sensible data, like monetary transactions and users credentials, is a desired target by malicious peers, who try to steal, manipulate or sniff on these data, potentially leading to great monetary or corporations' image damage. As a counter measure, researchers and corporate organizations try to develop ways for providing security for users property and information through security protocols.
 
-The \textit{Dynamic Authentication Protocol} (DAP) \cite{Peotta2012} is a security protocol, developed in 2012, aiming to provide a trustful authorization method for each banking transaction on an out-of-band secure access model. The author claims that the protocol provides minimization of success to a vast field of known attacks and approaches. However, the cited document does not provide a formal and incontestable proof of the protocol correctness, only providing to the reader a study case of a real world situation.
+The \textit{Dynamic Authentication Protocol} (DAP)~\cite{Peotta2012} is a security protocol, developed in 2012, aiming to provide a trustful authorization method for each banking transaction on an out-of-band secure access model. The author claims that the protocol provides minimization of success to a vast field of known attacks and approaches. However, the cited document does not provide a formal and incontestable proof of the protocol correctness, only providing to the reader a study case of a real world situation.
 
 \textit{Formal verification} is the field of Computer Science where mathematical tools are used to proving or disproving the correctness of algorithms, software or hardware. In essence, this requires the translation of those systems and their properties into a formal language for further verification by formal methods. In contrast to informal methods, which tend to be less arduous, but do not provide a factual proof of nonexistence of flaws, formal verification underlies in mathematical principles and provides reproducible proofs or counter-examples of a software correctness.
 
-Like a regular computer program, security protocols are software, often involving concurrency, where general scenarios gather multiple peers communicating with each other. Numerous techniques were developed for formally verify security protocols. The \textit{Inductive Method}, first proposed by L.~Paulson \cite{Paulson98} and further developed by G.~Bella \cite{Bella2007} is an interesting system, which abstracts many details of a security protocol context in a manner where it is possible to reason about past executions in a formal and logical way.
+Like a regular computer program, security protocols are software, often involving concurrency, where general scenarios gather multiple peers communicating with each other. Numerous techniques were developed for formally verify security protocols. The \textit{Inductive Method}, first proposed by L.~Paulson~\cite{Paulson98} and further developed by G.~Bella~\cite{Bella2007} is an interesting system, which abstracts many details of a security protocol context in a manner where it is possible to reason about past executions in a formal and logical way.
 
-In this work, this method will be explored and putted to test on DAP, a real world and challenging protocol, where the chosen area of interest shows significant relevance. Based in techniques from previous works \cite{BellaPaulson2006, Paulson99, Paulson98}, the protocol will be formally specified and verified, hopefully giving a formal and trustful certification for its users' base.
+In this work, this method will be explored and putted to test on DAP, a real world and challenging protocol, where the chosen area of interest shows significant relevance. Based in techniques from previous works~\cite{BellaPaulson2006, Paulson99, Paulson98}, the protocol will be formally specified and verified, hopefully giving a formal and trustful certification for its users' base.
 
 
 
 
 
 \section{Motivation}
-Authentication is the biggest concern in security for internet banking \cite{Hutchinson2003}. Allied to confidentiality, these properties provides a reliable environment for users to perform monetary transactions without worrying with passive network eavesdroppers or active attackers trying to modify these transactions.
+Authentication is the biggest concern in security for internet banking~\cite{Hutchinson2003}. Allied to confidentiality, these properties provides a reliable environment for users to perform monetary transactions without worrying with passive network eavesdroppers or active attackers trying to modify these transactions.
 
-However, despite the efforts to provide desired security qualities for internet banking security systems, criminals are still able to perform successful attacks on these infrastructures \cite{Adham2013}.
+However, despite the efforts to provide desired security qualities for internet banking security systems, criminals are still able to perform successful attacks on these infrastructures~\cite{Adham2013}.
 
-Promising works appeared over years using OTP schemes \cite{Starnberger2009, LeeHyunLim2010}, being them the basis for DAP. Still, no formal verification was done in any of these approaches. Therefore, there is no guarantee that they will not fail. Allied with correct tools, formal verification can provide mathematical proofs that security protocols are correct or not. For that reason, we argue that formally verifying such critical systems is not only a valid motivation, but an obligation.
+Promising works appeared over years using OTP schemes~\cite{Starnberger2009, LeeHyunLim2010}, being them the basis for DAP\@. Still, no formal verification was done in any of these approaches. Therefore, there is no guarantee that they will not fail. Allied with correct tools, formal verification can provide mathematical proofs that security protocols are correct or not. For that reason, we argue that formally verifying such critical systems is not only a valid motivation, but an obligation.
 
 
 
@@ -28,18 +28,18 @@ Promising works appeared over years using OTP schemes \cite{Starnberger2009, Lee
 \section{Goals}
 Based on the previous sessions, this work mainly tries to provide a formal specification of the \textit{Dynamic Authentication Protocol}, and its formal verification, using the Inductive Method. Therefore, a proof or a counter-example of the protocol correctness will be obtained, leading to a formal and mathematical corroboration for the system.
 
-Additionally, it is intended to incorporate new material for the base of the Inductive Method proofs \cite{isabelle-hol-auth}, using the automatic assistant system Isabelle \cite{isabelle}, contributing to its community.
+Additionally, it is intended to incorporate new material for the base of the Inductive Method proofs~\cite{isabelle-hol-auth}, using the automatic assistant system Isabelle~\cite{isabelle}, contributing to its community.
 
 \section{Content Outline}
 
 This document structure is divided in the following way:
 
 \begin{enumerate}
-    \item \textbf{Chapter \ref{chap:sec-protocols}} presents the general theory in security protocols, discussing its properties and goals;
+    \item \textbf{Chapter~\ref{chap:sec-protocols}} presents the general theory in security protocols, discussing its properties and goals;
 
-    \item \textbf{Chapter \ref{chap:inductive}} begins with a brief introduction on formal verification and then describes our selected approach, the Inductive Method;
+    \item \textbf{Chapter~\ref{chap:inductive}} begins with a brief introduction on formal verification and then describes our selected approach, the Inductive Method;
 
-    \item \textbf{Chapter \ref{chap:dap}} outlines internet banking systems and its challenges for presenting our targeted protocol, DAP, detailing its models, assumptions and operation;
+    \item \textbf{Chapter~\ref{chap:dap}} outlines internet banking systems and its challenges for presenting our targeted protocol, DAP, detailing its models, assumptions and operation;
 
     % \item \textbf{Chapter \ref{chap:methodology}} presents the intended methodology for the future work, displaying the intended approaches and already done tasks;
 \end{enumerate}
