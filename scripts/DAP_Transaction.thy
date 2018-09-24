@@ -32,8 +32,7 @@ inductive_set daptrans :: "event list set" where
             Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> daptrans"
 
-  | DT4: "\<lbrakk> evs4 \<in> daptrans;
-            legalUse(Smartphone A); A \<noteq> Server;
+  | DT4: "\<lbrakk> evs4 \<in> daptrans; legalUse(Smartphone A); A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace>
               \<lbrace>Agent A, Number T\<rbrace>,
               Crypt (shrK A) (Nonce r),
@@ -376,15 +375,71 @@ done
 
 (* 5. Regularity lemmas *)
 
-lemma Spy_analz_shrK :
+ML{*
+
+structure DAP_Transaction = struct
+
+fun prepare_tac ctxt =
+  forward_tac ctxt [@{thm Outputs_A_Smartphone_form_4}] 14 THEN
+  clarify_tac ctxt 15 THEN
+  forward_tac ctxt [@{thm Outputs_A_Smartphone_form_6}] 16
+
+fun parts_prepare_tac ctxt = 
+           prepare_tac ctxt THEN
+ (*SR_U9*)   dresolve_tac ctxt [@{thm Gets_imp_knows_Spy_parts_Snd}] 18 THEN 
+ (*SR_U9*)   dresolve_tac ctxt [@{thm Gets_imp_knows_Spy_parts_Snd}] 19 THEN      
+ (*Base*)  (force_tac ctxt) 1
+
+
+fun analz_prepare_tac ctxt = 
+         prepare_tac ctxt THEN
+         dresolve_tac ctxt @{thms Gets_imp_knows_Spy_analz_Snd} 18 THEN 
+ (*SR_U9*) dresolve_tac ctxt @{thms Gets_imp_knows_Spy_analz_Snd} 19 THEN 
+         REPEAT_FIRST (eresolve_tac ctxt [asm_rl, conjE] ORELSE' hyp_subst_tac ctxt)
+
+end
+*}
+
+method_setup prepare = \<open>
+    Scan.succeed (fn ctxt => SIMPLE_METHOD (DAP_Transaction.prepare_tac ctxt))\<close>
+  "to launch a few simple facts that will help the simplifier"
+
+method_setup parts_prepare = \<open>
+    Scan.succeed (fn ctxt => SIMPLE_METHOD (DAP_Transaction.parts_prepare_tac ctxt))\<close>
+  "additional facts to reason about parts"
+
+method_setup analz_prepare = \<open>
+    Scan.succeed (fn ctxt => SIMPLE_METHOD (DAP_Transaction.analz_prepare_tac ctxt))\<close>
+  "additional facts to reason about analz"
+
+
+lemma Spy_parts_keys [simp]: 
+  "evs \<in> daptrans \<Longrightarrow> (Key (shrK A) \<in> parts (knows Spy evs)) = (Smartphone A \<in> badp)"
+
+  apply (erule daptrans.induct)
+  (*apply parts_prepare*)
+  apply simp_all
+  (* apply (blast intro: parts_insertI) *)
+oops
+
+lemma Spy_analz_shrK [simp]: 
   "evs \<in> daptrans \<Longrightarrow> (Key (shrK A) \<in> analz (knows Spy evs)) = (Smartphone A \<in> badp)"
-apply (auto dest!: Spy_knows_bad_phones)
+
+  apply (auto dest!: Spy_knows_bad_phones)
 done
+
+
+(* Spy Guarantees *)
 
 lemma Spy_knows_Transaction : 
   "\<lbrakk> Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
      \<Longrightarrow> Number T \<in> analz (knows Spy evs)"
 apply (blast dest!: Says_imp_knows_Spy [THEN analz.Inj, THEN analz.Snd])
 done
+
+
+(* Authenticity lemmas *)
+
+
 
 end

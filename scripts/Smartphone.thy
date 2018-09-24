@@ -39,13 +39,13 @@ primrec illegalUse :: "smartphone \<Rightarrow> bool" ("illegalUse (_)") where
 overloading initState \<equiv> initState
   begin
   primrec initState where
-    initState_Server : "initState Server = (Key`(range shrK))" |
+    initState_Server : "initState Server = (Key` (range shrK))" |
     initState_Friend : "initState (Friend i) = {}" |
-    initState_Spy : "initState Spy = (Key`((shrK` bad) \<union> (shrK`{A. Smartphone A \<in> badp}) ))"
+    initState_Spy : "initState Spy = (Key` (shrK` {A. Smartphone A \<in> badp}))"
 end
 
 axiomatization where
-  Key_sypply_ax: "finite KK \<Longrightarrow> \<exists> K. K \<notin> KK & Key K \<notin> used evs " and
+  Key_supply_ax: "finite KK \<Longrightarrow> \<exists> K. K \<notin> KK & Key K \<notin> used evs " and
   
   (*Needed because of Spy's knowledge of Pairkeys*)
   Nonce_supply_ax: "finite NN \<Longrightarrow> \<exists> N. N \<notin> NN & Nonce N \<notin> used evs"
