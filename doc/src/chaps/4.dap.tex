@@ -89,20 +89,20 @@ Finally, the problem statement may be placed: the User wants to send a message \
 
 
 \subsection{General Model}
-The system has two major parts: the generation of shared key $K$, between the User and the Server, and the message exchange operations, which will carry the banking transactions requested by the User.
+The system has two major parts: the generation of shared key \(K\), between the User and the Server, and the message exchange operations, which will carry the banking transactions requested by the User.
 
-The production of the shared key $K$ is done only once, therefore the same key is used along all later messages, for any banking transaction. Also, this phase may be done by two ways, symmetric and asymmetric, depending on the channel the User chooses.
+The production of the shared key \(K\) is done only once, therefore the same key is used along all later messages, for any banking transaction. Also, this phase may be done by two ways, symmetric and asymmetric, depending on the channel the User chooses.
 
 
 
 
 
 \section{Key Generation}
-The key generation focus on the establishment of $K$: a shared key between a given user and the bank, used for further message transactions. At the end of generation process, the key will be securely stored at the User's smartphone and the Bank mainframe environment.
+The key generation focus on the establishment of \(K\): a shared key between a given user and the bank, used for further message transactions. At the end of generation process, the key will be securely stored at the User's smartphone and the Bank mainframe environment.
 
 Each user will have its own shared key with the Bank, meaning that the number of keys stored at the bank side is identical to the number of clients which are employing the DAP system. Therefore, requesting such a key means that the client is interested in using the extra protection layer. Hence, key generation is always started by the User.
 
-Following the protocol initial assumptions, both the Server and User's smartphone are uncompromisable. That said, we emphasize that $K$ is assumed not compromised as well, since it is stored only at entities that are not compromised by the Spy and does not appear in clear text over the network channel.
+Following the protocol initial assumptions, both the Server and User's smartphone are uncompromisable. That said, we emphasize that \(K\) is assumed not compromised as well, since it is stored only at entities that are not compromised by the Spy and does not appear in clear text over the network channel.
 
 
 
@@ -114,21 +114,20 @@ First, the User requires to ingress the two-factor authentication scheme and for
 The Server receives the request and generates three entities:
 
 \begin{itemize}
-  \item The shared key $K$, which will not be sent yet. This key is based in the User's ID and the operation request timestamp;
+  \item The shared key \(K\), which will not be sent yet. This key is based in the User's ID and the operation request timestamp;
 
-  \item A nonce $N_K$, being a random sequence of $2^{288}$ bits;
+  \item A nonce \(N_K\), being a random sequence of \(2^{288}\) bits;
 
-  \item A key $K'$, which is obtained by the binary summation of the previous entities, i.e. $K' = K \oplus N_K$.
+  \item A key \(K'\), which is obtained by the binary summation of the previous entities, i.e. \(K' = K \oplus N_K\).
 \end{itemize}
 
-Next, the Server responds the initial request with nonce $N_K$, which is noted by the user over the personal computer channel, encrypted in the QR-Code form. The User must use his smartphone to scan the code, storing the nonce within it. Now the User is prompted to access an ATM machine, to collect the second part of the key.
+Next, the Server responds the initial request with nonce \(N_K\), which is noted by the user over the personal computer channel, encrypted in the QR-Code form. The User must use his smartphone to scan the code, storing the nonce within it. Now the User is prompted to access an ATM machine, to collect the second part of the key.
 
-At the ATM machine, the user must present his personal smartcard and password for authentication. Then, the terminal requests the second part of the key to the Server, who replies with key $K'$. Once more, the ATM shows the message as a QR-code, which is scanned by the User's smartphone.
+At the ATM machine, the user must present his personal smartcard and password for authentication. Then, the terminal requests the second part of the key to the Server, who replies with key \(K'\). Once more, the ATM shows the message as a QR-code, which is scanned by the User's smartphone.
 
-Now, the smartphone can compute key $K$, using $N_K$ and $K'$ as inputs. At the end of the computation, the inputs are discarded and $K$ is stored at the User's smartphone. Finally, the key is properly distributed between the Server and the User.
+Now, the smartphone can compute key \(K\), using \(N_K\) and \(K'\) as inputs. At the end of the computation, the inputs are discarded and \(K\) is stored at the User's smartphone. Finally, the key is properly distributed between the Server and the User.
 
-
-\begin{figure}[ht]
+\begin{figure}[ht]\label{fig:dap-symmetric}
   \centering
   \begin{sequencediagram}
     \newinst{pc}{PC}
@@ -170,8 +169,7 @@ Now, the smartphone can compute key $K$, using $N_K$ and $K'$ as inputs. At the 
     \end{sdblock}
   \end{sequencediagram}
 
-\caption{Diagram of a symmetric method for generation of key $K$}
-\label{fig:dap-symmetric}
+  \caption{Diagram of a symmetric method for generation of key \(K\)}
 \end{figure}
 
 
@@ -183,7 +181,7 @@ Now, the smartphone can compute key $K$, using $N_K$ and $K'$ as inputs. At the 
 \subsection{Asymmetric Scheme}
 The asymmetric scheme resembles the public key RSA algorithm~\cite{RSA}. The User must issue the generation of key \(K\) at his smartphone. Although, a pair of keys are generated, \(pK_U\) and \(sK_U\), the public and private keys respectively. Then, it sends the public key to the Server.
 
-As soon the Server acknowledge the User public key, he signs it with his private key $sK_S$ and sends his public key to the User. When the latter notes the Server's public key, he stores it, encrypting it with his private key.
+As soon the Server acknowledge the User public key, he signs it with his private key \(sK_S\) and sends his public key to the User. When the latter notes the Server's public key, he stores it, encrypting it with his private key.
 
 This process, described in~\cite[p.78]{Peotta2012}, seems to have some inconsistencies. In private conversation with the protocol authors, we identified that the document needs reviews in this part. The text claims to describe a model based in public key infrastructure and RSA algorithm, but the presented scheme does not match the assertion. Thus, some naming conventions in the specification are not clear enough.
 
@@ -194,31 +192,31 @@ Therefore, we decided to provide the described methodology in~\cite{Peotta2012},
 
 
 \section{Message Transactions}
-Once the shared key $K$ is available for both the User and the Server, they can perform secure banking transactions, with atomic authorization for each operation. Initially, the User must be authenticated in the Internet Banking system, for requesting transactions. Note that this security layer is not enough for guaranteeing reliability, since the Spy has full control of the User's personal computer.
+Once the shared key \(K\) is available for both the User and the Server, they can perform secure banking transactions, with atomic authorization for each operation. Initially, the User must be authenticated in the Internet Banking system, for requesting transactions. Note that this security layer is not enough for guaranteeing reliability, since the Spy has full control of the User's personal computer.
 
-Additionally, the key $K$ is divided into two others: $k_1$ and $k_2$. The former is used for message integrity, as an input for HMAC-SHA1 protocol~\cite{Bellare96}, providing consistency checks among messages exchanged between the Server and the User. The latter is used for message secrecy, as an input for AES protocol ciphers~\cite{AES}, protecting messages or its components over clear channels.
+Additionally, the key \(K\) is divided into two others: \(k_1\) and \(k_2\). The former is used for message integrity, as an input for HMAC-SHA1 protocol~\cite{Bellare96}, providing consistency checks among messages exchanged between the Server and the User. The latter is used for message secrecy, as an input for AES protocol ciphers~\cite{AES}, protecting messages or its components over clear channels.
 
 Figure~\ref{fig:dap-transaction} explain the message transaction whole process, which is based in the following steps:
 
 \begin{enumerate}
   \item The User prompts the banking transaction \(m\) through the Internet Banking application, at her personal computer. She must be previously authenticated. The transaction is sent in cleartext to the Server;
 
-  \item Once the Server receives \(m\), it generates the \textbf{Transaction Authorization Nonce} (TAN), which we will name $r_S$. This nonce will uniquely identify the transaction \(m\), acting as a reference for further authorization. Also, it produces cipher $r'$, encrypting nonce $r_S$ using key $k_2$ and an AES encryption scheme, and the checksum hash $h_S$, applying the HMAC-SHA1 protocol over the concatenation of transaction \(m\) and cipher $r'$, using key $k_1$. Finally, entities $m, r'$ and $h_S$ are grouped and sent to the User;
+  \item Once the Server receives \(m\), it generates the \textbf{Transaction Authorization Nonce} (TAN), which we will name \(r_S\). This nonce will uniquely identify the transaction \(m\), acting as a reference for further authorization. Also, it produces cipher \(r'\), encrypting nonce \(r_S\) using key \(k_2\) and an AES encryption scheme, and the checksum hash \(h_S\), applying the HMAC-SHA1 protocol over the concatenation of transaction \(m\) and cipher \(r'\), using key \(k_1\). Finally, entities \(m, r'\) and \(h_S\) are grouped and sent to the User;
 
-  \item At the User side, the personal computer receives message $\Bracks{m, r', h_S}$ and visually displays it to the User as a QR-code cipher. The User may now use his smartphone to scan the code, which will input $m, r'$ and $h_S$ to the device;
+  \item At the User side, the personal computer receives message \(\Bracks{m, r', h_S}\) and visually displays it to the User as a QR-code cipher. The User may now use his smartphone to scan the code, which will input \(m, r'\) and \(h_S\) to the device;
 
-  \item By decomposition, the Smartphone retrieves \(m\) and $r'$. It now calculates cipher $h_U$, using its own $k_1$ key with HMAC-SHA1 protocol, and performs the checksum between $h_U$ and $h_S$. If the ciphers do not match, the Smartphone announces the error, halting the protocol. Otherwise, it considers the received transaction valid and displays it on its screen, presenting the challenge to the user;
+  \item By decomposition, the Smartphone retrieves \(m\) and \(r'\). It now calculates cipher \(h_U\), using its own \(k_1\) key with HMAC-SHA1 protocol, and performs the checksum between \(h_U\) and \(h_S\). If the ciphers do not match, the Smartphone announces the error, halting the protocol. Otherwise, it considers the received transaction valid and displays it on its screen, presenting the challenge to the user;
 
   \item The User is challenged to verify the transaction, being prompted to confirm its legitimacy. If the operation is declined, the protocol halts. Otherwise, the User confirms the message, sending a confirmation acknowledgment to the Smartphone;
 
-  \item Having the transaction checked and approved, the Smartphone decipher $r'$, using key $k_2$, obtaining its own version of the TAN, namely $r_U$, displaying it on its screen;
+  \item Having the transaction checked and approved, the Smartphone decipher \(r'\), using key \(k_2\), obtaining its own version of the TAN, namely \(r_U\), displaying it on its screen;
 
-  \item The User retrieves nonce $r_U$ from her Smartphone screen, sending it to the Server through its personal computer;
+  \item The User retrieves nonce \(r_U\) from her Smartphone screen, sending it to the Server through its personal computer;
 
-  \item The server receives $r_U$ and compares it with $r_S$. If they do not correspond, protocol halts. Otherwise, the Server authorizes the transaction. Finally, it sends an acknowledgment to the User, confirming the authorization.
+  \item The server receives \(r_U\) and compares it with \(r_S\). If they do not correspond, protocol halts. Otherwise, the Server authorizes the transaction. Finally, it sends an acknowledgment to the User, confirming the authorization.
 \end{enumerate}
 
-\begin{figure}[ht]
+\begin{figure}[ht]\label{fig:dap-transaction}
   \centering
   \begin{sequencediagram}
     \newinst{cel}{Smartphone}
@@ -251,7 +249,9 @@ Figure~\ref{fig:dap-transaction} explain the message transaction whole process, 
       % \postlevel
 
       \mess{cel}{$m$}{pc}
+
       \mess{pc}{Confirm $m$}{cel}
+
       \postlevel
 
       \begin{call}
@@ -273,7 +273,6 @@ Figure~\ref{fig:dap-transaction} explain the message transaction whole process, 
   \end{sequencediagram}
 
   \caption{Diagram of a message transation in DAP}
-  \label{fig:dap-transaction}
 \end{figure}
 
 
