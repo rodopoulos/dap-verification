@@ -440,6 +440,24 @@ done
 
 (* Authenticity lemmas *)
 
+(* Unicity lemmas *)
+lemma Transaction_unicity :
+  "\<lbrakk> Says Server A \<lbrace> 
+      \<lbrace> Agent A, Number T \<rbrace>,
+        Crypt (shrK A) (Nonce r),
+        Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+       \<rbrace> \<in> set evs ;
+    Says Server A' \<lbrace> 
+      \<lbrace> Agent A', Number T' \<rbrace>,
+        Crypt (shrK A') (Nonce r),
+        Crypt (shrK A') \<lbrace> \<lbrace>Agent A', Number T'\<rbrace>, Crypt (shrK A') (Nonce r) \<rbrace>
+       \<rbrace> \<in> set evs;
+    evs \<in> daptrans\<rbrakk>
+   \<Longrightarrow> A = A' \<and> T = T'"
 
+  apply (erule rev_mp, erule rev_mp)
+  apply (erule daptrans.induct, simp_all)
+  apply (fastforce dest: Says_parts_used)
+done
 
 end
