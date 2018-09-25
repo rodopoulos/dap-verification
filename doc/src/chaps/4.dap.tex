@@ -112,20 +112,19 @@ The symmetric model of key generation is prompted by the User at the Internet Ba
 First, the User requires to ingress the two-factor authentication scheme and for that, he must be previously authenticated in the Internet Banking system, on his personal computer.
 
 The Server receives the request and generates three entities:
-
 \begin{itemize}
-  \item The shared key \(K\), which will not be sent yet. This key is based in the User's ID and the operation request timestamp;
+  \item The cipher \(N'\), which generation is based in the User's ID and the operation request timestamp;
 
-  \item A nonce \(N_K\), being a random sequence of \(2^{288}\) bits;
+  \item A randomly generated fresh nonce \(N_S\);
 
-  \item A key \(K'\), which is obtained by the binary summation of the previous entities, i.e. \(K' = K \oplus N_K\).
+  \item Cipher \(N_A\), which is obtained by the following binary operations: \(N_A = N' \oplus N_K\).
 \end{itemize}
 
-Next, the Server responds the initial request with nonce \(N_K\), which is noted by the user over the personal computer channel, encrypted in the QR-Code form. The User must use his smartphone to scan the code, storing the nonce within it. Now the User is prompted to access an ATM machine, to collect the second part of the key.
+Next, the Server responds the initial request with nonce \(N_S\), which is noted by the user over the personal computer channel, presented in the QR-Code form. The User must use his smartphone to scan the code, storing the nonce within it. Now the User is prompted to access an ATM machine, in order to collect the second part of the key.
 
-At the ATM machine, the user must present his personal smartcard and password for authentication. Then, the terminal requests the second part of the key to the Server, who replies with key \(K'\). Once more, the ATM shows the message as a QR-code, which is scanned by the User's smartphone.
+At the ATM machine, the user must present his credentials, through a personal smartcard and password. Proceeding the operation, the terminal requests the second part of the key to the Server, \(N_A\), which delivers it through a secure channel. Hence, the ATM displays \(N_A\) as a QR-code, which is scanned by the User's smartphone.
 
-Now, the smartphone can compute key \(K\), using \(N_K\) and \(K'\) as inputs. At the end of the computation, the inputs are discarded and \(K\) is stored at the User's smartphone. Finally, the key is properly distributed between the Server and the User.
+Now, the smartphone computes key \(K\), using \(N_S\) and \(N_A\) as inputs and discarding them at the end. Since the Server generated both of the inputs, it can also computes key \(K\) and the key is properly distributed between the Server and the User.
 
 \begin{figure}[ht]\label{fig:dap-symmetric}
   \centering
@@ -136,15 +135,15 @@ Now, the smartphone can compute key \(K\), using \(N_K\) and \(K'\) as inputs. A
     \newinst[2]{srv}{Server}
 
     \mess{pc}{Request DAP}{srv}
-    \mess{srv}{$N_K$}{pc}
+    \mess{srv}{$N_S$}{pc}
 
     \begin{sdblock}{Offline Channel}{}
-      \mess{pc}{Displays $N_K$}{cel}
+      \mess{pc}{$N_S$}{cel}
 
       \postlevel\
 
       \begin{call}
-        {cel}{Scans $N_K$}{cel}{Stores $N_K$}
+        {cel}{Scans $N_S$}{cel}{Stores $N_S$}
       \end{call}
     \end{sdblock}
 
@@ -154,27 +153,23 @@ Now, the smartphone can compute key \(K\), using \(N_K\) and \(K'\) as inputs. A
 
     \postlevel\
 
-    \mess{atm}{Request $K'$}{srv}
+    \mess{atm}{Request $N_A$}{srv}
 
-    \mess{srv}{$K'$}{atm}
+    \mess{srv}{$N_A$}{atm}
 
     \begin{sdblock}{Offline Channel}{}
-      \mess{atm}{Displays $K'$}{cel}
+      \mess{atm}{Displays $N_A$}{cel}
 
       \postlevel\
 
       \begin{call}
-        {cel}{Scans $N_K$}{cel}{$K = N_K \oplus K'$}
+        {cel}{Scans $N_A$}{cel}{$K = N_S \oplus N_A$}
       \end{call}
     \end{sdblock}
   \end{sequencediagram}
 
   \caption{Diagram of a symmetric method for generation of key \(K\)}
 \end{figure}
-
-
-
-
 
 
 
@@ -279,18 +274,20 @@ Figure~\ref{fig:dap-transaction} explain the message transaction whole process, 
 
 
 
-\section{Security Claims}
-Finally, we discuss the correctness arguments concerning security on DAP\@. The authors postulate such guarantee as an hypothesis, constrained to a defined model of the system. This model restricts the entities which are vulnerable to the Spy, postulating the following:
+\section{Security Discussion}
+Finally, we discuss the correctness arguments concerning security on DAP, postulated as hypothesis, constrained to a defined model of the system. This model restricts the entities which are vulnerable to the Spy, postulating the following:
 
 \begin{itemize}
-  \item The User personal computer is totally compromised;
-  \item The ATM machine is not compromised;
+  \item The User personal computer and its channel with the Server are compromised;
+  \item The ATM machine and its channel with the Server are not compromised;
   \item The User smartphone is not compromised;
-  \item The Server is not compromised, but the Spy has full control of the network;
+  \item The Server is not compromised.
 \end{itemize}
 
-Additionally, note that the smartphone never sends any data over the network, so there is no data leak at this device. Based on that, authors claim that any secrets held on such devices are secured.
+Given that, the key \(K\), shared between user Smartphone and Bank for further message transaction validation, is stored in uncompromisable devices only. Additionally, the smartphone never sends any data over the network, so there is no data leak at this device and the key \(K\) --- and its derived keys \(k_1\) and \(k_2\) --- are secured.
 
-Thus, concerning a protocol run, if the Spy intercepts a message, alters its data and relays it to the valid user, the latter still must verify the transaction through the QR-code scanning, being able to drop an unknown operation.
+Regarding message transaction phase, the integrity of the transaction is assured by hash \(h_S\), where such cipher can only be produce by the ones possessing key \(k_1\) derived from \(K\), and further comparison with the hash produced at the User smartphone. Besides, the TAN \(r\) is stated as a randomly fresh identifier for the transaction, delivering unicity to the protocol session.
 
-However, none of these are formally proved. The authors simply based their model in a hypothesis in a closed model. Therefore, we identify that no formal guarantee are presented at all.
+Moreover, even if the Spy intercepts message \(m\), alters its structure and relays it to the intended peer, still, the User will be prompted to answer the security challenge where she must verify and confirm the issued transaction, presented in clear text. If she suspects anything, she can simply drop the operation, halting the protocol.
+
+However, none of these claims are formally proved. The authors simply based their model in a hypothesis in a closed model. Therefore, we identify that no formal guarantee are presented at all.
