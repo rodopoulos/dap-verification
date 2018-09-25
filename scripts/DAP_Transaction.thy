@@ -51,9 +51,9 @@ inductive_set daptrans :: "event list set" where
             Gets_s (Smartphone A) \<lbrace>
               \<lbrace> Agent A, Number T \<rbrace>,
               Crypt (shrK A) (Nonce r),
-              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs6;
-            Outputs (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6; 
+            Outputs (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6;
             Gets_s (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs6 \<rbrakk>
    \<Longrightarrow> Outputs (Smartphone A) A (Nonce r) # evs6 \<in> daptrans"
 
@@ -460,7 +460,6 @@ lemma Server_transaction_unique :
   apply (erule daptrans.induct, simp_all)
   apply (fastforce dest: Says_parts_used)
 done
-
 
 
 end
