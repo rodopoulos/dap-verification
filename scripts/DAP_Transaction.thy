@@ -36,7 +36,7 @@ inductive_set daptrans :: "event list set" where
             Gets_s (Smartphone A) \<lbrace>
               \<lbrace>Agent A, Number T\<rbrace>,
               Crypt (shrK A) (Nonce r),
-              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs4 \<rbrakk>
     \<Longrightarrow> Outputs (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> # evs4 \<in> daptrans"
 
@@ -439,10 +439,10 @@ apply (blast dest!: Says_imp_knows_Spy [THEN analz.Inj, THEN analz.Snd])
 done
 
 
-(* Authenticity lemmas *)
 
-(* Unicity lemmas *)
-lemma Transaction_unicity :
+
+(* 6. Unicity lemmas *)
+lemma Server_transaction_unique :
   "\<lbrakk> Says Server A \<lbrace> 
       \<lbrace> Agent A, Number T \<rbrace>,
         Crypt (shrK A) (Nonce r),
@@ -460,5 +460,7 @@ lemma Transaction_unicity :
   apply (erule daptrans.induct, simp_all)
   apply (fastforce dest: Says_parts_used)
 done
+
+
 
 end

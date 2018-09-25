@@ -384,6 +384,13 @@ apply (simp_all (no_asm_simp) split: event.split)
 apply (auto)
 done
 
+lemma Gets_s_parts_used [rule_format (no_asm)] :
+  "Gets_s P X \<in> set evs \<longrightarrow> (parts {X}) \<subseteq> used evs"
+apply (induct_tac "evs")
+apply (simp_all (no_asm_simp) split: event.split)
+apply (auto)
+done
+
 lemma Outputs_parts_used [rule_format (no_asm)] :
   "Outputs P A X \<in> set evs \<longrightarrow> (parts {X}) \<subseteq> used evs"
 apply (induct_tac "evs")
