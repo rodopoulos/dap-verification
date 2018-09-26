@@ -58,12 +58,11 @@ inductive_set daptrans :: "event list set" where
    \<Longrightarrow> Outputs (Smartphone A) A (Nonce r) # evs6 \<in> daptrans"
 
   | DT7: "\<lbrakk> evs7 \<in> daptrans; A \<noteq> Server;
-            Says A Server Transaction \<in> set evs7;
-            Gets A \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
-            Scans A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
-            Gets_a A Transaction' \<in> set evs7;
+            Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs7;
+            Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs7;
+            Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs7;
+            Gets_a A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs7;
             Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs7;
-            \<forall> p q. Confirmation \<noteq> \<lbrace>p, q\<rbrace>;
             Gets_a A r\<^sub>u \<in> set evs7 \<rbrakk>
     \<Longrightarrow> Says A Server r\<^sub>u # evs7 \<in> daptrans"
 
@@ -393,52 +392,11 @@ done
 
 (* 5. Regularity lemmas *)
 
-ML{*
-
-structure DAP_Transaction = struct
-
-fun prepare_tac ctxt =
-  forward_tac ctxt [@{thm Outputs_A_Smartphone_form_4}] 14 THEN
-  clarify_tac ctxt 15 THEN
-  forward_tac ctxt [@{thm Outputs_A_Smartphone_form_6}] 16
-
-fun parts_prepare_tac ctxt = 
-           prepare_tac ctxt THEN
- (*SR_U9*)   dresolve_tac ctxt [@{thm Gets_imp_knows_Spy_parts_Snd}] 18 THEN 
- (*SR_U9*)   dresolve_tac ctxt [@{thm Gets_imp_knows_Spy_parts_Snd}] 19 THEN      
- (*Base*)  (force_tac ctxt) 1
-
-
-fun analz_prepare_tac ctxt = 
-         prepare_tac ctxt THEN
-         dresolve_tac ctxt @{thms Gets_imp_knows_Spy_analz_Snd} 18 THEN 
- (*SR_U9*) dresolve_tac ctxt @{thms Gets_imp_knows_Spy_analz_Snd} 19 THEN 
-         REPEAT_FIRST (eresolve_tac ctxt [asm_rl, conjE] ORELSE' hyp_subst_tac ctxt)
-
-end
-*}
-
-method_setup prepare = \<open>
-    Scan.succeed (fn ctxt => SIMPLE_METHOD (DAP_Transaction.prepare_tac ctxt))\<close>
-  "to launch a few simple facts that will help the simplifier"
-
-method_setup parts_prepare = \<open>
-    Scan.succeed (fn ctxt => SIMPLE_METHOD (DAP_Transaction.parts_prepare_tac ctxt))\<close>
-  "additional facts to reason about parts"
-
-method_setup analz_prepare = \<open>
-    Scan.succeed (fn ctxt => SIMPLE_METHOD (DAP_Transaction.analz_prepare_tac ctxt))\<close>
-  "additional facts to reason about analz"
-
-
 lemma Spy_parts_keys [simp]: 
   "evs \<in> daptrans \<Longrightarrow> (Key (shrK A) \<in> parts (knows Spy evs)) = (Smartphone A \<in> badp)"
 
   apply (erule daptrans.induct)
-  (*apply parts_prepare*)
-  apply (simp_all add: Scans_A_Smartphone_form_3)
-  apply auto
-  (* apply (blast intro: parts_insertI) *)
+  apply (auto)
 oops
 
 lemma Spy_analz_shrK [simp]: 
