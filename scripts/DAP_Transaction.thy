@@ -30,7 +30,7 @@ inductive_set daptrans :: "event list set" where
   | DT3: "\<lbrakk> evs3 \<in> daptrans; legalUse (Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs3;
             Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk>
-    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> daptrans"
+    \<Longrightarrow> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> daptrans"
 
   | DT4: "\<lbrakk> evs4 \<in> daptrans; legalUse(Smartphone A); A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace>
@@ -43,9 +43,9 @@ inductive_set daptrans :: "event list set" where
   | DT5: "\<lbrakk> evs5 \<in> daptrans; legalUse(Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5;
             Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
-            Inputs A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
+            Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Gets_a A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5 \<rbrakk>
-    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> # evs5 \<in> daptrans"
+    \<Longrightarrow> Scans A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> # evs5 \<in> daptrans"
 
   | DT6: "\<lbrakk> evs6 \<in> daptrans; legalUse(Smartphone A); A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace>
@@ -60,9 +60,9 @@ inductive_set daptrans :: "event list set" where
   | DT7: "\<lbrakk> evs7 \<in> daptrans; A \<noteq> Server;
             Says A Server Transaction \<in> set evs7;
             Gets A \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
-            Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
+            Scans A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Gets_a A Transaction' \<in> set evs7;
-            Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs7;
+            Scans A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs7;
             \<forall> p q. Confirmation \<noteq> \<lbrace>p, q\<rbrace>;
             Gets_a A r\<^sub>u \<in> set evs7 \<rbrakk>
     \<Longrightarrow> Says A Server r\<^sub>u # evs7 \<in> daptrans"
@@ -80,13 +80,13 @@ inductive_set daptrans :: "event list set" where
   | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF));
              illegalUse(Smartphone A); C \<noteq> Server; C \<noteq> Spy \<rbrakk>
     \<Longrightarrow> Says Spy B X #
-        Inputs Spy (Smartphone A) X #
+        Scans Spy (Smartphone A) X #
         Outputs (Smartphone Spy) C X # evsF \<in> daptrans"
   
   (* Reception invariant rules *)
   | Rcpt: "\<lbrakk> evsR \<in> daptrans; Says A B X \<in> set evsR \<rbrakk> \<Longrightarrow> Gets B X # evsR \<in> daptrans"
 
-  | Rcpt_s: "\<lbrakk> evsRs \<in> daptrans; Inputs A (Smartphone B) X \<in> set evsRs \<rbrakk> 
+  | Rcpt_s: "\<lbrakk> evsRs \<in> daptrans; Scans A (Smartphone B) X \<in> set evsRs \<rbrakk> 
     \<Longrightarrow> Gets_s (Smartphone B) X # evsRs \<in> daptrans"
 
   | Rcpt_a: "\<lbrakk> evsRa \<in> daptrans; Outputs (Smartphone A) B X \<in> set evsRa \<rbrakk>
@@ -109,8 +109,8 @@ apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
 
-lemma Gets_s_imp_Inputs :
-  "\<lbrakk> Gets_s P X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Inputs A P X \<in> set evs"
+lemma Gets_s_imp_Scans :
+  "\<lbrakk> Gets_s P X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Scans A P X \<in> set evs"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
@@ -201,8 +201,8 @@ done
 (* 2. General guarantees for smartphone events *)
 
 (* - Defining legalUse conditions *)
-lemma Inputs_Smartphone_legalUse :
-  "\<lbrakk> Inputs A (Smartphone A) X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> legalUse(Smartphone A)"
+lemma Scans_Smartphone_legalUse :
+  "\<lbrakk> Scans A (Smartphone A) X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> legalUse(Smartphone A)"
 apply (erule rev_mp, erule daptrans.induct)
 apply (auto)
 done
@@ -215,10 +215,10 @@ done
 
 
 
-(* - Legal agents firing Inputs/Outputs must performs legal actions from their smartphones or Spy
+(* - Legal agents firing Scans/Outputs must performs legal actions from their smartphones or Spy
   performing illegal actions*)
-lemma Inputs_Smartphone :
-  "\<lbrakk> Inputs A P X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
+lemma Scans_Smartphone :
+  "\<lbrakk> Scans A P X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(P)) \<or> (P = (Smartphone Spy) \<and> illegalUse(P))"
   
   apply (erule rev_mp, erule daptrans.induct)
@@ -233,16 +233,16 @@ lemma Outputs_Smartphone :
   apply (simp_all)
 done
 
-lemma Inputs_Outputs_Smartphone :
-  "\<lbrakk> Inputs A P X \<in> set evs \<or> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
+lemma Scans_Outputs_Smartphone :
+  "\<lbrakk> Scans A P X \<in> set evs \<or> Outputs P A X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
      \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(Smartphone A)) \<or> (P = (Smartphone Spy))"
 
-  apply (blast dest: Inputs_Smartphone Outputs_Smartphone)
+  apply (blast dest: Scans_Smartphone Outputs_Smartphone)
 done
 
 (* - The spy can act both legally (using her smartphone) or illegally (using someone else) *)
-lemma Inputs_Smartphone_Spy :
-  "\<lbrakk> Inputs Spy P X \<in> set evs \<or> Outputs P Spy X \<in> set evs; evs \<in> daptrans \<rbrakk>  
+lemma Scans_Smartphone_Spy :
+  "\<lbrakk> Scans Spy P X \<in> set evs \<or> Outputs P Spy X \<in> set evs; evs \<in> daptrans \<rbrakk>  
       \<Longrightarrow> (P = (Smartphone Spy)) \<and> (legalUse(Smartphone Spy)) \<or>  
           (\<exists> A. P = (Smartphone A) \<and> illegalUse(Smartphone A))"
 
@@ -271,9 +271,9 @@ done
 
 
 
-(* 4. Inputs events guarantees *)
-lemma Inputs_A_Smartphone_3 :
-  "\<lbrakk> Inputs A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
+(* 4. Scans events guarantees *)
+lemma Scans_A_Smartphone_3 :
+  "\<lbrakk> Scans A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r, h \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and> 
         (Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r, h \<rbrace> \<in> set evs)"
 
@@ -283,12 +283,12 @@ done
 
 (* This is an important guarantee: the protocol legally continues if the agent confirms the 
      outputed message, which contains the transaction *)
-lemma Inputs_A_Smartphone_5 :
-  "\<lbrakk> Inputs A P Confirmation \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
+lemma Scans_A_Smartphone_5 :
+  "\<lbrakk> Scans A P Confirmation \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> (P = (Smartphone A)) \<and>
         (\<exists> Transaction T r' Checksum. 
             Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', Checksum \<rbrace> \<in> set evs \<and>
-            Inputs A (Smartphone A) \<lbrace>Transaction, r', Checksum\<rbrace> \<in> set evs \<and>
+            Scans A (Smartphone A) \<lbrace>Transaction, r', Checksum\<rbrace> \<in> set evs \<and>
             Gets_a A Transaction \<in> set evs \<and>
             Transaction = \<lbrace>Agent A, Number T\<rbrace> )"
 
@@ -298,8 +298,8 @@ done
 
 
 (* - message form guarantees *)
-lemma Inputs_A_Smartphone_form_3 :
-  "\<lbrakk> Inputs A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; 
+lemma Scans_A_Smartphone_form_3 :
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; 
      \<forall> p q. Transaction = \<lbrace>p, q\<rbrace>; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
   
@@ -312,7 +312,7 @@ done
 
 (* 5. Outputs events guarantees *) 
 
-(* First, we state that Smartphones provide correct outputs when fed with expected inputs.
+(* First, we state that Smartphones provide correct outputs when fed with expected Scans.
    Such lemmas guarantee that Smartphones cannot produce unexpected outputs, giving the Spy
    unlimited resources *)
 lemma Outputs_which_Smartphone_4 :
@@ -442,17 +442,19 @@ done
 
 
 (* 6. Unicity lemmas *)
+
+(* The TAN r uniquely identifies a transaction at the Server side *)
 lemma Server_transaction_unique :
   "\<lbrakk> Says Server A \<lbrace> 
-      \<lbrace> Agent A, Number T \<rbrace>,
-        Crypt (shrK A) (Nonce r),
-        Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
-       \<rbrace> \<in> set evs ;
+      \<lbrace>Agent A, Number T\<rbrace>,
+      Crypt (shrK A) (Nonce r),
+      Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+    \<rbrace> \<in> set evs ;
     Says Server A' \<lbrace> 
-      \<lbrace> Agent A', Number T' \<rbrace>,
-        Crypt (shrK A') (Nonce r),
-        Crypt (shrK A') \<lbrace> \<lbrace>Agent A', Number T'\<rbrace>, Crypt (shrK A') (Nonce r) \<rbrace>
-       \<rbrace> \<in> set evs;
+      \<lbrace>Agent A', Number T'\<rbrace>,
+      Crypt (shrK A') (Nonce r),
+      Crypt (shrK A') \<lbrace> \<lbrace>Agent A', Number T'\<rbrace>, Crypt (shrK A') (Nonce r) \<rbrace>
+     \<rbrace> \<in> set evs;
     evs \<in> daptrans\<rbrakk>
    \<Longrightarrow> A = A' \<and> T = T'"
 
