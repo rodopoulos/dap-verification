@@ -105,38 +105,55 @@ declare analz_into_parts [dest]
 (*   - considering legal agents (this include the spy) *)
 lemma Gets_imp_Says :
   "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Says A B X \<in> set evs"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 lemma Gets_s_imp_Scans :
   "\<lbrakk> Gets_s P X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Scans A P X \<in> set evs"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 lemma Gets_a_imp_Outputs :
   "\<lbrakk> Gets_a A X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> P. Outputs P A X \<in> set evs"
-apply (erule rev_mp, erule daptrans.induct)
-apply (auto)
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
 done
 
 (*  - considering illegal agents *)
 lemma Gets_imp_knows_Spy :
   "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> analz (knows Spy evs)"
-apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy)
+
+  apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy)
 done
 
 lemma Gets_imp_knows_Spy_parts_Snd: 
  "\<lbrakk> Gets B \<lbrace>X, Y\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> Y \<in> parts (knows Spy evs)"
-apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy parts.Inj parts.Snd)
+
+  apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy parts.Inj parts.Snd)
 done
 
 lemma Gets_imp_knows_Spy_analz_Snd: 
  "\<lbrakk> Gets B \<lbrace>X, Y\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> Y \<in> analz (knows Spy evs)"
-apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy analz.Inj analz.Snd)
+
+  apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy analz.Inj analz.Snd)
 done
 
+lemma Gets_s_imp_knows_Spy_parts_badp:
+  "\<lbrakk> Gets_s P X \<in> set evs; P \<in> badp; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> parts (knows Spy evs)"
+
+  apply (blast dest!: Gets_s_imp_knows_Spy_by_smartphone)
+done
+
+lemma Gets_s_imp_knows_Spy_analz_badp:
+  "\<lbrakk> Gets_s P X \<in> set evs; P \<in> badp; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> analz (knows Spy evs)"
+
+  apply (blast dest!: Gets_s_imp_knows_Spy_by_smartphone)
+done
 
 
 
@@ -419,7 +436,8 @@ lemma Spy_parts_keys [simp]:
 
   apply (erule daptrans.induct)
   (*apply parts_prepare*)
-  apply simp_all
+  apply (simp_all add: Scans_A_Smartphone_form_3)
+  apply auto
   (* apply (blast intro: parts_insertI) *)
 oops
 
