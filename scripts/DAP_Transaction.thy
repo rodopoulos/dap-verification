@@ -45,7 +45,7 @@ inductive_set daptrans :: "event list set" where
             Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Gets_a A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5 \<rbrakk>
-    \<Longrightarrow> Scans A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> # evs5 \<in> daptrans"
+    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> # evs5 \<in> daptrans"
 
   | DT6: "\<lbrakk> evs6 \<in> daptrans; legalUse(Smartphone A); A \<noteq> Server;
             Gets_s (Smartphone A) \<lbrace>
@@ -54,7 +54,7 @@ inductive_set daptrans :: "event list set" where
               Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs6;
             Outputs (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6;
-            Gets_s (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs6 \<rbrakk>
+            Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs6 \<rbrakk>
    \<Longrightarrow> Outputs (Smartphone A) A (Nonce r) # evs6 \<in> daptrans"
 
   | DT7: "\<lbrakk> evs7 \<in> daptrans; A \<noteq> Server;
@@ -62,7 +62,7 @@ inductive_set daptrans :: "event list set" where
             Gets A \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Scans A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Gets_a A Transaction' \<in> set evs7;
-            Scans A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs7;
+            Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs7;
             \<forall> p q. Confirmation \<noteq> \<lbrace>p, q\<rbrace>;
             Gets_a A r\<^sub>u \<in> set evs7 \<rbrakk>
     \<Longrightarrow> Says A Server r\<^sub>u # evs7 \<in> daptrans"
@@ -330,7 +330,7 @@ done
 
 lemma Outputs_which_Smartphone_6 :
   "\<lbrakk> Outputs (Smartphone A) A (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Gets_s (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs)"
+    \<Longrightarrow> (\<exists> T. Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs)"
 
   apply (erule rev_mp)
   apply (erule daptrans.induct)
