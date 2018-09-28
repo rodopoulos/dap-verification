@@ -31,7 +31,7 @@ definition legalUse :: "smartphone \<Rightarrow> bool" ("legalUse (_)") where
 
 (* Smartphones are prone to theft. The Spy may use it if she have stole it. *)
 primrec illegalUse :: "smartphone \<Rightarrow> bool" ("illegalUse (_)") where
-  illegalUse_def: "illegalUse (Smartphone A) = ((Smartphone A) \<in> stolen \<or> (Smartphone A) \<in> badp)"
+  illegalUse_def: "illegalUse (Smartphone A) = ((Smartphone A \<in> stolen) \<or> (Smartphone A \<in> badP))"
 
 
   
@@ -41,7 +41,7 @@ overloading initState \<equiv> initState
   primrec initState where
     initState_Server : "initState Server = (Key` (range shrK))" |
     initState_Friend : "initState (Friend i) = {}" |
-    initState_Spy : "initState Spy = (Key` (shrK` {A. Smartphone A \<in> badp}))"
+    initState_Spy : "initState Spy = (Key` (shrK` {A. Smartphone A \<in> badP}))"
 end
 
 axiomatization where
@@ -129,14 +129,14 @@ declare shrK_neq [THEN not_sym, simp]
 (* FUNCTION KNOWS *)
 (* An agent's compromised Smartphone disclose hers shared keys *)
 lemma Spy_knows_bad_phones [intro!] :
-  "Smartphone A \<in> badp \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
+  "Smartphone A \<in> badP \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) add: imageI knows_Cons split: event.split)
 done
 
 (* Case analysis on whether or not an agent is compromised *)
 lemma Crypt_Spy_analz_bad :
-  "\<lbrakk> Crypt (shrK A) X \<in> analz (knows Spy evs); Smartphone A \<in> badp \<rbrakk> 
+  "\<lbrakk> Crypt (shrK A) X \<in> analz (knows Spy evs); Smartphone A \<in> badP \<rbrakk> 
     \<Longrightarrow> X \<in> analz (knows Spy evs)"
 apply (erule analz.Decrypt)
 apply (simp add: Spy_knows_bad_phones)
