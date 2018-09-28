@@ -343,7 +343,7 @@ lemma knows_Gets:
   "A \<noteq> Spy \<longrightarrow> knows A (Gets A X # evs) = insert X (knows A evs)"
 by simp
 
-lemma knows_Scans: "knows A (Scans A C X # evs) = insert X (knows A evs)"
+lemma knows_Scans: "knows A (Scans A P X # evs) = insert X (knows A evs)"
 by simp
 
 lemma knows_SGets:
