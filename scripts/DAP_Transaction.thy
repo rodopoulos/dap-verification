@@ -21,9 +21,8 @@ inductive_set daptrans :: "event list set" where
   | DT1: "\<lbrakk> evs1 \<in> daptrans; A \<noteq> Server \<rbrakk>
     \<Longrightarrow> Says A Server \<lbrace> Agent A, Number T \<rbrace> # evs1 \<in> daptrans"
 
-  | DT2: "\<lbrakk> evs2 \<in> daptrans;
-            Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2;
-            Nonce r \<notin> used evs2 \<rbrakk>
+  | DT2: "\<lbrakk> evs2 \<in> daptrans; Nonce r \<notin> used evs2;
+            Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2 \<rbrakk>
     \<Longrightarrow> Says Server A \<lbrace> 
           \<lbrace> Agent A, Number T \<rbrace>,
           Crypt (shrK A) (Nonce r),
@@ -52,12 +51,12 @@ inductive_set daptrans :: "event list set" where
 
   | DT6: "\<lbrakk> evs6 \<in> daptrans; legalUse(Smartphone A); A \<noteq> Server;
             SGets (Smartphone A) \<lbrace>
-              \<lbrace> Agent A, Number T \<rbrace>,
+              \<lbrace>Agent A, Number T\<rbrace>,
               Crypt (shrK A) (Nonce r),
               Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs6;
-            Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6;
-            Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs6 \<rbrakk>
+            Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs6;
+            SGets (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs6 \<rbrakk>
    \<Longrightarrow> Shows (Smartphone A) A (Nonce r) # evs6 \<in> daptrans"
 
   | DT7: "\<lbrakk> evs7 \<in> daptrans; A \<noteq> Server;
@@ -66,16 +65,15 @@ inductive_set daptrans :: "event list set" where
             Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs7;
             Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs7;
-            AGets A r\<^sub>u \<in> set evs7 \<rbrakk>
-    \<Longrightarrow> Says A Server r\<^sub>u # evs7 \<in> daptrans"
+            AGets A (Nonce r) \<in> set evs7 \<rbrakk>
+    \<Longrightarrow> Says A Server (Nonce r) # evs7 \<in> daptrans"
 
   | DT8: "\<lbrakk> evs8 \<in> daptrans;
             Gets Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs8;
             Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r),
               Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs8;
-            Gets Server r\<^sub>u \<in> set evs8;
-            r\<^sub>u = Nonce r \<rbrakk>
+            Gets Server (Nonce r) \<in> set evs8 \<rbrakk>
     \<Longrightarrow> Says Server A Success # evs8 \<in> daptrans"
 
   (* Rule modeling the illegal behavior of the Spy *)
@@ -94,6 +92,9 @@ inductive_set daptrans :: "event list set" where
   | RcptA: "\<lbrakk> evsRa \<in> daptrans; Shows (Smartphone A) B X \<in> set evsRa \<rbrakk>
     \<Longrightarrow> AGets B X # evsRa \<in> daptrans"
 
+  | RcptI: "\<lbrakk> evsRi \<in> daptrans; Inputs A (Smartphone B) X \<in> set evsRi \<rbrakk>
+    \<Longrightarrow> SGets (Smartphone B) X # evsRi \<in> daptrans"
+
 declare Fake_parts_insert_in_Un  [dest]
 declare analz_into_parts [dest]
 
@@ -111,25 +112,45 @@ lemma Gets_imp_Says :
 done
 
 lemma Gets_imp_knows_Spy :
+  "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> knows Spy evs"
+by (blast dest!: Gets_imp_Says Says_imp_knows_Spy)
+  
+lemma Gets_imp_knows_Spy_analz :
   "\<lbrakk> Gets B X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> analz (knows Spy evs)"
+by (blast dest!: Gets_imp_Says Says_imp_knows_Spy)
 
-  apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy)
+lemma Gets_imp_knows_Spy_analz_Snd :
+ "\<lbrakk> Gets B \<lbrace>X, Y\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> Y \<in> analz (knows Spy evs)"
+
+  apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy analz.Inj analz.Snd)
 done
 
+lemmas Gets_imp_knows_Spy_parts [dest] = Gets_imp_knows_Spy_analz [THEN analz_into_parts]
+lemmas Gets_imp_knows_Spy_parts_Snd = Gets_imp_knows_Spy_analz_Snd [THEN analz_into_parts]
+
 lemma SGets_imp_Scans :
-  "\<lbrakk> SGets P X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> A. Scans A P X \<in> set evs"
+  "\<lbrakk> SGets P X \<in> set evs; evs \<in> daptrans \<rbrakk> 
+    \<Longrightarrow> \<exists> A. (Scans A P X \<in> set evs) \<or> (Inputs A P X \<in> set evs)"
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (auto)
 done
 
-lemma SGets_imp_knows_Spy_badP :
-  "\<lbrakk> SGets P X \<in> set evs; P \<in> badP; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> knows Spy evs"
+lemma SGets_imp_knows_Spy :
+  "\<lbrakk> SGets (Smartphone B) X \<in> set evs; (Smartphone B) \<in> badP; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> X \<in> knows Spy evs"
 
-  apply (erule rev_mp, erule rev_mp, erule daptrans.induct)
-  apply (simp_all)
-  apply (force dest!: SGets_imp_knows_Spy_insecureP)
+  apply (erule rev_mp, erule rev_mp)
+  apply (erule daptrans.induct)
+  apply (auto)
 done
+
+lemma SGets_imp_knows_Spy_analz :
+  "\<lbrakk> SGets (Smartphone B) X \<in> set evs; (Smartphone B) \<in> badP; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> X \<in> analz (knows Spy evs)"
+by (blast dest!: SGets_imp_knows_Spy)
+
+lemmas SGets_imp_knows_Spy_parts [dest] = SGets_imp_knows_Spy_analz [THEN analz_into_parts]
 
 lemma AGets_imp_Shows :
   "\<lbrakk> AGets A X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> P. Shows P A X \<in> set evs"
@@ -139,17 +160,6 @@ lemma AGets_imp_Shows :
 done
 
 
-lemma Gets_imp_knows_Spy_parts_Snd: 
- "\<lbrakk> Gets B \<lbrace>X, Y\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> Y \<in> parts (knows Spy evs)"
-
-  apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy parts.Inj parts.Snd)
-done
-
-lemma Gets_imp_knows_Spy_analz_Snd: 
- "\<lbrakk> Gets B \<lbrace>X, Y\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> Y \<in> analz (knows Spy evs)"
-
-  apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy analz.Inj analz.Snd)
-done
 
 
 (* - Lemmas on insecure devices, from the EventSP.thy, now proved for DAP_Transaction *)
@@ -169,7 +179,7 @@ lemma knows_Spy_Scans_insecureP_daptrans :
 by simp
 
 lemma knows_Spy_Shows_insecureM_daptrans_Spy :
-  "\<lbrakk> P \<notin> badP; evs \<in> daptrans \<rbrakk> 
+  "\<lbrakk> P \<notin> badP; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> knows Spy (Shows P Spy X # evs) = knows Spy evs"
 by simp
 
@@ -186,6 +196,7 @@ lemma knows_Spy_Inputs_daptrans :
   "\<lbrakk> A \<noteq> Spy; evs \<in> daptrans \<rbrakk> 
     \<Longrightarrow> knows Spy (Inputs A P X # evs) = knows Spy evs"
 by simp
+
 
 
 
@@ -315,7 +326,7 @@ lemma Protocol_terminates :
         THEN daptrans.DT2, THEN daptrans.Rcpt,
         THEN daptrans.DT3, THEN daptrans.RcptS,
         THEN daptrans.DT4, THEN daptrans.RcptA,
-        THEN daptrans.DT5, (* Here, agent does not need to receive the smartphone output *)
+        THEN daptrans.DT5, THEN daptrans.RcptI,
         THEN daptrans.DT6, THEN daptrans.RcptA,
         THEN daptrans.DT7, THEN daptrans.Rcpt,
         THEN daptrans.DT8])
@@ -380,7 +391,7 @@ done
 
 lemma Shows_which_Smartphone_6 :
   "\<lbrakk> Shows (Smartphone A) A (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs)"
+    \<Longrightarrow> (\<exists> T. SGets (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (auto)
@@ -402,18 +413,10 @@ done
 lemma Shows_A_Smartphone_form_6 :
   "\<lbrakk> Shows (Smartphone A) A TAN \<in> set evs; evs \<in> daptrans;
     \<forall> p q. TAN \<noteq> \<lbrace>p, q\<rbrace> \<rbrakk>
-    \<Longrightarrow> \<exists> r. TAN = Nonce r"
+    \<Longrightarrow> \<exists> r. TAN = (Nonce r)"
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (auto)
-done
-
-lemma AGets_A_form_7:
-  "\<lbrakk> AGets A TAN \<in> set evs; \<forall> p. TAN = p; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> \<exists> r. TAN = Nonce r"
-    
-  apply (erule rev_mp, erule rev_mp, erule daptrans.induct)
-  apply (simp_all)
 done
 
 
@@ -432,18 +435,11 @@ lemma DT3_analz_knows_Spy_snd :
     \<Longrightarrow> h\<^sub>s \<in> analz (knows Spy evs)"
 by (blast dest!: Gets_imp_Says Gets_imp_knows_Spy_analz_Snd)
 
-lemma DT7_analz_knows_Spy :
- "\<lbrakk> AGets A r\<^sub>u \<in> set evs; A \<in> bad; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> r\<^sub>u \<in> analz (knows Spy evs)"
-
-  apply (erule rev_mp, erule rev_mp, erule daptrans.induct)
-  apply (simp_all)
-oops
-
-
 lemmas DT3_parts_knows_Spy_fst = DT3_analz_knows_Spy_fst [THEN analz_into_parts]
 lemmas DT3_parts_knows_Spy_snd = DT3_analz_knows_Spy_snd [THEN analz_into_parts]
-lemmas DT7_parts_knows_Spy = DT7_analz_knows_Spy [THEN analz_into_parts]
+
+
+
 
 lemma Spy_parts_keys [simp]: 
   "evs \<in> daptrans \<Longrightarrow> (Key (shrK A) \<in> parts (knows Spy evs)) = (Smartphone A \<in> badP)"
@@ -451,7 +447,8 @@ lemma Spy_parts_keys [simp]:
   apply (erule daptrans.induct)
   apply (frule_tac [4] DT3_parts_knows_Spy_fst)
   apply (frule_tac [5] DT3_parts_knows_Spy_snd)
-  apply (simp_all, auto)
+  apply (force+)
+  apply (simp_all)
 oops
 
 
