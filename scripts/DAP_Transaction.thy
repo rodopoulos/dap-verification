@@ -47,7 +47,7 @@ inductive_set daptrans :: "event list set" where
             Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs5 \<rbrakk>
-    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace>Agent A, Number T\<rbrace> # evs5 \<in> daptrans"
+    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> # evs5 \<in> daptrans"
 
   | DT6: "\<lbrakk> evs6 \<in> daptrans; legalUse(Smartphone A); A \<noteq> Server;
             SGets (Smartphone A) \<lbrace>
@@ -56,7 +56,7 @@ inductive_set daptrans :: "event list set" where
               Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs6;
             Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs6;
-            SGets (Smartphone A) \<lbrace>Agent A, Number T\<rbrace> \<in> set evs6 \<rbrakk>
+            SGets (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs6 \<rbrakk>
    \<Longrightarrow> Shows (Smartphone A) A (Nonce r) # evs6 \<in> daptrans"
 
   | DT7: "\<lbrakk> evs7 \<in> daptrans; A \<noteq> Server;
@@ -64,7 +64,7 @@ inductive_set daptrans :: "event list set" where
             Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs7;
-            Inputs A (Smartphone A) \<lbrace>Agent A, Number T\<rbrace> \<in> set evs7;
+            Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs7;
             AGets A (Nonce r) \<in> set evs7 \<rbrakk>
     \<Longrightarrow> Says A Server (Nonce r) # evs7 \<in> daptrans"
 
@@ -441,8 +441,7 @@ lemma Shows_A_Smartphone_4 :
   apply (simp_all, force+)
   defer
   apply (blast+)
-  nitpick
-done
+oops
 
 lemma Shows_honest_A_Smartphone_4 :
   "\<lbrakk> Shows P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
@@ -457,8 +456,7 @@ lemma Shows_honest_A_Smartphone_4 :
   apply (simp_all, force+)
   defer
   apply (blast+)
-  nitpick
-done
+oops
 
 lemma Shows_which_Smartphone_4 :
   "\<lbrakk> Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
@@ -474,15 +472,14 @@ done
 
 lemma Shows_A_Smartphone_6 :
   "\<lbrakk> Shows P A (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T. SGets (Smartphone A) \<lbrace>Agent A, Number T\<rbrace> \<in> set evs)"
+    \<Longrightarrow> (\<exists> T. SGets (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (simp_all)
   apply (blast+)
   defer
   apply (blast+)
-  nitpick
-done
+oops
 
 lemma Shows_honest_A_Smartphone_6 :
   "\<lbrakk> Shows P A (Nonce r) \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
@@ -493,7 +490,7 @@ lemma Shows_honest_A_Smartphone_6 :
   apply (simp_all, force+)
   defer
   apply (blast+)
-done
+oops
 
 lemma Shows_which_Smartphone_6 :
   "\<lbrakk> Shows (Smartphone A) A (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
