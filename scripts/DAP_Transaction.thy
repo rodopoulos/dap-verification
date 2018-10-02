@@ -252,12 +252,23 @@ done
 
 (* - Server expected message form to the sender *)
 
-lemma DT2_Says_Server_message_form :
-  "\<lbrakk> Says Server A \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T r. Gets Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
-         Transaction = \<lbrace> Agent A, Number T \<rbrace> \<and> 
+lemma Says_Server_DT2 :
+  "\<lbrakk> Says Server A \<lbrace> 
+    \<lbrace>Agent A, Number T\<rbrace>, 
+    Crypt (shrK A) (Nonce r), 
+    Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+  \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> Gets Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs"
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (auto)
+done
+
+lemma Says_Server_form_DT2 :
+  "\<lbrakk> Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> r.
          r' = Crypt (shrK A) (Nonce r) \<and>
-         h\<^sub>s = Crypt (shrK A) \<lbrace> Transaction, Crypt (shrK A) (Nonce r) \<rbrace>)"
+         h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>)"
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (auto)
@@ -367,7 +378,8 @@ done
 lemma Scans_A_Smartphone_3 :
   "\<lbrakk> Scans A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
-        (Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs)"
+        Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
+        Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs"
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (simp_all)
@@ -378,7 +390,10 @@ done
 lemma Inputs_A_Smartphone_5 :
   "\<lbrakk> Inputs A P \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
-        Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs"
+        (\<exists> r' h\<^sub>s. Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
+        Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs \<and>
+        Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs \<and>
+        Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (auto)
@@ -396,6 +411,15 @@ lemma Scans_A_Smartphone_form_3 :
   apply (auto)
 done
 
+lemma Scans_A_Smartphone_form_DT3:
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> \<exists> r. r' = Crypt (shrK A) (Nonce r) \<and>
+             h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>"
+
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (simp_all)
+  apply (blast dest!: Says_Server_form_DT2)
+oops
 
 
 
