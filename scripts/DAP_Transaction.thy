@@ -29,7 +29,7 @@ inductive_set daptrans :: "event list set" where
           Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
         \<rbrace> # evs2 \<in> daptrans"
 
-  | DT3: "\<lbrakk> evs3 \<in> daptrans; legalUse (Smartphone A);
+  | DT3: "\<lbrakk> evs3 \<in> daptrans; legalUse (Smartphone A); A \<noteq> Server;
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs3;
             Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk>
     \<Longrightarrow> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> daptrans"
@@ -126,7 +126,7 @@ lemma Gets_imp_knows_Spy_analz_Snd :
 done
 
 lemmas Gets_imp_knows_Spy_parts [dest] = Gets_imp_knows_Spy_analz [THEN analz_into_parts]
-lemmas Gets_imp_knows_Spy_parts_Snd = Gets_imp_knows_Spy_analz_Snd [THEN analz_into_parts]
+lemmas Gets_imp_knows_Spy_parts_Snd [dest] = Gets_imp_knows_Spy_analz_Snd [THEN analz_into_parts]
 
 lemma SGets_imp_Scans :
   "\<lbrakk> SGets P X \<in> set evs; evs \<in> daptrans \<rbrakk> 
@@ -160,9 +160,8 @@ lemma AGets_imp_Shows :
 done
 
 
-
-
 (* - Lemmas on insecure devices, from the EventSP.thy, now proved for DAP_Transaction *)
+
 lemma Scans_imp_knows_Spy_insecureP_daptrans :
   "\<lbrakk> Scans Spy P X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> X \<in> knows Spy evs"
 
@@ -202,7 +201,9 @@ by simp
 
 (* RELIABILITY LEMMAS *)
 
-(* 1. Server cannot initiate the protocol *)
+(* 1. General Server guarantees *)
+
+(* Server cannot initiate the protocol *)
 lemma Says_Server_DT1_not_evs :
   "evs \<in> daptrans \<Longrightarrow> Says Server Server \<lbrace> Agent Server, Number T \<rbrace> \<notin> set evs"
 
@@ -211,31 +212,50 @@ lemma Says_Server_DT1_not_evs :
 done
 
 lemma Server_cannot_initiate :
-  "\<lbrakk> evs \<in> daptrans; Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs\<rbrakk> \<Longrightarrow> A \<noteq> Server"
+  "\<lbrakk> Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> A \<noteq> Server"
 
   apply (erule rev_mp, erule daptrans.induct)
-  apply (auto)
+  apply (simp_all)
 done
 
-(* - Also, the Server cannot output something from his smartphone. *)
-lemma Shows_Server_not_evs [rule_format]:
-  "evs \<in> daptrans \<Longrightarrow> Shows (Smartphone Server) A X \<notin> set evs"
+
+(* - The Server smartphone is not usable *)
+
+lemma Scans_Agent_Server_not_evs [rule_format] :
+  "evs \<in> daptrans \<Longrightarrow> Scans Server (Smartphone A) X \<notin> set evs"
 
   apply (erule daptrans.induct)
   apply (auto)
 done
 
-lemma Shows_Server_not_evs2 [rule_format] :
+lemma Scans_Server_Agent_not_evs [rule_format] :
+  "evs \<in> daptrans \<Longrightarrow> Scans A (Smartphone Server) X \<notin> set evs"
+
+  apply (erule daptrans.induct)
+  apply (auto)
+done
+
+lemma Shows_Agent_Server_not_evs [rule_format] :
   "evs \<in> daptrans \<Longrightarrow> Shows (Smartphone A) Server X \<notin> set evs"
 
   apply (erule daptrans.induct)
-  apply (auto)
+  apply (simp_all)
 done
 
+lemma Shows_Server_Agent_not_evs [rule_format]:
+  "evs \<in> daptrans \<Longrightarrow> Shows (Smartphone Server) A X \<notin> set evs"
+
+  apply (erule daptrans.induct)
+  apply (simp_all)
+done
+
+
 (* - Server expected message form to the sender *)
+
 lemma DT2_Says_Server_message_form :
   "\<lbrakk> Says Server A \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace> \<and> 
+    \<Longrightarrow> (\<exists> T r. Gets Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
+         Transaction = \<lbrace> Agent A, Number T \<rbrace> \<and> 
          r' = Crypt (shrK A) (Nonce r) \<and>
          h\<^sub>s = Crypt (shrK A) \<lbrace> Transaction, Crypt (shrK A) (Nonce r) \<rbrace>)"
 
@@ -243,7 +263,9 @@ lemma DT2_Says_Server_message_form :
   apply (auto)
 done
 
-(* - The Server only authorizes a transaction if it received a nonce that matches the produced TAN *)
+(* - The Server only authorizes a transaction if 
+     it received a nonce that matches the produced TAN *)
+
 lemma Says_Server_Success :
   "\<lbrakk> Says Server A Success \<in> set evs; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> \<exists> T r r\<^sub>u.
@@ -262,9 +284,11 @@ done
 
 
 
-(* 2. General guarantees for smartphone events *)
+
+(* 2. General guarantees on smartphones usability *)
 
 (* - Defining legalUse conditions *)
+
 lemma Scans_Smartphone_legalUse :
   "\<lbrakk> Scans A (Smartphone A) X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> legalUse(Smartphone A)"
 apply (erule rev_mp, erule daptrans.induct)
@@ -278,9 +302,9 @@ apply (auto)
 done
 
 
+(* - Legal agents' smartphones firing Scans/Shows must be their owners
+     performing a legal action or the Spy performing an illegal action *)
 
-(* - Legal agents firing Scans/Shows must performs legal actions from their smartphones or Spy
-  performing illegal actions*)
 lemma Scans_Smartphone :
   "\<lbrakk> Scans A P X \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(P)) \<or> (P = (Smartphone Spy) \<and> illegalUse(P))"
@@ -304,6 +328,7 @@ lemma Scans_Shows_Smartphone :
   apply (blast dest: Scans_Smartphone Shows_Smartphone)
 done
 
+
 (* - The spy can act both legally (using her smartphone) or illegally (using someone else) *)
 lemma Scans_Smartphone_Spy :
   "\<lbrakk> Scans Spy P X \<in> set evs \<or> Shows P Spy X \<in> set evs; evs \<in> daptrans \<rbrakk>  
@@ -313,6 +338,7 @@ lemma Scans_Smartphone_Spy :
   apply (erule rev_mp, erule daptrans.induct)
   apply (auto)
 done
+
 
 
 
@@ -344,21 +370,22 @@ lemma Scans_A_Smartphone_3 :
         (Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule daptrans.induct)
-  apply (auto)
+  apply (simp_all)
 done
 
 (* This is an important guarantee: the protocol legally continues if the agent confirms the 
      outputed message, which contains the transaction *)
 lemma Inputs_A_Smartphone_5 :
   "\<lbrakk> Inputs A P \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and> Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs"
+    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
+        Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs"
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (auto)
 done
 
 
-(* - message form guarantees *)
+(* - Message form guarantees *)
 
 lemma Scans_A_Smartphone_form_3 :
   "\<lbrakk> Scans A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; 
@@ -422,7 +449,22 @@ done
 
 
 
-(* 5. Regularity lemmas *)
+(* 6. Spy guarantees *)
+
+lemma Spy_knows_Transaction : 
+  "\<lbrakk> Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
+     \<Longrightarrow> Number T \<in> analz (knows Spy evs)"
+by (blast dest!: Says_imp_knows_Spy [THEN analz.Inj, THEN analz.Snd])
+
+lemma Spy_knows_TAN :
+  "\<lbrakk> Says A Server (Nonce r) \<in> set evs; evs \<in> daptrans \<rbrakk>
+    \<Longrightarrow> Nonce r \<in> knows Spy evs"
+by (blast dest!: Says_imp_knows_Spy)
+
+
+
+
+(* REGULARITY LEMMAS *)
 
 (* For reasoning about encrypted portion of messages *)
 lemma DT3_analz_knows_Spy_fst :
@@ -439,32 +481,22 @@ lemmas DT3_parts_knows_Spy_fst = DT3_analz_knows_Spy_fst [THEN analz_into_parts]
 lemmas DT3_parts_knows_Spy_snd = DT3_analz_knows_Spy_snd [THEN analz_into_parts]
 
 
-
-
-lemma Spy_parts_keys [simp]: 
+lemma Spy_parts_keys [simp] : 
   "evs \<in> daptrans \<Longrightarrow> (Key (shrK A) \<in> parts (knows Spy evs)) = (Smartphone A \<in> badP)"
 
   apply (erule daptrans.induct)
-  apply (frule_tac [4] DT3_parts_knows_Spy_fst)
-  apply (frule_tac [5] DT3_parts_knows_Spy_snd)
-  apply (force+)
   apply (simp_all)
-oops
+  apply (auto)
+sorry
 
-
-
-(* Spy Guarantees *)
-
-lemma Spy_knows_Transaction : 
-  "\<lbrakk> Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
-     \<Longrightarrow> Number T \<in> analz (knows Spy evs)"
-apply (blast dest!: Says_imp_knows_Spy [THEN analz.Inj, THEN analz.Snd])
-done
+lemma Spy_analz_shrK [simp] :
+  "evs \<in> daptrans \<Longrightarrow> (Key (shrK A) \<in> analz (knows Spy evs)) = (Smartphone A \<in> badP)" 
+by (auto dest!: Spy_knows_bad_phones)
 
 
 
 
-(* 6. Unicity lemmas *)
+(* UNICITY LEMMAS *)
 
 (* The TAN r uniquely identifies a transaction at the Server side *)
 lemma Server_transaction_unique :
@@ -486,5 +518,23 @@ lemma Server_transaction_unique :
   apply (fastforce dest: Says_parts_used)
 done
 
+
+
+
+(* AUTHENTICITY LEMMAS *)
+lemma Checksum_authentic :
+  "\<lbrakk> Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> parts (knows Spy evs);
+     (Smartphone A) \<notin> badP; evs \<in> daptrans \<rbrakk>
+     \<Longrightarrow> r' = Crypt (shrK A) (Nonce r) \<and>
+         h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r)\<rbrace> \<and>
+         Says Server A \<lbrace>
+            \<lbrace>Agent A, Number T\<rbrace>,
+            Crypt (shrK A) (Nonce r),
+            Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+         \<rbrace> \<in> set evs"
+      
+  apply (erule rev_mp, erule daptrans.induct)
+  apply (simp_all (no_asm_simp))
+oops
 
 end
