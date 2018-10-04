@@ -45,8 +45,8 @@ done
 
 specification (badP)
   (* Spy phone is secured because she already can use it freely *)
-  Spy_phone_in_bad     [iff]: "Smartphone Spy \<notin> badP"
-  Server_phone_not_bad [iff]: "Smartphone Server \<notin> badP"
+  Spy_phone_not_badP     [iff]: "Smartphone Spy \<notin> badP"
+  Server_phone_not_badP [iff]: "Smartphone Server \<notin> badP"
   apply blast
 done
 
@@ -94,7 +94,7 @@ primrec knows :: "agent \<Rightarrow> event list \<Rightarrow> msg set" where
       | SGets P X \<Rightarrow> 
         if secureP then knows A evs
         else (* However, if devices can be compromised, the Spy knows what a compromised phone
-                receives*)
+                receives *)
           if (A = Spy & P \<in> badP) then insert X (knows A evs)
           else knows A evs
 
@@ -311,7 +311,7 @@ lemma Shows_imp_knows_Spy_secureM [rule_format (no_asm)] :
 done
 
 lemma Shows_imp_know_Spy_insecureM [rule_format (no_asm)] :
-  "Shows P A X \<in> set evs \<longrightarrow> (insecureP \<and> P \<in> badP)  \<longrightarrow> X \<in> knows Spy evs"
+  "Shows P A X \<in> set evs \<longrightarrow> (insecureP \<and> P \<in> badP) \<longrightarrow> X \<in> knows Spy evs"
 
   apply (induct_tac "evs")
   apply (simp_all (no_asm_simp) split: event.split)
@@ -358,9 +358,9 @@ lemma knows_Shows_insecureP:
   "(insecureP \<and> A \<noteq> Spy) \<longrightarrow> knows A (Shows P A X # evs) = knows A evs"
 by simp
 
-lemma knows_AGets:
-  "A \<noteq> Spy \<longrightarrow> knows A (AGets A X # evs) = insert X (knows A evs)"
-by simp
+(* lemma knows_AGets: *)
+  (* "A \<noteq> Spy \<longrightarrow> knows A (AGets A X # evs) = insert X (knows A evs)" *)
+(* by simp *)
 
 lemma knows_Inputs:
   "knows A (Inputs A P X # evs) = insert X (knows A evs)"
