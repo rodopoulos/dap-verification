@@ -30,8 +30,10 @@ definition legalUse :: "smartphone \<Rightarrow> bool" ("legalUse (_)") where
   "legalUse P == P \<notin> stolen"
 
 (* Smartphones are prone to theft. The Spy may use it if she have stole it. *)
-primrec illegalUse :: "smartphone \<Rightarrow> bool" ("illegalUse (_)") where
-  illegalUse_def: "illegalUse (Smartphone A) = ((Smartphone A \<in> stolen) \<or> (Smartphone A \<in> badP))"
+primrec illegalUse :: "smartphone \<Rightarrow> bool" where
+  illegalUse_def: "illegalUse (Smartphone A) = (
+    (insecureP \<and> (Smartphone A \<in> stolen) \<or> (Smartphone A \<in> badP)) \<or>
+    (secureP   \<and> (Smartphone A \<in> stolen)))"
 
 
   
