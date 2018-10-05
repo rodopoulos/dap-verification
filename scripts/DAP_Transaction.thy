@@ -18,6 +18,27 @@ axiomatization where
 inductive_set daptrans :: "event list set" where
   Nil: "[] \<in> daptrans"
 
+  (* Rule modeling the illegal behavior of the Spy *)
+  | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF));
+             illegalUse(Smartphone A); C \<noteq> Server; C \<noteq> Spy \<rbrakk>
+    \<Longrightarrow> Says Spy B X #
+        Scans Spy (Smartphone A) X #
+        Shows (Smartphone Spy) C X # evsF \<in> daptrans"
+  
+  (* Reception invariant rules *)
+  | Rcpt: "\<lbrakk> evsR \<in> daptrans; Says A B X \<in> set evsR \<rbrakk> 
+    \<Longrightarrow> Gets B X # evsR \<in> daptrans"
+
+  | RcptS: "\<lbrakk> evsRs \<in> daptrans; Scans A (Smartphone B) X \<in> set evsRs \<rbrakk> 
+    \<Longrightarrow> SGets (Smartphone B) X # evsRs \<in> daptrans"
+
+  | RcptA: "\<lbrakk> evsRa \<in> daptrans; Shows (Smartphone A) B X \<in> set evsRa \<rbrakk>
+    \<Longrightarrow> AGets B X # evsRa \<in> daptrans"
+
+  | RcptI: "\<lbrakk> evsRi \<in> daptrans; Inputs A (Smartphone B) X \<in> set evsRi \<rbrakk>
+    \<Longrightarrow> SGets (Smartphone B) X # evsRi \<in> daptrans"
+
+  (* Protocol rules *)
   | DT1: "\<lbrakk> evs1 \<in> daptrans; A \<noteq> Server \<rbrakk>
     \<Longrightarrow> Says A Server \<lbrace> Agent A, Number T \<rbrace> # evs1 \<in> daptrans"
 
@@ -76,26 +97,7 @@ inductive_set daptrans :: "event list set" where
             Gets Server (Nonce r) \<in> set evs8 \<rbrakk>
     \<Longrightarrow> Says Server A Success # evs8 \<in> daptrans"
 
-  (* Rule modeling the illegal behavior of the Spy *)
-  | Fake: "\<lbrakk> evsF \<in> daptrans; X \<in> synth(analz(knows Spy evsF));
-             illegalUse(Smartphone A); C \<noteq> Server; C \<noteq> Spy \<rbrakk>
-    \<Longrightarrow> Says Spy B X #
-        Scans Spy (Smartphone A) X #
-        Shows (Smartphone Spy) C X # evsF \<in> daptrans"
-  
-  (* Reception invariant rules *)
-  | Rcpt: "\<lbrakk> evsR \<in> daptrans; Says A B X \<in> set evsR \<rbrakk> \<Longrightarrow> Gets B X # evsR \<in> daptrans"
-
-  | RcptS: "\<lbrakk> evsRs \<in> daptrans; Scans A (Smartphone B) X \<in> set evsRs \<rbrakk> 
-    \<Longrightarrow> SGets (Smartphone B) X # evsRs \<in> daptrans"
-
-  | RcptA: "\<lbrakk> evsRa \<in> daptrans; Shows (Smartphone A) B X \<in> set evsRa \<rbrakk>
-    \<Longrightarrow> AGets B X # evsRa \<in> daptrans"
-
-  | RcptI: "\<lbrakk> evsRi \<in> daptrans; Inputs A (Smartphone B) X \<in> set evsRi \<rbrakk>
-    \<Longrightarrow> SGets (Smartphone B) X # evsRi \<in> daptrans"
-
-declare Fake_parts_insert_in_Un  [dest]
+declare Fake_parts_insert_in_Un [dest]
 declare analz_into_parts [dest]
 
 
@@ -125,10 +127,10 @@ lemma Gets_imp_knows_Spy_analz_Snd :
   apply (blast dest!: Gets_imp_Says Says_imp_knows_Spy analz.Inj analz.Snd)
 done
 
-lemmas Gets_imp_knows_Spy_parts [dest] = Gets_imp_knows_Spy_analz [THEN analz_into_parts]
-lemmas Gets_imp_knows_Spy_parts_Snd [dest] = Gets_imp_knows_Spy_analz_Snd [THEN analz_into_parts]
+lemmas Gets_imp_knows_Spy_parts = Gets_imp_knows_Spy_analz [THEN analz_into_parts]
+lemmas Gets_imp_knows_Spy_parts_Snd = Gets_imp_knows_Spy_analz_Snd [THEN analz_into_parts]
 
-lemma SGets_imp_Scans :
+lemma SGets_imp_Scans_or_Inputs :
   "\<lbrakk> SGets P X \<in> set evs; evs \<in> daptrans \<rbrakk> 
     \<Longrightarrow> \<exists> A. (Scans A P X \<in> set evs) \<or> (Inputs A P X \<in> set evs)"
 
@@ -150,7 +152,7 @@ lemma SGets_imp_knows_Spy_analz :
     \<Longrightarrow> X \<in> analz (knows Spy evs)"
 by (blast dest!: SGets_imp_knows_Spy)
 
-lemmas SGets_imp_knows_Spy_parts [dest] = SGets_imp_knows_Spy_analz [THEN analz_into_parts]
+lemmas SGets_imp_knows_Spy_parts = SGets_imp_knows_Spy_analz [THEN analz_into_parts]
 
 lemma AGets_imp_Shows :
   "\<lbrakk> AGets A X \<in> set evs; evs \<in> daptrans \<rbrakk> \<Longrightarrow> \<exists> P. Shows P A X \<in> set evs"
@@ -417,7 +419,6 @@ lemma Scans_A_Smartphone_form_DT3:
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (simp_all)
-  defer
   apply (force)
 oops
 
@@ -430,7 +431,7 @@ oops
    Spy from having unlimited resources *)
 lemma Shows_A_Smartphone_4 :
   "\<lbrakk> Shows P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
+    \<Longrightarrow> ((legalUse(P)) \<and> P = (Smartphone A)) \<or> ((illegalUse(P)) \<and> P = (Smartphone Spy)) \<and>
         (\<exists> r. SGets (Smartphone A) \<lbrace>
           \<lbrace>Agent A, Number T\<rbrace>,
           Crypt (shrK A) (Nonce r),
@@ -438,9 +439,10 @@ lemma Shows_A_Smartphone_4 :
         \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule daptrans.induct)
-  apply (simp_all, force+)
+  apply (simp_all)
   defer
   apply (blast+)
+  apply (auto)
 oops
 
 lemma Shows_honest_A_Smartphone_4 :
@@ -453,7 +455,7 @@ lemma Shows_honest_A_Smartphone_4 :
         \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule daptrans.induct)
-  apply (simp_all, force+)
+  apply (simp_all)
   defer
   apply (blast+)
 oops
@@ -467,7 +469,9 @@ lemma Shows_which_Smartphone_4 :
         \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule daptrans.induct)
-  apply (auto)
+  apply (simp_all)
+  defer
+  apply (blast+)
 done
 
 lemma Shows_A_Smartphone_6 :
@@ -476,18 +480,17 @@ lemma Shows_A_Smartphone_6 :
 
   apply (erule rev_mp, erule daptrans.induct)
   apply (simp_all)
-  apply (blast+)
   defer
   apply (blast+)
 oops
 
 lemma Shows_honest_A_Smartphone_6 :
   "\<lbrakk> Shows P A (Nonce r) \<in> set evs; A \<noteq> Spy; evs \<in> daptrans \<rbrakk>
-    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and>
+    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
         (\<exists> T. SGets (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule daptrans.induct)
-  apply (simp_all, force+)
+  apply (simp_all)
   defer
   apply (blast+)
 oops
@@ -505,21 +508,20 @@ done
 (* - Shows messages form guarantees *)
 
 lemma Shows_A_Smartphone_form_4 :
-  "\<lbrakk> Shows (Smartphone A) A Transaction \<in> set evs; evs \<in> daptrans;
-    \<forall> p q. Transaction = \<lbrace>p, q\<rbrace> \<rbrakk>
+  "\<lbrakk> Shows (Smartphone A) A Transaction \<in> set evs; \<forall> p q. Transaction = \<lbrace>p, q\<rbrace>;
+     evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> \<exists> T. Transaction = \<lbrace>Agent A, Number T\<rbrace>"
 
   apply (erule rev_mp, erule daptrans.induct)
-  apply (auto)
+  apply (simp_all)
 done
 
 lemma Shows_A_Smartphone_form_6 :
-  "\<lbrakk> Shows (Smartphone A) A TAN \<in> set evs; evs \<in> daptrans;
-    \<forall> p q. TAN \<noteq> \<lbrace>p, q\<rbrace> \<rbrakk>
+  "\<lbrakk> Shows (Smartphone A) A TAN \<in> set evs; \<forall> p q. TAN \<noteq> \<lbrace>p, q\<rbrace>; evs \<in> daptrans \<rbrakk>
     \<Longrightarrow> \<exists> r. TAN = (Nonce r)"
 
-  apply (erule rev_mp, erule daptrans.induct)
-  apply (auto)
+  apply (erule rev_mp, erule rev_mp, erule daptrans.induct)
+  apply (simp_all, blast)
 done
 
 
@@ -556,11 +558,24 @@ by (blast dest!: Gets_imp_Says Gets_imp_knows_Spy_analz_Snd)
 lemmas DT3_parts_knows_Spy_fst = DT3_analz_knows_Spy_fst [THEN analz_into_parts]
 lemmas DT3_parts_knows_Spy_snd = DT3_analz_knows_Spy_snd [THEN analz_into_parts]
 
+lemma shrK_not_in_honest_Scans [dest]:
+  "\<lbrakk>Scans A (Smartphone A) X \<in> set evs; A \<notin> bad; Smartphone P \<notin> badP; evs \<in> daptrans\<rbrakk>
+    \<Longrightarrow> Key (shrK A) \<notin> analz {X}"
+
+  apply (erule rev_mp, erule rev_mp, erule rev_mp)
+  apply (erule daptrans.induct)
+  apply (frule_tac [9] DT3_parts_knows_Spy_fst)
+  apply (frule_tac [10] DT3_parts_knows_Spy_snd)
+  apply (simp_all, blast)
+  apply (auto)
+sorry
 
 lemma Spy_parts_keys [simp] : 
   "evs \<in> daptrans \<Longrightarrow> (Key (shrK A) \<in> parts (knows Spy evs)) = (Smartphone A \<in> badP)"
 
   apply (erule daptrans.induct)
+  apply (frule_tac [9] DT3_parts_knows_Spy_fst)
+  apply (frule_tac [10] DT3_parts_knows_Spy_snd)
   apply (simp_all)
   apply (auto)
 sorry
