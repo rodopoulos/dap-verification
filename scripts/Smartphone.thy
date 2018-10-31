@@ -107,6 +107,10 @@ apply (induct_tac "A")
 apply auto
 done
 
+lemma shrK_not_in_other [iff]: "Key (shrK (Friend x)) \<in> initState (Friend y) \<Longrightarrow> (x = y)"
+apply simp_all
+done
+
 (* Long term keys are not fresh *)
 lemma shrK_in_used [iff]: "Key (shrK A) \<in> used evs"
 apply (rule initState_into_used)

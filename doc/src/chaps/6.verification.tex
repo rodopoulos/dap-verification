@@ -1,1 +1,7 @@
 %!TEX root = ../../dissertacao.tex
+Finally, we present the formalization and verification of DAP\@. The asymmetric key generation was left out, due to lack of explicitness in the protocol document. Any protocol model adaptations will be explained in this chapter.
+
+The proof scripts regarding the formalization are partially described, where only relevant sections are included. The full files are attached as appendix at the end of this document.
+
+\section{Message Transaction}
+The DAP message transaction protocol model is defined in file \texttt{DAP_Transaction.thy}, as the constant \texttt{daptrans}, denoting the set of list events for each protocol rule. In this first formalization, the environment considered was the most threatening possible, where the Spy could have control over users' Smartphones by exploitation, besides robbery.
