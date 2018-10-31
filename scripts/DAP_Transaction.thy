@@ -442,7 +442,6 @@ lemma Shows_A_Smartphone_4 :
   apply (simp_all)
   defer
   apply (blast+)
-  apply (auto)
 oops
 
 lemma Shows_honest_A_Smartphone_4 :
@@ -576,7 +575,7 @@ lemma Spy_parts_keys [simp] :
   apply (erule daptrans.induct)
   apply (frule_tac [9] DT3_parts_knows_Spy_fst)
   apply (frule_tac [10] DT3_parts_knows_Spy_snd)
-  apply (simp_all)
+  apply (simp_all, blast)
   apply (auto)
 sorry
 
