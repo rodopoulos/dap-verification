@@ -67,53 +67,53 @@ primrec knows :: "agent \<Rightarrow> event list \<Rightarrow> msg set" where
   knows_Nil :  "knows A [] = initState A" |
   knows_Cons : "knows A (ev # evs) =
     (case ev of
-      (* An agent knows what he sends to anyone. The Spy knows everything sent on a trace *)
+      \<comment> \<open>An agent knows what he sends to anyone. The Spy knows everything sent on a trace\<close>
       Says A' B X \<Rightarrow>
         if (A = A' | A = Spy) then insert X (knows A evs)
         else (knows A evs)
 
-      (* An agent knows what he notes. The Spy knows what compromised agents knows on a trace *)
+      \<comment> \<open>An agent knows what he notes. The Spy knows what compromised agents knows on a trace\<close>
       | Notes A' X \<Rightarrow>
         if (A = A' | (A = Spy & A' \<in> bad)) then insert X (knows A evs)
         else knows A evs
 
-      (* An agent, except the Spy, knows what she receives in a trace. Due to the Says event and
-      reception invariant, the Spy knowledge does not need to be extended *)
+      \<comment> \<open>An agent, except the Spy, knows what she receives in a trace. Due to the Says event and
+      reception invariant, the Spy knowledge does not need to be extended\<close>
       | Gets A' X \<Rightarrow>
         if (A = A' & A \<noteq> Spy) then insert X (knows A evs)
         else knows A evs
 
-      (* An agent knows what she shows to her smartphone to scan. The Spy knows what a compromised
-         agent shows to her smartphones to scan *)
+      \<comment> \<open>An agent knows what she shows to her smartphone to scan. The Spy knows what a compromised
+         agent shows to her smartphones to scan\<close>
       | Scans A' P X \<Rightarrow>
         if (A = A' | (A = Spy & A' \<in> bad)) then insert X (knows A evs)
         else knows A evs
 
-      (* Due to reception invariant of Scans event, an agent does not enrich her knowledge set 
-         from what her smartphone receives *)
+      \<comment> \<open>Due to reception invariant of Scans event, an agent does not enrich her knowledge set 
+         from what her smartphone receives\<close>
       | SGets P X \<Rightarrow> 
         if secureP then knows A evs
-        else (* However, if devices can be compromised, the Spy knows what a compromised phone
-                receives *)
+        \<comment> \<open>However, if devices can be compromised, the Spy knows what a compromised phone receives\<close>
+        else
           if (A = Spy & P \<in> badP) then insert X (knows A evs)
           else knows A evs
 
-      (* An agent knows what her smartphone shows to her. *)
+      \<comment> \<open>An agent knows what her smartphone shows to her\<close>
       | Shows P A' X \<Rightarrow>
         if secureP then
           if (A = A') then insert X (knows A evs)
           else knows A evs
-        else (* However, if devices can be compromised, the Spy knows what a compromised phone
-                shows *)
+        \<comment> \<open>However, if devices can be compromised, the Spy knows what a compromised phone shows\<close>
+        else 
           if (A = Spy & P \<in> badP) then insert X (knows A evs)
           else knows A evs
 
-      (* An agent knows what she receives from her smartphone. The Spy only knows what compromised *)
+      \<comment> \<open>An agent knows what she receives from her smartphone. The Spy only knows what compromised\<close>
       | AGets A' X \<Rightarrow>
         if (A = A' & A \<noteq> Spy) then insert X (knows A evs)
         else knows A evs
 
-      (* An agent, and only her, knows what she manually inputs to her smartphone *)
+      \<comment> \<open>An agent, and only her, knows what she manually inputs to her smartphone\<close>
       | Inputs A' P X \<Rightarrow>
         if (A = A') then insert X (knows A evs)
         else knows A evs
@@ -130,9 +130,9 @@ primrec used :: "event list \<Rightarrow> msg set" where
       | Notes A X \<Rightarrow> parts {X} \<union> (used evs)
       | Gets A X \<Rightarrow> used evs
       | Scans A P X \<Rightarrow> parts {X} \<union> used evs
-      (* We need to extend the used set here due to lemma parts_knows_Spy_subset_used
+      \<comment> \<open>We need to extend the used set here due to lemma parts_knows_Spy_subset_used
          We do not violate the reception invariant, since every message received here was already
-         been added in the above definition *)
+         been added in the above definition\<close>
       | SGets P X \<Rightarrow> parts {X} \<union> used evs
       | Shows P A X \<Rightarrow> parts {X} \<union> used evs
       | AGets A X \<Rightarrow> used evs
