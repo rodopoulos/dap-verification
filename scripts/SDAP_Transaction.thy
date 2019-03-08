@@ -291,9 +291,10 @@ lemma Says_Server_Success :
           \<rbrace> \<in> set evs \<and>
           Gets Server (Nonce r) \<in> set evs"
 
-  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
   apply (auto)
-done 
+done
 
 
 
