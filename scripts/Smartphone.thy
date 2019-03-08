@@ -104,7 +104,7 @@ by (drule Crypt_imp_invKey_keysFor, simp)
 (* Server does know all shared keys! *)
 lemma shrK_in_initState [iff]: "Key (shrK A) \<in> initState Server"
 apply (induct_tac "A")
-apply auto
+apply simp_all
 done
 
 (* Previous to any session, legal agents only know their keys *)
