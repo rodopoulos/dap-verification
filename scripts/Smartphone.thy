@@ -2,9 +2,9 @@
     Author:     Felipe Rodopoulos, University of Brasilia
     Copyright   2018 University of Brasilia
 
-Theory for offline and out-of-band channels, defined by the communications
-  means created by the usage of a smartphone camera for decoding QR codes 
-  displayed others devices screens.
+Theory for offline and out-of-band channels. These are defined by the
+communications means created by the usage of a smartphone camera for
+decoding QR codes displayed others devices screens.
 
 Definitions for keys, initial state of agents and smartphone's usability.
 
