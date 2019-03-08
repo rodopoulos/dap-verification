@@ -107,6 +107,7 @@ apply (induct_tac "A")
 apply auto
 done
 
+(* Previous to any session, legal agents only know their keys *)
 lemma shrK_not_in_other [iff]: "Key (shrK (Friend x)) \<in> initState (Friend y) \<Longrightarrow> (x = y)"
 apply simp
 done
