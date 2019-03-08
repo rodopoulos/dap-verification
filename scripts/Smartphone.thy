@@ -108,7 +108,7 @@ apply auto
 done
 
 lemma shrK_not_in_other [iff]: "Key (shrK (Friend x)) \<in> initState (Friend y) \<Longrightarrow> (x = y)"
-apply simp_all
+apply simp
 done
 
 (* Long term keys are not fresh *)
