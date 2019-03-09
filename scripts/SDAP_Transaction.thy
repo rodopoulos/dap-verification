@@ -80,7 +80,7 @@ inductive_set sdaptrans :: "event list set" where
             Shows (Smartphone A) A (Nonce r) \<in> set evs7 \<rbrakk>
     \<Longrightarrow> Says A Server (Nonce r) # evs7 \<in> sdaptrans"
 
-  | DT8: "\<lbrakk> evs8 \<in> sdaptrans;
+  | DT8: "\<lbrakk> evs8 \<in> sdaptrans; A \<noteq> Server;
             Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs8;
             Says Server A \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r),
               Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
