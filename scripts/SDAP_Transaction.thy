@@ -357,7 +357,7 @@ done
 (* 3. Protocol termination  *)
 
 lemma Protocol_terminates :
-  "\<exists> A Success. \<exists> evs \<in> sdaptrans. A \<noteq> Server \<and> Says Server A Success \<in> set evs"
+  "\<exists> A T. \<exists> evs \<in> sdaptrans. A \<noteq> Server \<and> Says Server A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs"
 
   apply (intro exI bexI)
   apply (rule_tac [2] sdaptrans.Nil [THEN sdaptrans.DT1, THEN sdaptrans.Rcpt,
