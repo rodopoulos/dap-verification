@@ -9,8 +9,6 @@ begin
 
 abbreviation
   Confirmation :: msg where "Confirmation \<equiv> (Number 1)"
-abbreviation
-  Success :: msg where "Success \<equiv> (Number 2)"
 
 axiomatization where
   sdaptrans_assume_insecure_devices [iff]: "evs \<in> sdaptrans \<Longrightarrow> secureP"
@@ -88,7 +86,7 @@ inductive_set sdaptrans :: "event list set" where
               Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs8;
             Gets Server (Nonce r) \<in> set evs8 \<rbrakk>
-    \<Longrightarrow> Says Server A Success # evs8 \<in> sdaptrans"
+    \<Longrightarrow> Says Server A \<lbrace> Agent A, Number T \<rbrace>  # evs8 \<in> sdaptrans"
 
   (* Rule modeling the illegal behavior of the Spy *)
   | Fake: "\<lbrakk> evsF \<in> sdaptrans; X \<in> synth(analz(knows Spy evsF));
