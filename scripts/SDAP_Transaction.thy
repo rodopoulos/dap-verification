@@ -620,6 +620,7 @@ lemma Checksum_authentic :
       
   apply (erule rev_mp, erule sdaptrans.induct)
   apply (simp_all (no_asm_simp))
-oops
+  apply (auto)
+done
 
 end
