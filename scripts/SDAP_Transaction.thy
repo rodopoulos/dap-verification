@@ -598,8 +598,10 @@ lemma Server_transaction_unique :
     evs \<in> sdaptrans\<rbrakk>
    \<Longrightarrow> A = A' \<and> T = T'"
 
-  apply (erule rev_mp, erule rev_mp)
-  apply (erule sdaptrans.induct, simp_all)
+  apply (erule rev_mp)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
   apply (fastforce dest: Says_parts_used)
 done
 
