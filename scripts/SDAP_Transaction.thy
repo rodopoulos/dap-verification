@@ -428,7 +428,7 @@ lemma Scans_A_Smartphone_form_DT3:
   apply (simp_all)
   defer
   apply (force)
-oops
+done
 
 
 
