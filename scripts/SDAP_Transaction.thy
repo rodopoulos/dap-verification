@@ -471,7 +471,8 @@ lemma Shows_which_Smartphone_4 :
           Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
         \<rbrace> \<in> set evs)"
 
-  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
   apply (auto)
 done
 
