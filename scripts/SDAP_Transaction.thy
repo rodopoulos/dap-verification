@@ -468,7 +468,7 @@ lemma Shows_which_Smartphone_4 :
     \<Longrightarrow> (\<exists> r. Scans A (Smartphone A) \<lbrace>
           \<lbrace>Agent A, Number T\<rbrace>,
           Crypt (shrK A) (Nonce r),
-          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r)\<rbrace>
         \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp)
