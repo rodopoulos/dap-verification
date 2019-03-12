@@ -7,9 +7,6 @@ theory SDAP_Transaction imports "./Smartphone"
 
 begin
 
-abbreviation
-  Confirmation :: msg where "Confirmation \<equiv> (Number 1)"
-
 axiomatization where
   sdaptrans_assume_insecure_devices [iff]: "evs \<in> sdaptrans \<Longrightarrow> secureP"
 
@@ -50,7 +47,7 @@ inductive_set sdaptrans :: "event list set" where
             Gets A \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Scans A (Smartphone A) \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5 \<rbrakk>
-    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> Agent A, Number T, Confirmation \<rbrace> # evs5 \<in> sdaptrans"
+    \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> # evs5 \<in> sdaptrans"
 
   | DT6: "\<lbrakk> evs6 \<in> sdaptrans; legalUse(Smartphone A); A \<noteq> Server;
             Scans A (Smartphone A) \<lbrace>
@@ -58,7 +55,7 @@ inductive_set sdaptrans :: "event list set" where
               Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs6;
             Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6;
-            Inputs A (Smartphone A) \<lbrace> Agent A, Number T, Confirmation \<rbrace> \<in> set evs6 \<rbrakk>
+            Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6 \<rbrakk>
    \<Longrightarrow> Shows (Smartphone A) A (Nonce r) # evs6 \<in> sdaptrans"
 
    | DT6_Fake: "\<lbrakk> evs6f \<in> sdaptrans; illegalUse(Smartphone A); A \<noteq> Server;
@@ -67,7 +64,7 @@ inductive_set sdaptrans :: "event list set" where
                     Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
                   \<rbrace> \<in> set evs6;
                   Shows (Smartphone A) Spy \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6;
-                  Inputs Spy (Smartphone A) \<lbrace> Agent A, Number T, Confirmation \<rbrace> \<in> set evs6
+                  Inputs Spy (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6
                 \<rbrakk> 
     \<Longrightarrow> Shows (Smartphone A) Spy (Nonce r) # evs6f \<in> sdaptrans"
 
@@ -76,7 +73,7 @@ inductive_set sdaptrans :: "event list set" where
             Gets A \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Scans A (Smartphone A) \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs7;
-            Inputs A (Smartphone A) \<lbrace> Agent A, Number T, Confirmation \<rbrace> \<in> set evs7;
+            Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs7;
             Shows (Smartphone A) A (Nonce r) \<in> set evs7 \<rbrakk>
     \<Longrightarrow> Says A Server (Nonce r) # evs7 \<in> sdaptrans"
 
@@ -387,7 +384,7 @@ done
 (* This is an important guarantee: the protocol legally continues if the agent confirms the 
      outputed message, which contains the transaction *)
 lemma Inputs_A_Smartphone_5 :
-  "\<lbrakk> Inputs A P \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
+  "\<lbrakk> Inputs A P \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
         (\<exists> r' h\<^sub>s. Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
         Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs \<and>
@@ -468,7 +465,7 @@ done
 
 lemma Shows_A_Smartphone_6 :
   "\<lbrakk> Shows P A (Nonce r) \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs)"
+    \<Longrightarrow> (\<exists> T. Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule sdaptrans.induct)
   apply (simp_all, blast+)
@@ -477,8 +474,8 @@ done
 
 lemma Shows_honest_A_Smartphone_6 :
   "\<lbrakk> Shows P A (Nonce r) \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> legalUse(P) \<and> P = (Smartphone A) \<and>
-        (\<exists> T. Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs)"
+    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
+        (\<exists> T. Inputs A (Smartphone A) \<lbrace>Agent A, Number T \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule sdaptrans.induct)
   apply (simp_all, force+)
@@ -492,7 +489,7 @@ lemma Shows_which_Smartphone_6 :
             Crypt (shrK A) (Nonce r),
             Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
           \<rbrace> \<in> set evs \<and>
-          Inputs A (Smartphone A) \<lbrace>Agent A, Number T, Confirmation\<rbrace> \<in> set evs)"
+          Inputs A (Smartphone A) \<lbrace>Agent A, Number T \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule sdaptrans.induct)
   apply (auto)
