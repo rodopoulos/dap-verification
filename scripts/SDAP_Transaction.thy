@@ -19,40 +19,44 @@ inductive_set sdaptrans :: "event list set" where
   | DT2: "\<lbrakk> evs2 \<in> sdaptrans; Nonce r \<notin> used evs2;
             Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2 \<rbrakk>
     \<Longrightarrow> Says Server A \<lbrace> 
-          Agent A, Number T , Crypt (shrK A) (Nonce r),
-          Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
+          \<lbrace>Agent A, Number T\<rbrace>,
+          Crypt (shrK A) (Nonce r),
+          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
         \<rbrace> # evs2 \<in> sdaptrans"
 
   | DT3: "\<lbrakk> evs3 \<in> sdaptrans; legalUse (Smartphone A); A \<noteq> Server;
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs3;
-            Gets A \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk>
-    \<Longrightarrow> Scans A (Smartphone A) \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> # evs3 \<in> sdaptrans"
+            Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk>
+    \<Longrightarrow> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> sdaptrans"
 
   | DT4: "\<lbrakk> evs4 \<in> sdaptrans; legalUse(Smartphone A); A \<noteq> Server;
             Scans A (Smartphone A) \<lbrace>
-              Agent A, Number T, Crypt (shrK A) (Nonce r),
-              Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
+              \<lbrace>Agent A, Number T\<rbrace>,
+              Crypt (shrK A) (Nonce r),
+              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs4 \<rbrakk>
     \<Longrightarrow> Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> # evs4 \<in> sdaptrans"
 
   | DT4_Fake: "\<lbrakk> evs4f \<in> sdaptrans; illegalUse(Smartphone A); A \<noteq> Server;
                  Scans Spy (Smartphone A) \<lbrace>
-                  Agent A, Number T, Crypt (shrK A) (Nonce r),
-                  Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
+                  \<lbrace>Agent A, Number T\<rbrace>,
+                  Crypt (shrK A) (Nonce r),
+                  Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
                  \<rbrace> \<in> set evs4f\<rbrakk>
      \<Longrightarrow> Shows (Smartphone A) Spy \<lbrace> Agent A, Number T \<rbrace> # evs4f \<in> sdaptrans"
 
   | DT5: "\<lbrakk> evs5 \<in> sdaptrans; legalUse(Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5;
-            Gets A \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> \<in> set evs5;
-            Scans A (Smartphone A) \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> \<in> set evs5;
+            Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
+            Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
             Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5 \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> # evs5 \<in> sdaptrans"
 
   | DT6: "\<lbrakk> evs6 \<in> sdaptrans; legalUse(Smartphone A); A \<noteq> Server;
             Scans A (Smartphone A) \<lbrace>
-              Agent A, Number T, Crypt (shrK A) (Nonce r),
-              Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
+              \<lbrace>Agent A, Number T\<rbrace>,
+              Crypt (shrK A) (Nonce r),
+              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs6;
             Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6;
             Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6 \<rbrakk>
@@ -60,8 +64,9 @@ inductive_set sdaptrans :: "event list set" where
 
    | DT6_Fake: "\<lbrakk> evs6f \<in> sdaptrans; illegalUse(Smartphone A); A \<noteq> Server;
                   Scans Spy (Smartphone A) \<lbrace>
-                    Agent A, Number T, Crypt (shrK A) (Nonce r),
-                    Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
+                    \<lbrace>Agent A, Number T\<rbrace>,
+                    Crypt (shrK A) (Nonce r),
+                    Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
                   \<rbrace> \<in> set evs6;
                   Shows (Smartphone A) Spy \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6;
                   Inputs Spy (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6
@@ -70,8 +75,8 @@ inductive_set sdaptrans :: "event list set" where
 
   | DT7: "\<lbrakk> evs7 \<in> sdaptrans; A \<noteq> Server;
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs7;
-            Gets A \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> \<in> set evs7;
-            Scans A (Smartphone A) \<lbrace> Agent A, Number T, r', h\<^sub>s \<rbrace> \<in> set evs7;
+            Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs7;
+            Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs7;
             Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs7;
             Shows (Smartphone A) A (Nonce r) \<in> set evs7 \<rbrakk>
@@ -79,8 +84,10 @@ inductive_set sdaptrans :: "event list set" where
 
   | DT8: "\<lbrakk> evs8 \<in> sdaptrans; A \<noteq> Server;
             Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs8;
-            Says Server A \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r),
-              Crypt (shrK A) \<lbrace> Agent A, Number T, Crypt (shrK A) (Nonce r) \<rbrace>
+            Says Server A \<lbrace>
+              \<lbrace>Agent A, Number T\<rbrace>,
+              Crypt (shrK A) (Nonce r),
+              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs8;
             Gets Server (Nonce r) \<in> set evs8 \<rbrakk>
     \<Longrightarrow> Says Server A \<lbrace> Agent A, Number T \<rbrace>  # evs8 \<in> sdaptrans"
@@ -276,16 +283,19 @@ done
      it received a nonce that matches the produced TAN *)
 
 lemma Says_Server_Success :
-  "\<lbrakk> Says Server A Success \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> \<exists> T r.
-          Gets Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
-          Says Server A \<lbrace> 
-            \<lbrace>Agent A, Number T\<rbrace>, 
-            Crypt (shrK A) (Nonce r),
-            Crypt (shrK A) \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r)\<rbrace>
-          \<rbrace> \<in> set evs \<and>
-          Gets Server (Nonce r) \<in> set evs"
+  "\<lbrakk> Server \<noteq> A;
+    Says Server A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs;
+    evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> \<exists> r.
+      Gets Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
+      Says Server A \<lbrace> 
+        \<lbrace>Agent A, Number T\<rbrace>, 
+        Crypt (shrK A) (Nonce r),
+        Crypt (shrK A) \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r)\<rbrace>
+      \<rbrace> \<in> set evs \<and>
+      Gets Server (Nonce r) \<in> set evs"
 
+  apply (erule rev_mp)
   apply (erule rev_mp)
   apply (erule sdaptrans.induct)
   apply (auto)
@@ -386,12 +396,14 @@ done
 lemma Inputs_A_Smartphone_5 :
   "\<lbrakk> Inputs A P \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
-        (\<exists> r' h\<^sub>s. Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
-        Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs \<and>
-        Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs \<and>
-        Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs)"
+        (\<exists> r' h\<^sub>s.
+          Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
+          Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs \<and>
+          Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs \<and>
+          Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs)"
 
-  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
   apply (auto)
 done
 
