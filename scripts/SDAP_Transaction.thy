@@ -67,9 +67,9 @@ inductive_set sdaptrans :: "event list set" where
                     \<lbrace>Agent A, Number T\<rbrace>,
                     Crypt (shrK A) (Nonce r),
                     Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
-                  \<rbrace> \<in> set evs6;
-                  Shows (Smartphone A) Spy \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6;
-                  Inputs Spy (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6
+                  \<rbrace> \<in> set evs6f;
+                  Shows (Smartphone A) Spy \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6f;
+                  Inputs Spy (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6f
                 \<rbrakk> 
     \<Longrightarrow> Shows (Smartphone A) Spy (Nonce r) # evs6f \<in> sdaptrans"
 
