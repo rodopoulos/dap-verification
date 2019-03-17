@@ -226,7 +226,7 @@ done
 
 (* - The Server smartphone is not usable *)
 
-lemma Scans_Agent_Server_not_evs [rule_format] :
+lemma Scans_Agent_Server_not_evs [rule_format, simp] :
   "evs \<in> sdaptrans \<Longrightarrow> Scans Server (Smartphone A) X \<notin> set evs"
 
   apply (erule sdaptrans.induct)
