@@ -24,7 +24,7 @@ inductive_set sdaptrans :: "event list set" where
           Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
         \<rbrace> # evs2 \<in> sdaptrans"
 
-  | DT3: "\<lbrakk> evs3 \<in> sdaptrans; legalUse (Smartphone A); A \<noteq> Server;
+  | DT3: "\<lbrakk> evs3 \<in> sdaptrans; legalUse (Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs3;
             Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk>
     \<Longrightarrow> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> sdaptrans"
@@ -230,14 +230,17 @@ lemma Scans_Agent_Server_not_evs [rule_format] :
   "evs \<in> sdaptrans \<Longrightarrow> Scans Server (Smartphone A) X \<notin> set evs"
 
   apply (erule sdaptrans.induct)
-  apply (auto)
+  apply (simp_all)
+  apply (blast dest:Server_cannot_initiate)
 done
 
 lemma Scans_Server_Agent_not_evs [rule_format] :
   "evs \<in> sdaptrans \<Longrightarrow> Scans A (Smartphone Server) X \<notin> set evs"
 
   apply (erule sdaptrans.induct)
-  apply (auto)
+  apply (simp_all)
+  apply (blast dest:Server_cannot_initiate)
+  apply (blast)
 done
 
 lemma Shows_Agent_Server_not_evs [rule_format] :
