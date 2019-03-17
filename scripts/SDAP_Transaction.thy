@@ -29,7 +29,7 @@ inductive_set sdaptrans :: "event list set" where
             Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs3 \<rbrakk>
     \<Longrightarrow> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> # evs3 \<in> sdaptrans"
 
-  | DT4: "\<lbrakk> evs4 \<in> sdaptrans; legalUse(Smartphone A); A \<noteq> Server;
+  | DT4: "\<lbrakk> evs4 \<in> sdaptrans; legalUse(Smartphone A);
             Scans A (Smartphone A) \<lbrace>
               \<lbrace>Agent A, Number T\<rbrace>,
               Crypt (shrK A) (Nonce r),
@@ -248,6 +248,7 @@ lemma Shows_Agent_Server_not_evs [rule_format] :
 
   apply (erule sdaptrans.induct)
   apply (simp_all)
+  apply (blast dest:Scans_Server_Agent_not_evs)
 done
 
 lemma Shows_Server_Agent_not_evs [rule_format]:
@@ -255,6 +256,7 @@ lemma Shows_Server_Agent_not_evs [rule_format]:
 
   apply (erule sdaptrans.induct)
   apply (simp_all)
+  apply (blast dest:Scans_Server_Agent_not_evs)
 done
 
 
