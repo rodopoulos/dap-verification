@@ -52,7 +52,7 @@ inductive_set sdaptrans :: "event list set" where
             Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5 \<rbrakk>
     \<Longrightarrow> Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> # evs5 \<in> sdaptrans"
 
-  | DT6: "\<lbrakk> evs6 \<in> sdaptrans; legalUse(Smartphone A); A \<noteq> Server;
+  | DT6: "\<lbrakk> evs6 \<in> sdaptrans; legalUse(Smartphone A);
             Scans A (Smartphone A) \<lbrace>
               \<lbrace>Agent A, Number T\<rbrace>,
               Crypt (shrK A) (Nonce r),
@@ -62,7 +62,7 @@ inductive_set sdaptrans :: "event list set" where
             Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6 \<rbrakk>
    \<Longrightarrow> Shows (Smartphone A) A (Nonce r) # evs6 \<in> sdaptrans"
 
-   | DT6_Fake: "\<lbrakk> evs6f \<in> sdaptrans; illegalUse(Smartphone A); A \<noteq> Server;
+   | DT6_Fake: "\<lbrakk> evs6f \<in> sdaptrans; illegalUse(Smartphone A);
                   Scans Spy (Smartphone A) \<lbrace>
                     \<lbrace>Agent A, Number T\<rbrace>,
                     Crypt (shrK A) (Nonce r),
@@ -73,7 +73,7 @@ inductive_set sdaptrans :: "event list set" where
                 \<rbrakk> 
     \<Longrightarrow> Shows (Smartphone A) Spy (Nonce r) # evs6f \<in> sdaptrans"
 
-  | DT7: "\<lbrakk> evs7 \<in> sdaptrans; A \<noteq> Server;
+  | DT7: "\<lbrakk> evs7 \<in> sdaptrans;
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs7;
             Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs7;
             Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs7;
@@ -249,6 +249,7 @@ lemma Shows_Agent_Server_not_evs [rule_format] :
   apply (erule sdaptrans.induct)
   apply (simp_all)
   apply (blast dest:Scans_Server_Agent_not_evs)
+  apply (blast dest:Scans_Server_Agent_not_evs)
 done
 
 lemma Shows_Server_Agent_not_evs [rule_format]:
@@ -256,6 +257,8 @@ lemma Shows_Server_Agent_not_evs [rule_format]:
 
   apply (erule sdaptrans.induct)
   apply (simp_all)
+  apply (blast dest:Scans_Server_Agent_not_evs)
+  apply (blast dest:Scans_Server_Agent_not_evs)
   apply (blast dest:Scans_Server_Agent_not_evs)
   apply (blast)
 done
