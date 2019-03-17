@@ -37,7 +37,7 @@ inductive_set sdaptrans :: "event list set" where
             \<rbrace> \<in> set evs4 \<rbrakk>
     \<Longrightarrow> Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> # evs4 \<in> sdaptrans"
 
-  | DT4_Fake: "\<lbrakk> evs4f \<in> sdaptrans; illegalUse(Smartphone A); A \<noteq> Server;
+  | DT4_Fake: "\<lbrakk> evs4f \<in> sdaptrans; illegalUse(Smartphone A);
                  Scans Spy (Smartphone A) \<lbrace>
                   \<lbrace>Agent A, Number T\<rbrace>,
                   Crypt (shrK A) (Nonce r),
@@ -257,6 +257,7 @@ lemma Shows_Server_Agent_not_evs [rule_format]:
   apply (erule sdaptrans.induct)
   apply (simp_all)
   apply (blast dest:Scans_Server_Agent_not_evs)
+  apply (blast)
 done
 
 
