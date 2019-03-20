@@ -152,9 +152,9 @@ Having the notions of smartphone threats and usage, we are able to go forward an
     & \texttt{\textbf{Notes} agent msg} \\
     & \texttt{\textbf{Gets} agent msg} \\
     & \texttt{\textbf{Inputs} agent smartphone msg} \\
-    & \texttt{\textbf{Gets\_s} smartphone msg} \\
+    & \texttt{\textbf{SGets} smartphone msg} \\
     & \texttt{\textbf{Outputs} smartphone agent msg} \\
-    & \texttt{\textbf{Gets\_a} agent msg}
+    & \texttt{\textbf{AGets} agent msg}
   \end{split}
 \end{equation*}
 
@@ -163,16 +163,16 @@ The regular network events are kept as in Chapter \ref{chap:inductive}, while fo
 \begin{description}
   \item[\texttt{Inputs}] defines the act of an agent sending data to a smartphone. Hence, this event describes when a smartphone scans data from some agent's screen;
 
-  \item[\texttt{Gets\_s}] defines the reception event at the smartphone side, in respect to a \textit{Inputs} event;
+  \item[\texttt{SGets}] defines the reception event at the smartphone side, in respect to a \textit{Inputs} event;
 
   \item[\texttt{Outputs}] defines the sending of data from a smartphone to an agent, using the smartphone screen. Like the \textit{Inputs} event, it envolves both entities;
 
-  \item[\texttt{Gets\_a}] finally, defines the reception of data by an agent from the offline channel.
+  \item[\texttt{AGets}] finally, defines the reception of data by an agent from the offline channel.
 \end{description}
 
 It is easy to note that the new events allow a proper distinction from messages received on the regular channel from the ones received in the new channel. Yet, the Spy still can forge messages on compromised devices and send them through these channels.
 
-The creation of proper events for message reception in offline channels, \texttt{Gets\_s} and \texttt{Gets\_a}, provides a reliable way for smartphones correctly receive messages sent by \texttt{Inputs} events and agents receive messages sent by \texttt{Outputs} events, respectively.
+The creation of proper events for message reception in offline channels, \texttt{SGets} and \texttt{AGets}, provides a reliable way for smartphones correctly receive messages sent by \texttt{Inputs} events and agents receive messages sent by \texttt{Outputs} events, respectively.
 
 Finally, we need to extend the formal definition of the \textit{used} function, describing how each new event contributes to enrich the set of past messages present in the current trace:
 
@@ -186,7 +186,7 @@ Finally, we need to extend the formal definition of the \textit{used} function, 
   \item All messages that a smartphone receives as inputs from an agent in a trace do not directly extend those that are used on that trace.
   %
   \begin{center}
-    \texttt{used}((\texttt{Gets\_s} $P$ $X$) $\#$ \textit{evs}) $\triangleq$ \texttt{used} \textit{evs}
+    \texttt{used}((\texttt{SGets} $P$ $X$) $\#$ \textit{evs}) $\triangleq$ \texttt{used} \textit{evs}
   \end{center}
 
   \item All components of a message that an agent's smartphone outputs in a trace are used on that trace:
@@ -198,7 +198,7 @@ Finally, we need to extend the formal definition of the \textit{used} function, 
   \item All messages that an agent receives as inputs from a smartphone in a trace do not directly extend those that are used on that trace.
   %
   \begin{center}
-    \texttt{used}((\texttt{Gets\_a} $A$ $X$) $\#$ \textit{evs}) $\triangleq$ \texttt{used} \textit{evs}
+    \texttt{used}((\texttt{AGets} $A$ $X$) $\#$ \textit{evs}) $\triangleq$ \texttt{used} \textit{evs}
   \end{center}
 \end{enumerate}
 
@@ -252,7 +252,7 @@ The function \textit{knows} will also be extended. The new events impacts both o
   \item No legal agent can extend his knowledge with any of the message received by any smartphone in a trace, since he already knows given the case of \texttt{Inputs} event. However, if the smartphone is connected to the network and is also compromised, the Spy can learn any information received by it.
   %
   \begin{center}
-    \texttt{knows} $A$ ((\texttt{Gets\_s} $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
+    \texttt{knows} $A$ ((\texttt{SGets} $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
       \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = Spy, P \in \textit{connected} \text{ and } P \in badp\\
       \texttt{knows}\ A\ evs & \text{otherwise}
     \end{cases}$
@@ -270,7 +270,7 @@ The function \textit{knows} will also be extended. The new events impacts both o
   \item An agent, other than the Spy, knows what she receives from his smartphone in a trace.
   %
   \begin{center}
-    \texttt{knows} $A$ ((\texttt{Gets\_a} $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
+    \texttt{knows} $A$ ((\texttt{AGets} $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
       \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = A' \text{ and } A \neq Spy \\
       \texttt{knows}\ A\ evs & \text{otherwise}
     \end{cases}$
