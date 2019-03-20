@@ -110,23 +110,29 @@ Finally, we mention the QR code ciphering scheme that happens over some steps of
 
 \subsection{Usability}
 \label{ssec:usability}
-Usability concerns the characterization of smartphone operations, hence modeling this property affects both legal agents and the Spy. Legal agents only perform legal actions, while the Spy can perform both legal and illegal actions. We investigate which actions are interesting to focus, perceiving how the mobile devices communicate with agents.
+Usability concerns the characterization of smartphone operations, hence modeling this property affects both legal agents and the Spy. Legal agents only perform legal actions, while the Spy can perform both legal and illegal actions.
 
-The set of Smartphone actions is constrained to physical operations, so stolen devices are prone to illegal actions by the Spy. However, as stated in
+Smartphone actions are these used to exchange data with the agents. It can be scanning a QR-code from a screen, showing data through its screen or receiving an input. However, compromised devices can leak messages to the Spy in the first two actions. The latter is only accessible to her if it is compromised. So, the definition of legal and illegal actions will be defined based on the state of the secured devices flag.
 
-Legal actions are done by legal users, consequently it is easy to define the legal operation:
+Since legal actions are done by legal users, it is easy to define the legal operation. A smartphone is legally used when it is in the user's possession:
 %
 \begin{center}
   \textit{legalUse}(\texttt{Smartphone} $A$) $\triangleq$ \texttt{Smartphone} $A \notin$ \texttt{stolen}
 \end{center}
 %
-As discussed, the illegal action is constrained to physical actions, thus, for performing any of these, the Spy must physically posses the smartphone, by robbery, so:
+When devices can be compromised, the Spy can obtain any scanned or showed messages by the smartphone. Additionally, if she has access to the smartphone, she can also obtain such messages:
+% 
+\begin{center}
+  \textit{illegalUse}(\texttt{Smartphone} $A$) $\triangleq$ \texttt{Smartphone} $A \in$ \texttt{stolen} $\vee$ \texttt{Smartphone} $A \in$ \texttt{badP}
+\end{center}
+% 
+In the case where devices are secured, the Spy can only obtain any data from the smartphones when they are in possession of them:
 %
 \begin{center}
   \textit{illegalUse}(\texttt{Smartphone} $A$) $\triangleq$ \texttt{Smartphone} $A \in$ \texttt{stolen}
 \end{center}
 %
-It is important to also discuss the smartphone usability for the Spy, given that she can also perform legal actions. In that sense, we stress that she does not need to use her own card illegally, given that such action would not result in any more relevant information to her knowledge set. Hence:
+It is important to also discuss the smartphone usability for the Spy, given that she can also perform legal actions. In that sense, we stress that she does not need to use her own smartphone illegally, given that such action would not result in any more relevant information to her knowledge set. Hence:
 %
 \begin{center}
   \texttt{Smartphone} \textit{Spy} $\notin$ \texttt{stolen}
