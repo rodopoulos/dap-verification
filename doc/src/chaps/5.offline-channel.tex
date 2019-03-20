@@ -90,10 +90,11 @@ An evaluation of realistic vulnerabilities for smartphones is presented, in orde
 Additionally, once robbed by the Spy, a smartphone may be in possession of a skilled attacker, which now can easily compromise and exploit the device. Even if it is unlikely, this claim is not idealistic {\color{blue} REFERENCIA}. Hence, we state that if a smartphone is robbed, it is automatically compromised, leading to the relation below.
 %
 $$stolen \subseteq badp$$
+%
+Considering that the DAP make the assumption of secure devices, that is, when the Spy cannot compromise smartphone devices, we consider a special flag, defined at the protocol model level, in order to state such situation. When the \(secureP\) flag is used, the model consider all device secured, otherwise the \(insecureP\) is used. This properties will influence in the definition of how the Spy learn messages along the protocol. The definition of one is simple the negation of the other.
 
 
 
-\subsection{Keys}
 In this model, agents' long-term keys are now stored in the Smartphone and agents do not have direct access to it anymore. Thus, such keys are left out of agents' initial state. However, key formalization is kept, since it belongs to the agent:
 %
 $$\texttt{shrK} : agent \longrightarrow key$$
