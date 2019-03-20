@@ -13,7 +13,6 @@ build:
 	@echo "Building..."
 	@echo "warn: pdflatex and bibtex output is ommited. For verbosity, use 'make debug'"
 	@pdflatex $(FILE) > /dev/null
-	@pdflatex $(FILE) > /dev/null
 	@bibtex $(FILE) > /dev/null
 	@pdflatex $(FILE) > /dev/null
 	@pdflatex $(FILE) > /dev/null
@@ -22,10 +21,9 @@ build:
 debug:
 	@echo "Building..."
 	@pdflatex $(FILE)
-	@pdflatex $(FILE) > /dev/null
 	@bibtex $(FILE)
-	@pdflatex $(FILE)
 	@pdflatex $(FILE) > /dev/null
+	@pdflatex $(FILE)
 	@echo "Done."
 
 
