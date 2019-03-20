@@ -46,14 +46,13 @@ However, it is important to note that the smartphone performs more actions than 
 
 \subsection{DAP Assumptions \textit{vs.} Real World Scenarios}
 \label{sec:dap-assumptions}
-Before going further, it is important to discuss the environment described in the DAP specification and contrast it with the real world. The protocol specification makes strong assumptions about the User smartphone, stating that it cannot be directly accessed or operated by the Spy. We argue that such claim is idealistic, since recent studies have shown critical security flaws and attacks in the major mobile phones operating systems \cite{ZhouJiang2012,Han2013}, enabling remote operations by an attacker, for instance, which goes directly against the security requirement dictated by the protocol. Moreover, it is reasonable to consider the situation of theft, a scenario which is effectively contemplated in Inductive Method extended theory for smartcards \cite[Ch. 10]{Bella2007}.
+Before going further, it is important to discuss the environment described in the DAP specification and contrast it with the real world. The protocol specification makes strong assumptions about the User smartphone, stating that it cannot be directly accessed or operated by the Spy.
 
-Therefore, in contrast with DAP specification, but in accordance with the formal method for verifying a protocol \cite[Ch. 11]{Bella2007}, we must consider the real world scenario cases, where the Spy can exploit or steal the User smartphone. We stress that these situations provide different sets of information to the Spy. Thus, we present two possible distinct formalizations for both of them in the following sections.
+We argue that such claim is idealistic, since recent studies have shown critical security flaws and attacks in the major mobile phones operating systems \cite{ZhouJiang2012,Han2013}, enabling remote operations by an attacker, for instance, which goes directly against the security requirement dictated by the protocol. 
 
+Moreover, Finally, the situation of smartphone robbery must also be taken in account. Here, the Spy could not only operate the smartphone but, if she is skilled enough, she could also exploit the device, obtaining the same privileges as if the smartphone is compromised. This scenario is effectively contemplated in Inductive Method extended theory for smartcards \cite[Ch. 10]{Bella2007}.
 
-
-\subsection{Security Context}
-The offline communication environment depicted in Section \ref{sec:smartphone-first-analysis} restrains the Spy from its omniscient features, introducing a channel where she does not have full control. However, with the new postulations introduced in Section \ref{sec:dap-assumptions}, feasible manners to exploit some protocol entities can be found.
+Therefore, in contrast with DAP specification, but in accordance with the formal method for verifying a protocol \cite[Ch. 11]{Bella2007}, we should consider a scenario where the Spy can exploit the User smartphone. Since it is feasible, the theft scenario will be considered in all cases. This strategy will arise two possible formalizations for the protocol and introduce new forms of exploiting the protocol. 
 
 Given the fact that the smartphone can connect to the default network channel, it can be reached by the Spy and further compromised by her. Like an ordinary computer, the smartphone can be exploited in such manner that the attacker can disclose stored data, eavesdrop communication, fake data, and perform other malicious actions through remote control.
 
