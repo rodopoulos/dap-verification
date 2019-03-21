@@ -301,6 +301,19 @@ Finally, rule \texttt{Fake} is extend in order to embrace such details, producin
 
 
 \section{Protocol Model}
+Once formalized, the model for smartphones guarantees the reception of messages for agents and devices, but only when the assumption of secure means holds. For the case when it does not hold, we need two more rules that models the reception of data, similarly to the reception rule for network events, since rules are not forced to happen in the model. The \texttt{SRcpt} and \texttt{ARcpt} rules guarantee the reception of data for insecured devices. Both of then are defined at the protocol level.
+% 
+\begin{align*}
+  & \texttt{SRcpt}: \newline \\
+  & \lBrace evsRs \in protocol;\ \texttt{Scans}\ A\ (\text{Smartphone}\ B)\ X \in \textit{set}\ evsRs \rBrace\\
+  & \Longrightarrow \texttt{SGets}\ B\ X\ \#\ evsRs \in protocol
+\end{align*}
+
+\begin{align*}
+  & \texttt{ARcpt}: \newline \\
+  & \lBrace evsRa \in protocol;\ \texttt{Shows}\ (\text{Smartphone}\ A)\ B\ X \in \textit{set}\ evsRa \rBrace\\
+  & \Longrightarrow \texttt{AGets}\ B\ X\ \#\ evsRa \in protocol
+\end{align*}
 
 
 \section{Further Discussion}
