@@ -301,3 +301,13 @@ Finally, rule \texttt{Fake} is extend in order to embrace such details, producin
 
 
 \section{Protocol Model}
+
+
+\section{Further Discussion}
+The model presented in this section is suitable for a reasonable analysis of the proposed protocol and its tools. The formalization introduced the mechanisms for agent-device communication, considering possible attacks from the Spy perspective. 
+
+However, such formalization has many concepts being grouped into a single model. The out-of-band entities, which are not properly embedded in the software aspects of the protocol, are modeled together with the technical detail of the protocol. Even if the model can depict major parts of the whole protocol operation, some others aspects may be left out, such as aspects regarding \textit{social engineering attacks}.
+
+The definition of a security protocol as a ceremony, involving both technical and social aspects, has already been done \cite{Ellison07} and and introductory formalization and further extensions of such aspects have been done in the Inductive Method \cite{Bella2012}. The technique considers many out-of-band elements of the protocol, even the ones regarding human and computer interactions. The protocol is structured in layers, representing one major aspect in the protocol. The agent are also split into different kind of players, which interactions are held between two layers. Thus, a security property must transverse many layers until reaching the human entity to be considered as valid.
+
+Additionally, this strategy can be extend to cover new entities, such as a new device that acts as a trusted devices, but that can be exploited by a malicious peer, given this possible scenario. Hence, this approach seems to be more interesting for verifying a protocol like the DAP, given the better model granularity it provides. However, given the for time constraints in this work, this task is delegated to future work.
