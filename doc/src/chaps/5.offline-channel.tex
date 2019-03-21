@@ -276,6 +276,20 @@ The function \textit{knows} will also be extended. The new events impacts both o
   \end{center}
 \end{enumerate}
 
+When the assumption of secure devices hold, the definition of the \textit{knows} is simplified. Events \texttt{Scans} and \texttt{Outputs} do not need its correspondent reception events, since message reception is guaranteed. The \texttt{Scans} event is preserved, since it can only be exploited when the agent herself is compromised. Therefore, we only update the \texttt{Outputs} event form:
+% 
+\begin{enumerate}
+  \setcounter{enumi}{5}
+  \item An agent, including the Spy, knows what her smartphone shows;
+  %
+  \begin{center}
+    \texttt{knows} $A$ ((\texttt{Shows} $P$ $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
+      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = A'\\
+      \texttt{knows}\ A\ evs & \text{otherwise}
+    \end{cases}$
+  \end{center}
+\end{enumerate}
+
 
 
 \section{Threat Model}
