@@ -208,7 +208,7 @@ We introduce the formal definition of the \textit{used} function, describing how
 
 \subsection{Agents' Knowledge}
 \label{ssec:agents-knowledge-smartphone}
-With new the events, the agents' knowledge sets are now subject to changes compared to the ones defined in Chapter \ref{chap:inductive}. The smartphone is a device that does not necessarily disclose its data to its agents, but it requires communication in order to enrich the agent's knowledge set. At the same time, we observe that compromised devices will disclose its secrets to the Spy. However, we stress that such situation only happens to smartphones connected to the unreliable channel, that is, the Internet.
+With new the events, the agents' knowledge sets are now subject to changes compared to the ones defined in Chapter \ref{chap:inductive}. The smartphone is a device that does not necessarily disclose its data to its agents, but it requires communication in order to enrich the agent's knowledge set. At the same time, we observe that compromised devices will disclose its secrets to the Spy.
 
 The definitions on the agents' initial knowledge set are properly updated, following the guideline of Section \ref{ssec:threat-model} and taking into account the secrets held by the smartphone. We omit asymmetric long-term keys for readability:
 %
@@ -231,43 +231,42 @@ The definitions on the agents' initial knowledge set are properly updated, follo
     \begin{split}
       \texttt{initState}\ Spy \triangleq\
       & (\texttt{Key shrK bad}) \ \cup \\
-      & (\texttt{Key shrK}\{P.\ Smartphone\ P \in badp\ \wedge \\
-      & Smartphone\ P \in connected\})
+      & (\texttt{Key shrK}\ \{P.\ Smart phone\ P \in badP\})
     \end{split}
   \end{equation*}
 \end{enumerate}
 
-The function \textit{knows} will also be extended. The new events impacts both on agents and the Spy knowledge set, where the latter needs careful analysis, as follows:
+The function \textit{knows} will also be extended. The new events impacts both on agents and the Spy knowledge set, where the latter needs careful analysis, as follows. When the assumption of secured devices does not hold, we have that:
 \begin{enumerate}
   \setcounter{enumi}{3}
-  \item An agent knows what she inputs to any smartphone in a trace;
+  \item An agent knows what she inputs to any smartphone in a trace. If an agent is compromised, then the Spy also knows any inputed message;
   %
   \begin{center}
-    \texttt{knows} $A$ ((\texttt{Inputs} $A'$ $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
-      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = A', \\
+    \texttt{knows} $A$ ((\texttt{Scans} $A'$ $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
+      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = A' \text{ or } (A = Spy \text{ and } A' \in bad), \\
       \texttt{knows}\ A\ evs & \text{otherwise}
     \end{cases}$
   \end{center}
 
-  \item No legal agent can extend his knowledge with any of the message received by any smartphone in a trace, since he already knows given the case of \texttt{Inputs} event. However, if the smartphone is connected to the network and is also compromised, the Spy can learn any information received by it.
+  \item No legal agent can extend his knowledge with any of the message received by any smartphone in a trace, since he already knows given the case of \texttt{Inputs} event. However, if the smartphone is compromised, the Spy can learn any information it receives;
   %
   \begin{center}
     \texttt{knows} $A$ ((\texttt{SGets} $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
-      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = Spy, P \in \textit{connected} \text{ and } P \in badp\\
+      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = Spy \text{ and } P \in badP\\
       \texttt{knows}\ A\ evs & \text{otherwise}
     \end{cases}$
   \end{center}
 
-  \item An agent, including the Spy, knows what her smartphone outputs in a trace, given that reception in the offline channel is guaranteed. Also, the Spy knows what all connected and compromised smartphones output.
+  \item An agent does not know what her smartphone outputs in a trace, since the device can be compromised. The Spy can obtain all information output by compromised smartphones;
   %
   \begin{center}
-    \texttt{knows} $A$ ((\texttt{Outputs} $P$ $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
-      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = A' \text{ or if } A = Spy, P \in \textit{connected} \text{ and } P \in badp \\
+    \texttt{knows} $A$ ((\texttt{Shows} $P$ $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
+      \{ X\} \cup \texttt{knows}\ A\ evs & \text{if } A = \text{ Spy and } P \in badP \\
       \texttt{knows}\ A\ evs & \text{otherwise}
     \end{cases}$
   \end{center}
 
-  \item An agent, other than the Spy, knows what she receives from his smartphone in a trace.
+  \item An agent other than the Spy knows what she receives from her smartphone
   %
   \begin{center}
     \texttt{knows} $A$ ((\texttt{AGets} $A$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
