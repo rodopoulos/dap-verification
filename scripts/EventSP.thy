@@ -98,17 +98,17 @@ primrec knows :: "agent \<Rightarrow> event list \<Rightarrow> msg set" where
           if (A = Spy & P \<in> badP) then insert X (knows A evs)
           else knows A evs
 
-      \<comment> \<open>An agent knows what her smartphone shows to her\<close>
+      \<comment> \<open>An agent, including the Spy, knows what her smartphone shows to her\<close>
       | Shows P A' X \<Rightarrow>
         if secureP then
           if (A = A') then insert X (knows A evs)
           else knows A evs
-        \<comment> \<open>However, if devices can be compromised, the Spy knows what a compromised phone shows\<close>
+        \<comment> \<open>When insecure devices hold, the Spy knows what compromised devices shows\<close>
         else 
           if (A = Spy & P \<in> badP) then insert X (knows A evs)
           else knows A evs
 
-      \<comment> \<open>An agent knows what she receives from her smartphone. The Spy only knows what compromised\<close>
+      \<comment> \<open>An agent knows what she receives from her smartphone. The Spy already knows from the previous event\<close>
       | AGets A' X \<Rightarrow>
         if (A = A' & A \<noteq> Spy) then insert X (knows A evs)
         else knows A evs
