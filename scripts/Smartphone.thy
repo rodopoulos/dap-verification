@@ -17,12 +17,19 @@ theory Smartphone imports "./EventSP" "~~/src/HOL/Auth/All_Symmetric" begin
 (* Theory only reasons over pre-shared keys between agents and Servers.
   Any other key type must be defined in another theory *)
 axiomatization
-  shrK  ::  "agent \<Rightarrow> key"
+  shrK  ::  "agent \<Rightarrow> key" and
+  k1 :: "agent \<Rightarrow> key" and
+  k2 :: "agent \<Rightarrow> key"
 
 where
-  inj_shrK : "inj shrK"
+  inj_shrK : "inj shrK" and
+  inj_k1 : "inj k1" and
+  inj_k2 : "inj k2" and
 
-
+  ref_k1 : "(k1(A) = k1(A')) = (A = A')" and
+  ref_k2 : "(k2(A) = k2(A')) = (A = A')" and
+  k1_disj_shrK [iff]: "k1(A) \<noteq> shrK A" and
+  k2_disj_shrK [iff]: "k2(A) \<noteq> shrK A"
   
 (* SMARTPHONE USAGE *)
 (* Legal agents use their smartphone if they hold it *)
