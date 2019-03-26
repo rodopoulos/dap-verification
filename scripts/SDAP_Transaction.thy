@@ -437,27 +437,58 @@ done
 
 (* - Message form guarantees *)
 
-lemma Scans_A_Smartphone_form_3 :
+lemma Scans_A_Smartphone_form_DT3_Transaction :
   "\<lbrakk> Scans A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; 
      \<forall> p q. Transaction = \<lbrace>p, q\<rbrace>; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
   
-  apply (erule rev_mp, erule sdaptrans.induct)
-  apply (auto)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
 done
 
-lemma Scans_A_Smartphone_form_DT3:
-  "\<lbrakk> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> \<exists> r. r' = Crypt (shrK A) (Nonce r) \<and>
-             h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>"
+lemma Scans_A_Smartphone_form_DT3_hash : 
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace>
+      \<lbrace>Agent A, Number T\<rbrace>, 
+      Crypt (k1(A)) (Nonce r),
+      h\<^sub>s
+    \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> h\<^sub>s = Crypt (k2(A)) \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>"
 
-  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
   apply (simp_all)
   defer
-  apply (force)
+  apply (blast)
 done
 
+lemma Scans_A_Smartphone_form_DT3_TAN : 
+  "(Scans A (Smartphone A) \<lbrace>
+      \<lbrace>Agent A, Number T\<rbrace>,
+      r',
+      Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r' \<rbrace>
+    \<rbrace> \<in> set evs \<and> evs \<in> sdaptrans) 
+    \<Longrightarrow>  \<exists> r. (r' = Crypt (k1(A)) (Nonce r))"
 
+  apply (erule rev_mp)
+  apply (auto)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
+done
+
+lemma Scans_A_Smartphone_form_DT3_ciphers :
+  "(((Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs) \<and> (evs \<in> sdaptrans))
+  \<longrightarrow> (\<exists> r. ((Nonce r \<in> parts {r', h\<^sub>s}))))"
+
+apply (auto)
+nitpick
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
+  defer
+  apply (blast)
+  apply (auto)
+done
 
 (* 5. Shows events guarantees *) 
 
