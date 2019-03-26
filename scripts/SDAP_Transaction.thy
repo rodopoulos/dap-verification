@@ -278,11 +278,29 @@ lemma Says_Server_DT2 :
   apply (auto)
 done
 
-lemma Says_Server_form_DT2 :
+lemma Says_Server_form_DT2_TAN :
   "\<lbrakk> Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (\<exists> r.
-         r' = Crypt (shrK A) (Nonce r) \<and>
-         h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>)"
+         r' = Crypt (k1(A)) (Nonce r) \<and>
+         h\<^sub>s = Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>)"
+
+  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (auto)
+done
+
+lemma Says_Server_form_DT2_hash :
+  "\<lbrakk> Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r), h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> h\<^sub>s = Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>"
+
+  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (simp_all)
+done
+
+lemma Says_Server_form_DT2 [simp]:
+  "\<lbrakk> Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> r.
+         r' = Crypt (k1(A)) (Nonce r) \<and>
+         h\<^sub>s = Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>)"
 
   apply (erule rev_mp, erule sdaptrans.induct)
   apply (auto)
@@ -299,8 +317,8 @@ lemma Says_Server_Success :
       Gets Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
       Says Server A \<lbrace> 
         \<lbrace>Agent A, Number T\<rbrace>, 
-        Crypt (shrK A) (Nonce r),
-        Crypt (shrK A) \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r)\<rbrace>
+        Crypt (k1(A)) (Nonce r),
+        Crypt (k2(A)) \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r)\<rbrace>
       \<rbrace> \<in> set evs \<and>
       Gets Server (Nonce r) \<in> set evs"
 
