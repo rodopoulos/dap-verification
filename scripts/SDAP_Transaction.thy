@@ -20,8 +20,8 @@ inductive_set sdaptrans :: "event list set" where
             Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs2 \<rbrakk>
     \<Longrightarrow> Says Server A \<lbrace> 
           \<lbrace>Agent A, Number T\<rbrace>,
-          Crypt (shrK A) (Nonce r),
-          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+          Crypt (k1(A)) (Nonce r),
+          Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>
         \<rbrace> # evs2 \<in> sdaptrans"
 
   | DT3: "\<lbrakk> evs3 \<in> sdaptrans; legalUse (Smartphone A);
@@ -32,16 +32,16 @@ inductive_set sdaptrans :: "event list set" where
   | DT4: "\<lbrakk> evs4 \<in> sdaptrans; legalUse(Smartphone A);
             Scans A (Smartphone A) \<lbrace>
               \<lbrace>Agent A, Number T\<rbrace>,
-              Crypt (shrK A) (Nonce r),
-              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+              Crypt (k1(A)) (Nonce r),
+              Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs4 \<rbrakk>
     \<Longrightarrow> Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> # evs4 \<in> sdaptrans"
 
   | DT4_Fake: "\<lbrakk> evs4f \<in> sdaptrans; illegalUse(Smartphone A);
                  Scans Spy (Smartphone A) \<lbrace>
                   \<lbrace>Agent A, Number T\<rbrace>,
-                  Crypt (shrK A) (Nonce r),
-                  Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+                  Crypt (k1(A)) (Nonce r),
+                  Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>
                  \<rbrace> \<in> set evs4f\<rbrakk>
      \<Longrightarrow> Shows (Smartphone A) Spy \<lbrace> Agent A, Number T \<rbrace> # evs4f \<in> sdaptrans"
 
@@ -55,8 +55,8 @@ inductive_set sdaptrans :: "event list set" where
   | DT6: "\<lbrakk> evs6 \<in> sdaptrans; legalUse(Smartphone A);
             Scans A (Smartphone A) \<lbrace>
               \<lbrace>Agent A, Number T\<rbrace>,
-              Crypt (shrK A) (Nonce r),
-              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+              Crypt (k1(A)) (Nonce r),
+              Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs6;
             Shows (Smartphone A) A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6;
             Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6 \<rbrakk>
@@ -65,8 +65,8 @@ inductive_set sdaptrans :: "event list set" where
    | DT6_Fake: "\<lbrakk> evs6f \<in> sdaptrans; illegalUse(Smartphone A);
                   Scans Spy (Smartphone A) \<lbrace>
                     \<lbrace>Agent A, Number T\<rbrace>,
-                    Crypt (shrK A) (Nonce r),
-                    Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+                    Crypt (k1(A)) (Nonce r),
+                    Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>
                   \<rbrace> \<in> set evs6f;
                   Shows (Smartphone A) Spy \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6f;
                   Inputs Spy (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6f
@@ -86,8 +86,8 @@ inductive_set sdaptrans :: "event list set" where
             Gets Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs8;
             Says Server A \<lbrace>
               \<lbrace>Agent A, Number T\<rbrace>,
-              Crypt (shrK A) (Nonce r),
-              Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+              Crypt (k1(A)) (Nonce r),
+              Crypt (k2(A)) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (k1(A)) (Nonce r) \<rbrace>
             \<rbrace> \<in> set evs8;
             Gets Server (Nonce r) \<in> set evs8 \<rbrakk>
     \<Longrightarrow> Says Server A \<lbrace> Agent A, Number T \<rbrace>  # evs8 \<in> sdaptrans"
