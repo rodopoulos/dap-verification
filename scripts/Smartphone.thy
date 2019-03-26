@@ -29,7 +29,8 @@ where
   ref_k1 : "(k1(A) = k1(A')) = (A = A')" and
   ref_k2 : "(k2(A) = k2(A')) = (A = A')" and
   k1_disj_shrK [iff]: "k1(A) \<noteq> shrK A" and
-  k2_disj_shrK [iff]: "k2(A) \<noteq> shrK A"
+  k2_disj_shrK [iff]: "k2(A) \<noteq> shrK A" and
+  shrK_is_k1_and_k2 [iff]: "shrK A = k1(A) + k2(A)"
   
 (* SMARTPHONE USAGE *)
 (* Legal agents use their smartphone if they hold it *)
@@ -146,6 +147,7 @@ lemma Spy_knows_bad_phones [intro!] :
   "Smartphone A \<in> badP \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
 apply (induct_tac "evs")
 apply (simp_all (no_asm_simp) add: imageI knows_Cons split: event.split)
+apply (auto)
 done
 
 (* Case analysis on whether or not an agent is compromised *)
@@ -154,7 +156,7 @@ lemma Crypt_Spy_analz_bad :
     \<Longrightarrow> X \<in> analz (knows Spy evs)"
 apply (erule analz.Decrypt)
 apply (simp add: Spy_knows_bad_phones)
-done
+using Spy_knows_bad_phones by auto
 
 
 
