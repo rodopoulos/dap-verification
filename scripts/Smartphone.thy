@@ -65,6 +65,8 @@ axiomatization where
   
 (* PROPERTIES OF SHARED KEYS *)
 declare inj_shrK [THEN inj_eq, iff]
+declare inj_k1 [THEN inj_eq, iff]
+declare inj_k2 [THEN inj_eq, iff]
 
 (* Shared key encryption is symmetric *)
 lemma invKey_K [simp]: "invKey K = K"
