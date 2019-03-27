@@ -52,6 +52,7 @@ overloading initState \<equiv> initState
     initState_Server : "initState Server = (Key` (range shrK))" |
     initState_Friend : "initState (Friend i) = {}" |
     initState_Spy : "initState Spy = (Key` (shrK` {A. Smartphone A \<in> badP}))"
+    (* initState_Spy : "initState Spy = (Key` (shrK` {A. Smartphone A \<in> badP}) \<union> Key`(shrK` {A. A \<in> bad}))" *)
 end
 
 axiomatization where
