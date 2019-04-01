@@ -142,6 +142,14 @@ lemma Spy_knows_bad_phones [intro!] :
   apply (simp_all (no_asm_simp) add: imageI knows_Cons split: event.split)
 done
 
+(* As a consequence, if the Smartphone is robbed, it also disclose the agents secrets to the Spy *)
+lemma Spy_knows_stolen_phones [intro!] :
+  "Smartphone A \<in> stolen \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
+
+  apply (induct_tac "evs")
+  apply (simp_all (no_asm_simp) add: imageI knows_Cons split: event.split)
+using Stolen_in_badP by blast
+
 (* Case analysis on whether or not an agent is compromised *)
 lemma Crypt_Spy_analz_bad :
   "\<lbrakk> Crypt (shrK A) X \<in> analz (knows Spy evs); Smartphone A \<in> badP \<rbrakk> 
