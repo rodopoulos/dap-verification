@@ -646,4 +646,12 @@ lemma Ciphers_authentic :
   apply (auto)
 done
 
+(* CONFIDENTIALITY LEMMAS *)
+
+
+(* AUTHENTICATION LEMMAS *)
+
+
+(* AUTHORIZATION LEMMAS *)
+
 end
