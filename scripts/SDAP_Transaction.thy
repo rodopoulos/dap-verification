@@ -287,16 +287,6 @@ lemma Says_Server_DT2 :
   apply (auto)
 done
 
-lemma Says_Server_form_DT2 :
-  "\<lbrakk> Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> r.
-         r' = Crypt (shrK A) (Nonce r) \<and>
-         h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>)"
-
-  apply (erule rev_mp, erule sdaptrans.induct)
-  apply (auto)
-done
-
 (* - The Server only authorizes a transaction if 
      it received a nonce that matches the produced TAN *)
 
@@ -436,18 +426,6 @@ lemma Scans_A_Smartphone_form_3 :
   apply (erule rev_mp, erule sdaptrans.induct)
   apply (auto)
 done
-
-lemma Scans_A_Smartphone_form_DT3:
-  "\<lbrakk> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> \<exists> r. r' = Crypt (shrK A) (Nonce r) \<and>
-             h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>"
-
-  apply (erule rev_mp, erule sdaptrans.induct)
-  apply (simp_all)
-  defer
-  apply (force)
-done
-
 
 
 (* 5. Shows events guarantees *) 
@@ -650,5 +628,32 @@ done
 
 
 (* AUTHORIZATION LEMMAS *)
+
+(* INTEGRITY LEMMAS *)
+text\<open>@{term step2_integrity} also is a reliability theorem\<close>
+lemma Says_Server_message_form_DT2 :
+  "\<lbrakk> Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> r.
+         r' = Crypt (shrK A) (Nonce r) \<and>
+         h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>)"
+
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (auto)
+done
+
+lemma Inputs_Smartphone_A_DT3_message_form :
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+  \<Longrightarrow> Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs
+      \<and> Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs
+      \<and> (\<exists> r.
+        r' = Crypt (shrK A) (Nonce r) \<and>
+        h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>)"
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
+  prefer 2 apply (force)
+  nitpick
+done
 
 end
