@@ -253,8 +253,7 @@ lemma Scans_Server_Agent_not_evs [rule_format] :
 
   apply (erule sdaptrans.induct)
   apply (simp_all)
-  apply (blast dest:Server_cannot_initiate)
-  apply (blast)
+  apply (blast dest:Server_cannot_initiate)+
 done
 
 lemma Shows_Agent_Server_not_evs [rule_format] :
@@ -262,8 +261,7 @@ lemma Shows_Agent_Server_not_evs [rule_format] :
 
   apply (erule sdaptrans.induct)
   apply (simp_all)
-  apply (blast dest:Scans_Server_Agent_not_evs)
-  apply (blast dest:Scans_Server_Agent_not_evs)
+  apply (blast dest:Scans_Server_Agent_not_evs)+
 done
 
 lemma Shows_Server_Agent_not_evs [rule_format]:
@@ -271,10 +269,7 @@ lemma Shows_Server_Agent_not_evs [rule_format]:
 
   apply (erule sdaptrans.induct)
   apply (simp_all)
-  apply (blast dest:Scans_Server_Agent_not_evs)
-  apply (blast dest:Scans_Server_Agent_not_evs)
-  apply (blast dest:Scans_Server_Agent_not_evs)
-  apply (blast)
+  apply (blast dest:Scans_Server_Agent_not_evs)+
 done
 
 
