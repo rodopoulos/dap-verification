@@ -14,8 +14,7 @@ An agent is bad if her smartphone is compromised.
 
 theory Smartphone imports "./EventSP" "~~/src/HOL/Auth/All_Symmetric" begin
 
-(* Theory only reasons over pre-shared keys between agents and Servers.
-  Any other key type must be defined in another theory *)
+(* Theory only reasons over pre-shared keys between agents smartphones and Servers *)
 axiomatization
   shrK  ::  "agent \<Rightarrow> key"
 
@@ -29,7 +28,8 @@ where
 definition legalUse :: "smartphone \<Rightarrow> bool" ("legalUse (_)") where
   "legalUse P == P \<notin> stolen"
 
-(* Smartphones are prone to theft. The Spy may use it if she have stole it. *)
+(* Smartphones are prone to theft. The Spy may use it if she have stole it.
+   If devices can be compromised, the Spy can remotely obtain its inputs and outputs *)
 primrec illegalUse :: "smartphone \<Rightarrow> bool" where
   illegalUse_def: "illegalUse (Smartphone A) = (
     (insecureP \<and> (Smartphone A \<in> stolen) \<or> (Smartphone A \<in> badP)) \<or>
