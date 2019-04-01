@@ -499,7 +499,8 @@ lemma Shows_A_Smartphone_6 :
     \<Longrightarrow> (\<exists> T. Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule sdaptrans.induct)
-  apply (simp_all, blast+)
+  apply (simp_all)
+  apply (blast+)
   apply (auto)
 done
 
