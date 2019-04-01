@@ -578,7 +578,8 @@ lemma Spy_parts_keys [simp] :
   apply (erule sdaptrans.induct)
   apply (frule_tac [4] DT3_parts_knows_Spy_fst)
   apply (frule_tac [5] DT3_parts_knows_Spy_snd)
-  apply (simp_all, force)
+  apply (simp_all)
+  apply (auto intro!:parts_insertI)
 done
 
 lemma Spy_analz_shrK [simp] :
