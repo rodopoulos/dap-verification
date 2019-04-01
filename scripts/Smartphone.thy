@@ -154,8 +154,9 @@ using Stolen_in_badP by blast
 lemma Crypt_Spy_analz_bad :
   "\<lbrakk> Crypt (shrK A) X \<in> analz (knows Spy evs); Smartphone A \<in> badP \<rbrakk> 
     \<Longrightarrow> X \<in> analz (knows Spy evs)"
-apply (erule analz.Decrypt)
-apply (simp add: Spy_knows_bad_phones)
+
+  apply (erule analz.Decrypt)
+  apply (simp add: Spy_knows_bad_phones)
 done
 
 
