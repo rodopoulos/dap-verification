@@ -203,6 +203,20 @@ by simp
 
 
 
+(* For reasoning about encrypted portion of messages *)
+lemma DT3_analz_knows_Spy_fst :
+ "\<lbrakk> Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> r' \<in> analz (knows Spy evs)"
+by (blast dest!: Gets_imp_Says Gets_imp_knows_Spy_analz_Snd)
+
+lemma DT3_analz_knows_Spy_snd :
+ "\<lbrakk> Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> h\<^sub>s \<in> analz (knows Spy evs)"
+by (blast dest!: Gets_imp_Says Gets_imp_knows_Spy_analz_Snd)
+
+lemmas DT3_parts_knows_Spy_fst = DT3_analz_knows_Spy_fst [THEN analz_into_parts]
+lemmas DT3_parts_knows_Spy_snd = DT3_analz_knows_Spy_snd [THEN analz_into_parts]
+
 
 (* RELIABILITY LEMMAS *)
 
@@ -558,22 +572,6 @@ by (blast dest!: Says_imp_knows_Spy)
 
 
 (* REGULARITY LEMMAS *)
-
-(* For reasoning about encrypted portion of messages *)
-lemma DT3_analz_knows_Spy_fst :
- "\<lbrakk> Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> r' \<in> analz (knows Spy evs)"
-by (blast dest!: Gets_imp_Says Gets_imp_knows_Spy_analz_Snd)
-
-lemma DT3_analz_knows_Spy_snd :
- "\<lbrakk> Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> h\<^sub>s \<in> analz (knows Spy evs)"
-by (blast dest!: Gets_imp_Says Gets_imp_knows_Spy_analz_Snd)
-
-lemmas DT3_parts_knows_Spy_fst = DT3_analz_knows_Spy_fst [THEN analz_into_parts]
-lemmas DT3_parts_knows_Spy_snd = DT3_analz_knows_Spy_snd [THEN analz_into_parts]
-
-
 lemma Spy_parts_keys [simp] : 
   "evs \<in> sdaptrans \<Longrightarrow> (Key (shrK A) \<in> parts (knows Spy evs)) = (Smartphone A \<in> badP)"
 
