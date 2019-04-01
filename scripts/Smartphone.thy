@@ -137,8 +137,9 @@ declare shrK_neq [THEN not_sym, simp]
 (* An agent's compromised Smartphone disclose hers shared keys *)
 lemma Spy_knows_bad_phones [intro!] :
   "Smartphone A \<in> badP \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
-apply (induct_tac "evs")
-apply (simp_all (no_asm_simp) add: imageI knows_Cons split: event.split)
+
+  apply (induct_tac "evs")
+  apply (simp_all (no_asm_simp) add: imageI knows_Cons split: event.split)
 done
 
 (* Case analysis on whether or not an agent is compromised *)
