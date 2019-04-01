@@ -612,11 +612,25 @@ lemma Server_transaction_unique :
   apply (fastforce dest: Says_parts_used)
 done
 
-
-
+(* We do not force that a transaction number T to be fresh, hence we cannot prove the
+   following  
+lemma Server_TAN_unique :
+  "\<lbrakk> Says Server A \<lbrace> 
+      \<lbrace>Agent A, Number T\<rbrace>,
+      Crypt (shrK A) (Nonce r),
+      Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+    \<rbrace> \<in> set evs ;
+    Says Server A \<lbrace> 
+      \<lbrace>Agent A, Number T\<rbrace>,
+      Crypt (shrK A) (Nonce r'),
+      Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r') \<rbrace>
+     \<rbrace> \<in> set evs;
+    evs \<in> sdaptrans\<rbrakk>
+   \<Longrightarrow> r = r'"
+*)
 
 (* AUTHENTICITY LEMMAS *)
-lemma Checksum_authentic :
+lemma Ciphers_authentic :
   "\<lbrakk> Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> parts (knows Spy evs);
      (Smartphone A) \<notin> badP; evs \<in> sdaptrans \<rbrakk>
      \<Longrightarrow> r' = Crypt (shrK A) (Nonce r) \<and>
