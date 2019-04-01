@@ -159,6 +159,13 @@ lemma Crypt_Spy_analz_bad :
   apply (simp add: Spy_knows_bad_phones)
 done
 
+lemma Crypt_Spy_analz_stolen : 
+  "\<lbrakk> Crypt (shrK A) X \<in> analz (knows Spy evs); Smartphone A \<in> stolen \<rbrakk> 
+    \<Longrightarrow> X \<in> analz (knows Spy evs)"
+
+  apply (erule analz.Decrypt)
+  apply (simp add: Spy_knows_stolen_phones)
+done
 
 
 (* NONCE LEMMAS *)
