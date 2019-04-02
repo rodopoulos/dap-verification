@@ -45,6 +45,7 @@ inductive_set sdaptrans :: "event list set" where
                  \<rbrace> \<in> set evs4f\<rbrakk>
      \<Longrightarrow> Shows (Smartphone A) Spy \<lbrace> Agent A, Number T \<rbrace> # evs4f \<in> sdaptrans"
 
+  (* Agent is confirming the transaction *)
   | DT5: "\<lbrakk> evs5 \<in> sdaptrans; legalUse(Smartphone A);
             Says A Server \<lbrace> Agent A, Number T \<rbrace> \<in> set evs5;
             Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs5;
