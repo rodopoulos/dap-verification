@@ -642,7 +642,7 @@ lemma Says_Server_message_form_DT2 :
   apply (auto)
 done
 
-lemma Inputs_Smartphone_A_DT3_message_form :
+lemma Scans_Smartphone_A_DT3_message_form :
   "\<lbrakk> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
   \<Longrightarrow> Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs
       \<and> Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs
