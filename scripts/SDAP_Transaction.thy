@@ -643,18 +643,21 @@ lemma Says_Server_message_form_DT2 :
   apply (auto)
 done
 
-lemma Scans_Smartphone_A_DT3_message_form :
-  "\<lbrakk> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-  \<Longrightarrow> Says Server A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs
-      \<and> Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs
-      \<and> (\<exists> r.
+text\<open>@{term step3_integrity} is the form of the message which the agent redirect to its smartphone.
+It cannot be proven, since there is no way to the agent know what he is forwarding \<close>
+(* lemma Scans_Smartphone_A_DT3_message_form :
+  "\<lbrakk> A \<noteq> Spy; Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+  \<Longrightarrow> (\<exists> r.
         r' = Crypt (shrK A) (Nonce r) \<and>
         h\<^sub>s = Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>)"
+*)
+
+lemma Scans_Smartphone_A_DT3_message_form_unprovable : 
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+  \<Longrightarrow> (\<exists> r'. (\<exists> r. r' \<noteq> Crypt (shrK A) (Nonce r)))"
   apply (erule rev_mp)
   apply (erule sdaptrans.induct)
-  apply (simp_all)
-  prefer 2 apply (force)
-  nitpick
+  apply (auto)
 done
 
 end
