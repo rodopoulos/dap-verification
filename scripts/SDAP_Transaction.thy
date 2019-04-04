@@ -544,6 +544,60 @@ lemma Spy_knows_TAN :
 by (blast dest!: Says_imp_knows_Spy)
 
 
+lemma TAN_Says_Server_analz_knows_Spy :
+  "\<lbrakk> Says Server A \<lbrace>
+       \<lbrace>Agent A, Number T\<rbrace>,
+       Crypt (shrK A) (Nonce r),
+       Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+     \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+  \<Longrightarrow> Crypt (shrK A) (Nonce r) \<in> analz (knows Spy evs)"
+
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all add: analz_insertI)
+done
+
+lemma Hash_Says_Server_analz_knows_Spy :
+  "\<lbrakk> Says Server A \<lbrace>
+       \<lbrace>Agent A, Number T\<rbrace>,
+       Crypt (shrK A) (Nonce r),
+       Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+     \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+  \<Longrightarrow> Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> \<in> analz (knows Spy evs)"
+
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all add: analz_insertI)
+done
+
+lemma TAN_Scans_analz_knows_Spy :
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace>
+       \<lbrace>Agent A, Number T\<rbrace>,
+       Crypt (shrK A) (Nonce r),
+       Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+     \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+  \<Longrightarrow> Crypt (shrK A) (Nonce r) \<in> analz (knows Spy evs)"
+
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all add: analz_insertI)
+  apply (blast dest!: DT3_analz_knows_Spy_fst)+
+done
+
+lemma Hash_Scans_analz_knows_Spy :
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace>
+       \<lbrace>Agent A, Number T\<rbrace>,
+       Crypt (shrK A) (Nonce r),
+       Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> 
+     \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+  \<Longrightarrow> Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace> \<in> analz (knows Spy evs)"
+
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all add: analz_insertI)
+  apply (blast dest!: DT3_analz_knows_Spy_snd)+
+done
+
 
 
 (* REGULARITY LEMMAS *)
