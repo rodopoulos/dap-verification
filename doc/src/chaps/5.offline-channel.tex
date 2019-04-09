@@ -25,7 +25,7 @@ The DAP specification describes the User Smartphone as a key component for the p
 
 The above described properties can be embedded on a dedicated hardware, other than smartphones, which could be issued by the bank to the protocol users. Each client would have his own device, already packed with any required encryption key, establishing the proper link between Bank and User. Similar schemes have been already implemented by other online banking systems, for instance, One Time Password (OTP) proprietary tokens are delivered to bank clients, in order to compose two-factor authentication and transaction authorization systems for online banking protocols \cite{Bonneau2012, Claessens2002}.
 
-However, the protocol authors enjoyed the convenience of the smartphone. Not only the device appropriately fits the requirements for the protocol mandatory hardware but also has a strong and known acceptance among users around the world {\color{blue} REFERENCIA}. Therefore, the device is a reasonable choice.
+However, the protocol authors enjoyed the convenience of the smartphone. Not only the device appropriately fits the requirements for the protocol mandatory hardware but also has a strong and known acceptance among users around the world \cite{NewzooReport2018}. Therefore, the device is a reasonable choice.
 % TODO: consertar parágrafo anterior de acordo com a correção da Cláudia: "a requirement that specified (cite chapter before)".
 
 
@@ -87,7 +87,7 @@ An evaluation of realistic vulnerabilities for smartphones is presented, in orde
   \item \textbf{Device control:} mobile phones are reduced personal computers, which can be held by users. As noted, they can also be exploited and controlled remotely by the Spy, giving her the ability to request computational actions and access device data. Therefore, compromised smartphones could be added to the set \texttt{badp}, of compromised agents. However, such capacities are limited to the set of computational operations, which does not include physical actions with the smartphone, like pointing its camera to something. As a result, the formalization of a compromised device must not include such actions, but only the ones achievable by computational means.
 \end{itemize}
 
-Additionally, once robbed by the Spy, a smartphone may be in possession of a skilled attacker, which now can easily compromise and exploit the device. Even if it is unlikely, this claim is not idealistic {\color{blue} REFERENCIA}. Hence, we state that if a smartphone is robbed, it is automatically compromised, leading to the relation below.
+Additionally, once robbed by the Spy, a smartphone may be in possession of a skilled attacker, which now can easily compromise and exploit the device. Even if it is unlikely, this claim is not idealistic \cite{Rao2015}. Hence, we state that if a smartphone is robbed, it is automatically compromised, leading to the relation below.
 %
 $$stolen \subseteq badp$$
 %
@@ -104,7 +104,7 @@ How such keys are stored does not require an explicit formalization by the Smart
 
 Several smartphone's operational systems present to their users the possibility to be operated until a passphrase is inputted, protecting them from any unwanted access and further illegal actions. However, such behavior is not required by the DAP specification and, given the fact that stolen devices are automatically considered compromised, such security scheme is irrelevant. Thus, we do not present a formalization of PIN-required actions on the smartphone.
 
-Finally, we mention the QR code ciphering scheme that happens over some steps of DAP. The protocol standard presents a matrix barcode scheme for displaying information, using four possible encoding modes: numeric, alphanumeric, binary and kanji. That said, we emphasize that no innate encryption happens in such codification and so, there is no need for a key definition here. {\color{blue} Pegar referências sobre QR code, que aparentemente, possui uma especificação proprietaria}
+Finally, we mention the QR code ciphering scheme that happens over some steps of DAP. The protocol standard \cite{ISO13586} presents a matrix barcode scheme for displaying information, using four possible encoding modes: numeric, alphanumeric, binary and kanji. That said, we emphasize that no innate encryption happens in such codification and so, there is no need for a key definition here.
 
 
 
@@ -308,13 +308,13 @@ Once formalized, the model for smartphones guarantees the reception of messages 
   & \lBrace evsRs \in protocol;\ \texttt{Scans}\ A\ (\text{Smartphone}\ B)\ X \in \textit{set}\ evsRs \rBrace\\
   & \Longrightarrow \texttt{SGets}\ B\ X\ \#\ evsRs \in protocol
 \end{align*}
-
+%
 \begin{align*}
   & \texttt{ARcpt}: \newline \\
   & \lBrace evsRa \in protocol;\ \texttt{Shows}\ (\text{Smartphone}\ A)\ B\ X \in \textit{set}\ evsRa \rBrace\\
   & \Longrightarrow \texttt{AGets}\ B\ X\ \#\ evsRa \in protocol
 \end{align*}
-
+%
 
 \section{Further Discussion}
 The model presented in this section is suitable for a reasonable analysis of the proposed protocol and its tools. The formalization introduced the mechanisms for agent-device communication, considering possible attacks from the Spy perspective. 
