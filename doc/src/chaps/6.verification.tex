@@ -99,6 +99,21 @@ Rule \textit{DT4} happens inside the smartphone. Here, the agent also must be ho
 
 Rule \textit{DT5} models the agent confirming the visualized transaction in her smartphone screen. For this reason, the agent must have issued a transaction, received it with its correspondent ciphers from the Server and saw the same transaction, inputed by her in \textit{DT3}, on the device screen. Again, we adapted the protocol: the confirmation act is represented with the \texttt{Inputs} event, using the transaction itself as an acknowledge that the outputed transaction is correct. Thus, the message is clearly with its intent.
 
+\begin{figure}[!h]
+  \begin{align*}
+    & \texttt{DT5}: \newline \\
+    & \lBrace evs5 \in sdaptrans;\ \text{legalUse}(\Smartphone{A}); \\
+    & \quad \Says{A}{\Server}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \in \texttt{set} \ evs5 \\
+    & \quad \Gets{A}{\Bracks{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}, r', h_S}} \in \texttt{set} \ evs5 \\
+    & \quad \Scans{A}{\Smartphone{A}}{\Bracks{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}, r', h_S}} \in \texttt{set} \ evs5 \\
+    & \quad \Outputs{\Smartphone{A}}{A}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \in \texttt{set} \ evs5 \\
+    & \Longrightarrow \Inputs{\Smartphone{A}}{A}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \ \# \ evs5 \in sdaptrans
+  \end{align*}
+  %
+  \label{fig:dap-model-2}
+  \caption{Inductive model of secured DAP message transaction base case and reception}
+\end{figure}
+
 Next, rule \texttt{DT6} models the smartphone presenting the decrypted TAN to the agent. In this case, we need that the smartphone had received the encrypted TAN and the correspondent hash and had the received transaction confirmed by the agent. Having these fulfilled, the smartphone can present the nonce.
 
 Rule \textit{DT7} starts the last stage of the protocol. Having issued and confirmed the transaction and received the correspondent TAN, the user can present it to the Server, in order to authorized it at its side. Again, the agent does not know what the ciphers represent and the progress of the protocol should not rely in this fact.
