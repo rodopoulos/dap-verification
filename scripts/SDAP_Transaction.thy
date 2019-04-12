@@ -640,10 +640,62 @@ lemma Server_transaction_unique :
 
   apply (erule rev_mp)
   apply (erule rev_mp)
-  apply (erule sdaptrans.induct)
+  apply (erule sdaptrans.induct)  
   apply (simp_all)
   apply (fastforce dest: Says_parts_used)
 done
+
+lemma aux : 
+  "\<lbrakk> Gets A \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, r', hs\<rbrace> \<in> set evs;
+     Gets A' \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, r', hs\<rbrace> \<in> set evs; A \<noteq> Spy; A' \<noteq> Spy;
+      evs \<in> sdaptrans
+  \<rbrakk> \<Longrightarrow> A' = A"
+
+  apply (erule rev_mp)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)  
+  apply (simp_all)
+  apply auto
+sledgehammer
+done
+
+
+lemma Smartphone_transaction_unique2 : 
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, r', hs\<rbrace> \<in> set evs;
+     Scans A' (Smartphone A') \<lbrace>\<lbrace>Agent A', Number T'\<rbrace>, r', hs\<rbrace> \<in> set evs;
+    evs \<in> sdaptrans
+  \<rbrakk>
+  \<Longrightarrow> A = A' \<and> T = T'"
+
+  apply (erule rev_mp)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)  
+  apply (simp_all)
+  apply auto
+oops
+
+lemma Smartphone_transaction_unique : 
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace>
+      \<lbrace>Agent A, Number T\<rbrace>,
+      Crypt (shrK A) (Nonce r),
+      Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+     \<rbrace> \<in> set evs;
+     Scans A' (Smartphone A') \<lbrace>
+      \<lbrace>Agent A', Number T'\<rbrace>,
+      Crypt (shrK A') (Nonce r),
+      Crypt (shrK A') \<lbrace> \<lbrace>Agent A', Number T'\<rbrace>, Crypt (shrK A') (Nonce r) \<rbrace>
+     \<rbrace> \<in> set evs;
+    evs \<in> sdaptrans
+  \<rbrakk>
+  \<Longrightarrow> A = A' \<and> T = T'"
+
+  apply (erule rev_mp)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)  
+  apply (simp_all)
+  defer
+  apply (blast)
+oops
 
 (* We do not force that a transaction number T to be fresh, hence we cannot prove the
    following  
