@@ -351,9 +351,12 @@ done
 
 lemma Scans_Shows_Smartphone :
   "\<lbrakk> Scans A P X \<in> set evs \<or> Shows P A X \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
-     \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(Smartphone A)) \<or> (P = (Smartphone Spy))"
+     \<Longrightarrow> (P = (Smartphone A) \<and> legalUse(Smartphone A))"
 
-  apply (blast dest: Scans_Smartphone Shows_Smartphone)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
+  apply (blast)+
 done
 
 
