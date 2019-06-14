@@ -684,13 +684,10 @@ lemma Smartphone_transaction_unique :
       Crypt (shrK A') (Nonce r),
       Crypt (shrK A') \<lbrace> \<lbrace>Agent A', Number T'\<rbrace>, Crypt (shrK A') (Nonce r) \<rbrace>
      \<rbrace> \<in> set evs;
-      legalUse(Smartphone A); legalUse(Smartphone A');
     evs \<in> sdaptrans
   \<rbrakk>
   \<Longrightarrow> A = A' \<and> T = T'"
 
-  apply (erule rev_mp)
-  apply (erule rev_mp)
   apply (erule rev_mp)
   apply (erule rev_mp)
   apply (erule sdaptrans.induct)  
@@ -738,8 +735,18 @@ done
 
 (* AUTHENTICATION LEMMAS *)
 
+lemma TAN_identity :
+  "\<lbrakk> Says Server A' \<lbrace> 
+      \<lbrace>Agent A, Number T\<rbrace>,
+      Crypt (shrK A) (Nonce r),
+      Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+     \<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+     \<Longrightarrow> A' = A"
 
-(* AUTHORIZATION LEMMAS *)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
+done
 
 (* INTEGRITY LEMMAS *)
 text\<open>@{term step2_integrity} also is a reliability theorem\<close>
