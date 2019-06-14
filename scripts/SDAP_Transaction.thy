@@ -732,8 +732,22 @@ done
 
 (* CONFIDENTIALITY LEMMAS *)
 
-
 (* AUTHENTICATION LEMMAS *)
+
+(* try to prove // try to use illegalUse // try to use Server response in order to remove \<exists> r.
+  \<lbrakk> Says A Server \<lbrace> Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+  \<Longrightarrow> (\<exists> B r. Says B Server (Nonce r) \<and> A \<noteq> B)
+*)
+
+lemma TAN_without_author : 
+  "\<lbrakk> Gets Server (Nonce r) \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+     \<Longrightarrow> \<exists> A T. (Gets Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs)"
+
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
+  sledgehammer
+done
 
 lemma TAN_identity :
   "\<lbrakk> Says Server A' \<lbrace> 
