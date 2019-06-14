@@ -643,19 +643,20 @@ lemma Server_transaction_unique :
   apply (fastforce dest: Says_parts_used)
 done
 
-lemma aux : 
-  "\<lbrakk> Gets A \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, r', hs\<rbrace> \<in> set evs;
-     Gets A' \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, r', hs\<rbrace> \<in> set evs; A \<noteq> Spy; A' \<noteq> Spy;
+lemma Agent_transaction_unique : 
+  "\<lbrakk> A \<notin> bad;
+     Gets A \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, r', hs\<rbrace> \<in> set evs;
+     Gets A \<lbrace>\<lbrace>Agent A', Number T'\<rbrace>, r', hs\<rbrace> \<in> set evs;
       evs \<in> sdaptrans
-  \<rbrakk> \<Longrightarrow> A' = A"
+  \<rbrakk> \<Longrightarrow> T' = T \<and> A = A'"
 
+  apply (erule rev_mp)
   apply (erule rev_mp)
   apply (erule rev_mp)
   apply (erule sdaptrans.induct)  
   apply (simp_all)
   apply auto
-sledgehammer
-done
+oops
 
 
 lemma Smartphone_transaction_unique2 : 
