@@ -219,9 +219,9 @@ lemmas DT3_parts_knows_Spy_fst = DT3_analz_knows_Spy_fst [THEN analz_into_parts]
 lemmas DT3_parts_knows_Spy_snd = DT3_analz_knows_Spy_snd [THEN analz_into_parts]
 
 
-(* RELIABILITY LEMMAS *)
+(* == RELIABILITY LEMMAS == *)
 
-(* 1. General Server guarantees *)
+(* SERVER GUARANTEES *)
 
 (* Server cannot initiate the protocol *)
 lemma Says_Server_DT1_not_evs :
@@ -533,9 +533,7 @@ done
 
 
 
-
-(* 6. Spy guarantees *)
-
+(* 6. SPY COUNTERGUARANTEES *)
 lemma Spy_knows_Transaction : 
   "\<lbrakk> Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
      \<Longrightarrow> Number T \<in> analz (knows Spy evs)"
