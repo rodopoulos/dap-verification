@@ -419,21 +419,6 @@ lemma Inputs_A_Smartphone_5 :
   apply (auto)
 done
 
-
-(* - Message form guarantees *)
-
-lemma Scans_A_Smartphone_form_3 :
-  "\<lbrakk> Scans A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; 
-     \<forall> p q. Transaction = \<lbrace>p, q\<rbrace>; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
-  
-  apply (erule rev_mp, erule sdaptrans.induct)
-  apply (auto)
-done
-
-
-(* 5. Shows events guarantees *) 
-
 (* First, we state that Smartphones provide correct Shows when fed with expected Scans.
    Such lemmas guarantee that Smartphones cannot produce unexpected Shows, preventing the
    Spy from having unlimited resources *)
@@ -450,6 +435,20 @@ lemma Shows_A_Smartphone_4 :
   apply (simp_all, force+)
 done
 
+(* enfraquecer a regra no smartphone *)
+lemma Shows_A_Smartphone_6 :
+  "\<lbrakk> Shows P A (Nonce r) \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> T. Inputs A P \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
+
+  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (simp_all)
+  apply (blast+)
+  sledgehammer
+  apply (auto)
+done
+
+
+(* 5. Shows events guarantees *) 
 lemma Shows_honest_A_Smartphone_4 :
   "\<lbrakk> Shows P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
@@ -460,9 +459,21 @@ lemma Shows_honest_A_Smartphone_4 :
         \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp, erule sdaptrans.induct)
+  apply (simp_all)
+  apply (force+)
+done
+
+lemma Shows_honest_A_Smartphone_6 :
+  "\<lbrakk> Shows P A (Nonce r) \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
+        (\<exists> T. Inputs A (Smartphone A) \<lbrace>Agent A, Number T \<rbrace> \<in> set evs)"
+
+  apply (erule rev_mp, erule sdaptrans.induct)
   apply (simp_all, force+)
 done
 
+
+(* Weakest versions *)
 lemma Shows_which_Smartphone_4 :
   "\<lbrakk> Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (\<exists> r. Scans A (Smartphone A) \<lbrace>
@@ -474,25 +485,6 @@ lemma Shows_which_Smartphone_4 :
   apply (erule rev_mp)
   apply (erule sdaptrans.induct)
   apply (auto)
-done
-
-lemma Shows_A_Smartphone_6 :
-  "\<lbrakk> Shows P A (Nonce r) \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Inputs A (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
-
-  apply (erule rev_mp, erule sdaptrans.induct)
-  apply (simp_all)
-  apply (blast+)
-  apply (auto)
-done
-
-lemma Shows_honest_A_Smartphone_6 :
-  "\<lbrakk> Shows P A (Nonce r) \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
-        (\<exists> T. Inputs A (Smartphone A) \<lbrace>Agent A, Number T \<rbrace> \<in> set evs)"
-
-  apply (erule rev_mp, erule sdaptrans.induct)
-  apply (simp_all, force+)
 done
 
 lemma Shows_which_Smartphone_6 :
@@ -511,7 +503,15 @@ done
 
 
 
-(* - Shows messages form guarantees *)
+(* Messages form guarantees *)
+lemma Scans_A_Smartphone_form_3 :
+  "\<lbrakk> Scans A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; 
+     \<forall> p q. Transaction = \<lbrace>p, q\<rbrace>; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
+
+  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (auto)
+done
 
 lemma Shows_A_Smartphone_form_4 :
   "\<lbrakk> Shows (Smartphone A) A Transaction \<in> set evs; evs \<in> sdaptrans;
@@ -533,9 +533,7 @@ done
 
 
 
-
-(* 6. Spy guarantees *)
-
+(* 6. SPY COUNTERGUARANTEES *)
 lemma Spy_knows_Transaction : 
   "\<lbrakk> Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
      \<Longrightarrow> Number T \<in> analz (knows Spy evs)"
