@@ -291,7 +291,7 @@ done
 (* - The Server only authorizes a transaction if 
      it received a nonce that matches the produced TAN *)
 
-lemma Says_Server_Success :
+lemma Says_Server_DT8 :
   "\<lbrakk> Server \<noteq> A;
     Says Server A \<lbrace> Agent A, Number T \<rbrace> \<in> set evs;
     evs \<in> sdaptrans \<rbrakk>
@@ -533,7 +533,9 @@ done
 
 
 
-(* 6. SPY COUNTERGUARANTEES *)
+
+(* 6. Spy guarantees *)
+
 lemma Spy_knows_Transaction : 
   "\<lbrakk> Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
      \<Longrightarrow> Number T \<in> analz (knows Spy evs)"
