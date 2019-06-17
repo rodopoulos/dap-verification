@@ -437,18 +437,26 @@ done
 
 (* enfraquecer a regra no smartphone *)
 lemma Shows_A_Smartphone_6 :
-  "\<lbrakk> Shows P A (Nonce r) \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+  "\<lbrakk> Shows P A (Nonce r) \<in> set evs; legalUse(P); P \<notin> badP; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (\<exists> T. Inputs A P \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
 
-  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (erule rev_mp)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
   apply (simp_all)
   apply (blast+)
-  sledgehammer
-  apply (auto)
 done
 
+lemma Shows_Someone_Smartphone_6 :
+  "\<lbrakk> Shows (Smartphone A) B (Nonce r) \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> T. Inputs B (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
+  apply (blast+)
+done
 
-(* 5. Shows events guarantees *) 
+(* 5. Shows events guarantees *)
 lemma Shows_honest_A_Smartphone_4 :
   "\<lbrakk> Shows P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
