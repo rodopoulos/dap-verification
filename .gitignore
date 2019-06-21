@@ -2,7 +2,7 @@
 .vscode
 
 ## ISABELLE IGNORES
-*.thy~
+*.*~
 \#*\#
 
 ## LATEX IGNORES
