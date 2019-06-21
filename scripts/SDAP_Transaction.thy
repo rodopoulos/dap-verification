@@ -71,7 +71,7 @@ inductive_set sdaptrans :: "event list set" where
                   \<rbrace> \<in> set evs6f;
                   Shows (Smartphone A) Spy \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6f;
                   Inputs Spy (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs6f
-                \<rbrakk> 
+                \<rbrakk>
     \<Longrightarrow> Shows (Smartphone A) Spy (Nonce r) # evs6f \<in> sdaptrans"
 
   | DT7: "\<lbrakk> evs7 \<in> sdaptrans;
@@ -515,7 +515,7 @@ lemma Scans_A_Smartphone_form_3 :
   "\<lbrakk> Scans A (Smartphone A) \<lbrace> Transaction, r', h\<^sub>s \<rbrace> \<in> set evs; 
      \<forall> p q. Transaction = \<lbrace>p, q\<rbrace>; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (\<exists> T r. Transaction = \<lbrace> Agent A, Number T \<rbrace>)"
-
+  
   apply (erule rev_mp, erule sdaptrans.induct)
   apply (auto)
 done
@@ -541,7 +541,7 @@ done
 
 
 (* 6. SPY COUNTERGUARANTEES *)
-lemma Spy_knows_Transaction : 
+lemma Spy_knows_Transaction :
   "\<lbrakk> Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
      \<Longrightarrow> Number T \<in> analz (knows Spy evs)"
 by (blast dest!: Says_imp_knows_Spy [THEN analz.Inj, THEN analz.Snd])
@@ -630,7 +630,7 @@ by (auto dest!: Spy_knows_bad_phones)
 
 (* The TAN r uniquely identifies a transaction at the Server side *)
 lemma Server_transaction_unique :
-  "\<lbrakk> Says Server A \<lbrace> 
+  "\<lbrakk> Says Server A \<lbrace>
       \<lbrace>Agent A, Number T\<rbrace>,
       Crypt (shrK A) (Nonce r),
       Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
@@ -676,8 +676,8 @@ lemma Smartphone_transaction_unique :
       Crypt (shrK A) (Nonce r),
       Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T'\<rbrace>, Crypt (shrK A') (Nonce r) \<rbrace>
      \<rbrace> \<in> set evs;
-      legalUse(Smartphone A); legalUse(Smartphone A');
-    evs \<in> sdaptrans
+     legalUse(Smartphone A); legalUse(Smartphone A');
+     evs \<in> sdaptrans
   \<rbrakk>
   \<Longrightarrow> T = T'"
 
