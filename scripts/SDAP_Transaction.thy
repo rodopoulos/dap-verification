@@ -435,7 +435,6 @@ lemma Shows_A_Smartphone_4 :
   apply (simp_all, force+)
 done
 
-(* enfraquecer a regra no smartphone *)
 lemma Shows_A_Smartphone_6 :
   "\<lbrakk> Shows P A (Nonce r) \<in> set evs; legalUse(P); P \<notin> badP; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (\<exists> T. Inputs A P \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
@@ -707,7 +706,9 @@ lemma Smartphone_transaction_unique :
   apply (blast)
 oops
 
-lemma Server_Transaction_not_unique : 
+(* We do not force that a transaction number T to be fresh, hence we cannot prove the
+   following  
+lemma Server_TAN_unique :
   "\<lbrakk> Says Server A \<lbrace> 
       \<lbrace>Agent A, Number T\<rbrace>,
       Crypt (shrK A) (Nonce r),
@@ -719,13 +720,8 @@ lemma Server_Transaction_not_unique :
       Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r') \<rbrace>
      \<rbrace> \<in> set evs;
     evs \<in> sdaptrans\<rbrakk>
-   \<Longrightarrow> \<exists> r r'. (r = r')"
-
-  apply (erule rev_mp)
-  apply (erule rev_mp)
-  apply (erule sdaptrans.induct)
-  apply (simp_all)
-done
+   \<Longrightarrow> r = r'"
+*)
 
 (* AUTHENTICITY LEMMAS *)
 lemma Ciphers_authentic :
