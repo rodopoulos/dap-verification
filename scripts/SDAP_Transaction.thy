@@ -665,21 +665,6 @@ lemma Agent_transaction_unique :
   apply auto
 oops
 
-
-lemma Smartphone_transaction_unique2 : 
-  "\<lbrakk> Scans A (Smartphone A) \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, r', hs\<rbrace> \<in> set evs;
-     Scans A' (Smartphone A') \<lbrace>\<lbrace>Agent A', Number T'\<rbrace>, r', hs\<rbrace> \<in> set evs;
-    evs \<in> sdaptrans
-  \<rbrakk>
-  \<Longrightarrow> A = A' \<and> T = T'"
-
-  apply (erule rev_mp)
-  apply (erule rev_mp)
-  apply (erule sdaptrans.induct)  
-  apply (simp_all)
-  apply auto
-oops
-
 lemma Smartphone_transaction_unique : 
   "\<lbrakk> Scans A (Smartphone A) \<lbrace>
       \<lbrace>Agent A, Number T\<rbrace>,
