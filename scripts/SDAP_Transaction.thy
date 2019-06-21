@@ -551,7 +551,6 @@ lemma Spy_knows_TAN :
     \<Longrightarrow> Nonce r \<in> knows Spy evs"
 by (blast dest!: Says_imp_knows_Spy)
 
-
 lemma TAN_Says_Server_analz_knows_Spy :
   "\<lbrakk> Says Server A \<lbrace>
        \<lbrace>Agent A, Number T\<rbrace>,
