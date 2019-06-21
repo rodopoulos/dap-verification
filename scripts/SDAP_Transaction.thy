@@ -707,9 +707,7 @@ lemma Smartphone_transaction_unique :
   apply (blast)
 oops
 
-(* We do not force that a transaction number T to be fresh, hence we cannot prove the
-   following  
-lemma Server_TAN_unique :
+lemma Server_Transaction_not_unique : 
   "\<lbrakk> Says Server A \<lbrace> 
       \<lbrace>Agent A, Number T\<rbrace>,
       Crypt (shrK A) (Nonce r),
@@ -721,8 +719,13 @@ lemma Server_TAN_unique :
       Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r') \<rbrace>
      \<rbrace> \<in> set evs;
     evs \<in> sdaptrans\<rbrakk>
-   \<Longrightarrow> r = r'"
-*)
+   \<Longrightarrow> \<exists> r r'. (r = r')"
+
+  apply (erule rev_mp)
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (simp_all)
+done
 
 (* AUTHENTICITY LEMMAS *)
 lemma Ciphers_authentic :
