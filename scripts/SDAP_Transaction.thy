@@ -419,8 +419,40 @@ lemma Inputs_A_Smartphone_5 :
   apply (auto)
 done
 
-(* First, we state that Smartphones provide correct Shows when fed with expected Scans.
-   Such lemmas guarantee that Smartphones cannot produce unexpected Shows, preventing the
+(* 5. Shows events guarantees *)
+
+(* Rule DT4 *)
+
+(* Weakest versions *)
+lemma Shows_which_Smartphone_4 :
+  "\<lbrakk> Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> r. Scans A (Smartphone A) \<lbrace>
+          \<lbrace>Agent A, Number T\<rbrace>,
+          Crypt (shrK A) (Nonce r),
+          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r)\<rbrace>
+        \<rbrace> \<in> set evs)"
+
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (auto)
+done
+
+lemma Shows_honest_A_Smartphone_4 :
+  "\<lbrakk> Shows P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
+        (\<exists> r. Scans A (Smartphone A) \<lbrace>
+          \<lbrace>Agent A, Number T\<rbrace>,
+          Crypt (shrK A) (Nonce r),
+          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
+        \<rbrace> \<in> set evs)"
+
+  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (simp_all)
+  apply (force+)
+done
+
+(* The smartphones provides correct Shows event when fed with expected Scans.
+   Such lemma guarantees that Smartphones cannot produce unexpected Shows, preventing the
    Spy from having unlimited resources *)
 lemma Shows_A_Smartphone_4 :
   "\<lbrakk> Shows P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
@@ -435,39 +467,16 @@ lemma Shows_A_Smartphone_4 :
   apply (simp_all, force+)
 done
 
-lemma Shows_A_Smartphone_6 :
+(* Rule DT6 *)
+lemma Shows_uncompromised_A_Smartphone_6 :
   "\<lbrakk> Shows P A (Nonce r) \<in> set evs; legalUse(P); P \<notin> badP; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Inputs A P \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
+    \<Longrightarrow> (P = (Smartphone A)) \<and> (\<exists> T. Inputs A P \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
 
   apply (erule rev_mp)
   apply (erule rev_mp)
   apply (erule sdaptrans.induct)
   apply (simp_all)
   apply (blast+)
-done
-
-lemma Shows_Someone_Smartphone_6 :
-  "\<lbrakk> Shows (Smartphone A) B (Nonce r) \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> T. Inputs B (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
-  apply (erule rev_mp)
-  apply (erule sdaptrans.induct)
-  apply (simp_all)
-  apply (blast+)
-done
-
-(* 5. Shows events guarantees *)
-lemma Shows_honest_A_Smartphone_4 :
-  "\<lbrakk> Shows P A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
-        (\<exists> r. Scans A (Smartphone A) \<lbrace>
-          \<lbrace>Agent A, Number T\<rbrace>,
-          Crypt (shrK A) (Nonce r),
-          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
-        \<rbrace> \<in> set evs)"
-
-  apply (erule rev_mp, erule sdaptrans.induct)
-  apply (simp_all)
-  apply (force+)
 done
 
 lemma Shows_honest_A_Smartphone_6 :
@@ -479,19 +488,13 @@ lemma Shows_honest_A_Smartphone_6 :
   apply (simp_all, force+)
 done
 
-
-(* Weakest versions *)
-lemma Shows_which_Smartphone_4 :
-  "\<lbrakk> Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (\<exists> r. Scans A (Smartphone A) \<lbrace>
-          \<lbrace>Agent A, Number T\<rbrace>,
-          Crypt (shrK A) (Nonce r),
-          Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r)\<rbrace>
-        \<rbrace> \<in> set evs)"
-
+lemma Shows_Someone_Smartphone_6 :
+  "\<lbrakk> Shows (Smartphone A) B (Nonce r) \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (\<exists> T. Inputs B (Smartphone A) \<lbrace> Agent A, Number T \<rbrace> \<in> set evs)"
   apply (erule rev_mp)
   apply (erule sdaptrans.induct)
-  apply (auto)
+  apply (simp_all)
+  apply (blast+)
 done
 
 lemma Shows_which_Smartphone_6 :
@@ -550,6 +553,7 @@ lemma Spy_knows_TAN :
   "\<lbrakk> Says A Server (Nonce r) \<in> set evs; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> Nonce r \<in> knows Spy evs"
 by (blast dest!: Says_imp_knows_Spy)
+
 
 lemma TAN_Says_Server_analz_knows_Spy :
   "\<lbrakk> Says Server A \<lbrace>
