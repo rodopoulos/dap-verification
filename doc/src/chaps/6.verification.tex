@@ -269,7 +269,7 @@ Lemma \ref{thm:scans-shows-smartphone} states that if an agent other than the Sp
 \label{thm:scans-shows-smartphone}
   If A is not the Spy and \text{evs} contains
   \[\Scans{A}{P}{X}\ \text{or}\ \Outputs{P}{A}{X}\]
-  Then, Smartphone P must belong to A and must have been legally used
+  Then, P = (Smartphone A) and legalUse(P)
 \end{lemma}
 
 The Spy can act in two different ways. She can only legally use her own smartphone, since it cannot be compromised, and any other smartphone that belongs to an agent is illegally usable by her. Theorem \ref{thm:scans-smartphone-spy} confirms that.
@@ -278,7 +278,7 @@ The Spy can act in two different ways. She can only legally use her own smartpho
   \label{thm:scans-smartphone-spy}
   If \text{evs} contains
   \[\Scans{\Spy}{P}{X} \ \text{or} \ \Outputs{P}{\Spy}{X}\]
-  Then, the Smartphone P belong to the Spy and was legally used or it belongs to some agent A and it was illegally used.
+  Then, (P = (Smartphone A) and legalUse(A)) or, for some A, (P = (Smartphone A) and illegalUse(A))
 \end{lemma}
 
 \subsection{Smartphone Outputs}
@@ -320,9 +320,9 @@ Rule \textit{DT6} follows the same principle. However, the strongest version the
 
 \begin{theorem}[\textbf{Shows\_uncompromised\_A\_Smartphone\_6}]
   \label{thm:shows-uncompromised-a-smartphone-6}
-  If P is a uncompromised and legally used smartphone and \text{evs} contains
+  If $P \notin badP$, legalUse(P) and \text{evs} contains
   \[\Outputs{P}{A}{\Message{Nonce}{r}}\]
-  Then, P belongs to A and there is a transaction \(T\) such that \text{evs} also contains
+  Then, P = (Smartphone A) and, for some \(T\), \text{evs} also contains
   \[\Inputs{A}{P}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}}\]
 \end{theorem}
 
@@ -330,11 +330,45 @@ Another type of guarantees are the ones related to the format of the messages in
 
 
 \subsection{Smartphone Inputs}
-The proofs for smartphone inputs also have the two cited categories. The one concerning the expected outputs given the correct inputs are easily proved for Rules \textit{DT3} and \textit{DT5}.
+The proofs for smartphone inputs also have the two cited categories. Here, both the \textit{Scans} and the \textit{Inputs} events are considered. Rule \textit{DT3} is another rule that suffers from the Spy threats.x
 
-For the message form guarantees we have some more complex cases.
+Rule \textit{DT5} has a special meaning: it acts as the confirmation step for the protocol, since it represents the user confirmation. This message is preceded by important conditions such as the checksum verification, TAN deciphering and the smartphone displaying the received transaction to the user.
+
+\begin{theorem}[\textbf{Inputs\_A\_Smartphone\_5}]
+  \label{thm:inputs-a-smartphone-5}
+  If \text{evs} contain
+  \[\Inputs{A}{P}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}}\]
+  Then, P = (Smartphone A), legalUse(A) and \text{evs} contains
+  \begin{align*}
+    & \Scans{A}{\Smartphone{A}}{\lBrack} \\
+      & \quad \Bracks{\Message{Agent}{A}, \Message{Number}{T}}, \\
+      & \quad \Crypt{\Key{shrK}{A}}{\Bracks{\Message{Nonce}{r}}} \\
+      & \quad \Crypt{\Key{shrK}{A}}{\Bracks{\Bracks{\Message{Agent}{A}, \Message{Number}{T}},\Crypt{\Key{shrK}{A}}{\Bracks{\Message{Nonce}{r}}}}} \\
+    & \rBrack
+  \end{align*}
+\end{theorem}
+
+Theorem \ref{thm:inputs-a-smartphone-5} proves that if the event of an agent confirming a transaction on a smartphone exists, then she must been acting legally and her smartphone have confirmed that the received transaction is authentic. However, it is important to note that the agent itself does not participate in any of these stages directly, since she only knows the transaction among all the previous messages, which goes according to the DAP specification.
+
+Regarding message format guarantees, it is possible to find some issues with Rule \textit{DT3}. Once an agent receives message \(m'\) from the Server, she cannot inspect the format of the message. Thus, the agent dos not have any guarantees about that message, that is, the message is not explicit about its contents. Theorem \ref{thm:scans-smartphone-a-dt3-message-form-unprovable} shows that the contents of the message that the agent forwards to its smartphone cannot be derived, since that is not conclusive what each message entity representes
+
+\begin{theorem}[\textbf{Scans\_Smartphone\_A\_DT3\_form\_unprovable}]
+\label{thm:scans-smartphone-a-dt3-message-form-unprovable}
+  If \text{evs} contains
+  \[\Scans{A}{\Smartphone{A}}{\Bracks{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}, r', h_S}}\]
+  Then, for some nonce r', there is some nonce r that $r \neq \Crypt{\Key{shrK}{A}}{\Message{Nonce}{r}}$
+\end{theorem}
+
+Lemmas about Rule \textit{DT5} format are straightforward, once it is the only \textit{Inputs} event in the protocol and its message form is the transaction itself.
 
 
+\subsection{Regularity}
+The DAP message transaction phase does not send any long-term keys over the network. Therefore, such keys are only present in the network if the Spy is sending then. In order to do so, the Spy must know such keys prior to the protocol execution, which means that she must have access to the legal agent smartphone, which retains the user long-term key. She cannot obtain the key from the Server, since it is a secure entity. At the same time, if the agent smartphone is compromised, the Spy can send its store long-term key in the network. Theorem \ref{thm:spy-analz-shrk} is a message regularity guarantee that expresses this situation.
+
+\begin{theorem}[\textbf{Spy\_analz\_shrK}]
+\label{thm:spy-analz-shrk}
+  Trace evs is such that \[Key\ (shrK)\ A \in analz(knows\ Spy\ evs) \Longleftrightarrow (Smartphone A) \in badP\]
+\end{theorem}
 
 
 \section{Model Properties}
@@ -342,7 +376,8 @@ For the message form guarantees we have some more complex cases.
 \subsection{Unicity}
 The TAN is the entity that uniquely identify a transaction. Hence, it is important that such entity preserves the unicity property. The Server must guarantee that if two TAN are equal, then they are referencing the same transaction. Theorem \ref{thm:server-tan-unique} describes that if two messages in the network preserve the same TAN, then they must carrying the same transaction to the same agent. This property cannot the verified by any agent, since they cannot read the Server's message ciphered content.
 
-\begin{theorem}
+\begin{theorem}[\textbf{Server\_TAN\_Unique}]
+\label{thm:server-tan-unique}
   If \text{evs} contains
   \begin{align*}
     & \Says{\Server}{A}{\lBrack} \\
@@ -358,3 +393,4 @@ The TAN is the entity that uniquely identify a transaction. Hence, it is importa
   \end{align*}
   Then, $A = A'$ and $T = T`$
 \end{theorem}
+  
