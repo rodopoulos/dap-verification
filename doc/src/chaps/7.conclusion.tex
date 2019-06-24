@@ -28,3 +28,8 @@ Lemmas regarding rules $DT3$ and $DT6$ presented issues, where strong lemmas cou
 \section{Future Work}
 As discussed, some properties were left out from the verification. The main focus was given to basic properties and another ones regarding the protocol message contents.
 
+One of the main tasks delegated to the future is the use of concepts from the security protocol ceremony, which could bring more interesting details about the phases where there are interactions between the user and her smartphone.
+
+Additionally, the DAP formalization lacks the scenario where smartphones can exploited. This is a important scenario since it correspond to the real world. This formalization should take in account that the Spy can trigger any desired action in the smartphones, access their data and obtain any inputed information in this devices. In a more threatening scenario, some of the proved properties for the secured DAP version can become unprovable, since many of the protocol guarantees rely in the fact that the devices cannot be compromised.
+
+Finally, the formalization of the shared key generation phase was left out, both for the symmetric and asymmetric schemes. The former may present more interesting details about the protocol and the key itself, since it uses the peculiarities of the DAP as the use of smartphone and message exchange base in QR-codes.
