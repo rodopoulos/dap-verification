@@ -303,7 +303,7 @@ We use Rule \textit{DT4} as an example. Lemma \ref{thm:shows-which-smartphone-4}
 
 A second version of the this lemma defines a stronger scenario, where the agent cannot be the Spy. This guarantees not only that the smartphone received the proper inputs but that a legal use of the user smartphone was performed, by its owner. Finally, the strongest version, presented in Theorem \ref{thm:shows-a-smartphone-4}, consider the case for an arbitrary smartphone. In this case, it is still provable the ownership and legality on the smartphone use. Thus, it is proved that a smartphone only shows a transaction confirmation message to its owner and depends on the correct deciphering of the TAN and hash checksum.
 
-\begin{theorem}[\textbf{Shows\_A\_Smartphone\_A}]
+\begin{theorem}[\textbf{Shows\_A\_Smartphone\_4}]
 \label{thm:shows-a-smartphone-4}
   If \text{evs} contains
   \[\Outputs{P}{A}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}}\]
@@ -317,7 +317,7 @@ A second version of the this lemma defines a stronger scenario, where the agent 
   \end{align*}
 \end{theorem}
 
-Rule \textit{DT6} follows the same principle. However, the strongest version the reliability property cannot be proved for this rule. Given \textit{DT6\_Fake}, it is not possible to assure that a legal agent performed the transaction confirmation, since the Spy can steal or exploit the device. Hence, the strongest provable form of the smartphone operation property is illustrated in Theorem \ref{thm:shows-uncompromised-a-smartphone-6}, where the smartphone ownership and smartphone reliable operation can only the guaranteed when it has been legally used and not compromised.
+Rule \textit{DT6} follows the same principle. However, the strongest version of the reliability property cannot be proved for this rule. Given \textit{DT6\_Fake}, it is not possible to assure that a legal agent performed the transaction confirmation, since the Spy can steal or exploit the device. Hence, the strongest provable form of the smartphone operation property is illustrated in Theorem \ref{thm:shows-uncompromised-a-smartphone-6}, where the smartphone ownership and smartphone reliable operation can only the guaranteed when it has been legally used and not compromised.
 
 \begin{theorem}[\textbf{Shows\_uncompromised\_A\_Smartphone\_6}]
   \label{thm:shows-uncompromised-a-smartphone-6}
@@ -331,7 +331,19 @@ Another type of guarantees are the ones related to the format of the messages in
 
 
 \subsection{Smartphone Inputs}
-The proofs for smartphone inputs also have the two cited categories. Here, both the \textit{Scans} and the \textit{Inputs} events are considered. Rule \textit{DT3} is another rule that suffers from the Spy threats.x
+The proofs for smartphone inputs also have the two cited categories. Here, both the \textit{Scans} and the \textit{Inputs} events are considered. Like the weaker guarantees for Rule \textit{DT6}, Rule \textit{DT3} is another rule that suffers from the Spy threats. Since the smartphone can be robbed, a Spy could input a desired transaction in the stolen phone. Therefore, event if the event of a smartphone scanning the message \(m'\) is detected within a trace, it is not obvious that a legal use the smartphone was performed. Theorem \ref{thm:scans-a-honest-smartphone-3} is the strongest guarantee for such event, where the premises include the fact that the agent performing the scanning action is not the Spy. In this case, a legal use of the agent smartphone can be assured.
+
+\begin{theorem}[\textbf{Scans\_A\_honest\_Smartphone\_3}]
+\label{thm:scans-a-honest-smartphone-3}
+  If A is not the Spy and evs contains
+  \[\Scans{A}{P}{\Bracks{\Bracks{\Message{Agent}{A}, \Message{Numbert}{T}}, r', h_S}}\]
+  Then, P = (Smartphone A), legalUse(P) and evs contains
+  \begin{align*}
+    & \Says{A}{\Server}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \\
+    & \Gets{A}{\Bracks{\Bracks{\Message{Agent}{A}, \Message{Numbert}{T}}, r', h_S}}
+  \end{align*}
+  
+\end{theorem}
 
 Rule \textit{DT5} has a special meaning: it acts as the confirmation step for the protocol, since it represents the user confirmation. This message is preceded by important conditions such as the checksum verification, TAN deciphering and the smartphone displaying the received transaction to the user.
 
