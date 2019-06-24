@@ -54,9 +54,9 @@ Also, bandwidth and computational power limits are established. The whole system
 
 It is important to emphasize that the protocol identifies an unique transaction on each run. The user must be already authenticated before prompting a transaction authorization and private authentication keys must be previously exchanged between the server and the client. In a protocol run, the user receives a series of challenges, in order to verify the operation, where those challenges contain pieces of information about the given transaction.
 
-One of these tasks envolves the use of a third-party device equipped with a camera and QR-code scanning technology, usually a smartphone. This phase works as a final hash verification for each operation, where the user should scan a QR-code containing the transaction details, check it and send a 6-digit PIN that corresponds to the transaction identifier, resulting in the final transaction authorization.
+One of these tasks envolves the use of a third-party device equipped with a camera and QR-code scanning technology, usually a smartphone. This phase works as a final hash verification for each operation, where the user should scan a QR-code containing the transaction details, check it and send a 6-digit PIN that corresponds to the transaction authorization identifier, resulting in the final transaction authorization.
 
-The protocol authors claim that this last step produce an extra security layer that could only be exploited through social engineering tactics, hardening the attack against a serie of known strategies. In summary, an attacker can fake an operation but cannot authorize it, since the authorization procedure was removed from the session context and transfered to the user responsibility over an offline channel.
+The protocol authors claim that this last step produce an extra security layer that could only be exploited through social engineering tactics, hardening the attack against a serie of known strategies. In summary, an attacker can fake an operation but cannot authorize it, since the authorization procedure was removed from the session context and transferred to the user responsibility over an offline channel.
 
 
 
