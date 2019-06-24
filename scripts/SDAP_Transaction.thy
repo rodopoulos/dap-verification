@@ -95,7 +95,7 @@ inductive_set sdaptrans :: "event list set" where
 
   (* Rule modeling the illegal behavior of the Spy *)
   | Fake: "\<lbrakk> evsF \<in> sdaptrans; X \<in> synth(analz(knows Spy evsF));
-             illegalUse(Smartphone A); C \<noteq> Server; C \<noteq> Spy \<rbrakk>
+             illegalUse(Smartphone A) \<rbrakk>
     \<Longrightarrow> Says Spy B X #
         Scans Spy (Smartphone A) X # evsF \<in> sdaptrans"
   
@@ -362,8 +362,8 @@ done
 
 (* - The spy can act both legally (using her smartphone) or illegally (using someone else) *)
 lemma Scans_Smartphone_Spy :
-  "\<lbrakk> Scans Spy P X \<in> set evs \<or> Shows P Spy X \<in> set evs; evs \<in> sdaptrans \<rbrakk>  
-      \<Longrightarrow> (P = (Smartphone Spy)) \<and> (legalUse(Smartphone Spy)) \<or>  
+  "\<lbrakk> Scans Spy P X \<in> set evs \<or> Shows P Spy X \<in> set evs; evs \<in> sdaptrans \<rbrakk>
+      \<Longrightarrow> (P = (Smartphone Spy)) \<and> (legalUse(Smartphone Spy)) \<or>
           (\<exists> A. P = (Smartphone A) \<and> illegalUse(Smartphone A))"
 
   apply (erule rev_mp, erule sdaptrans.induct)
@@ -393,7 +393,8 @@ done
 
 (* 4. Scans & Inputs events guarantees *)
 
-lemma Scans_A_Smartphone_3 :
+(* Rule DT3 *)
+lemma Scans_A_honest_Smartphone_3 :
   "\<lbrakk> Scans A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
         Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
@@ -403,10 +404,36 @@ lemma Scans_A_Smartphone_3 :
   apply (simp_all)
 done
 
+
+lemma Scans_A_honest_Smartphone_3_2 :
+  "\<lbrakk> Scans A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs;  evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
+        Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
+        Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs"
+
+  apply (erule rev_mp, erule sdaptrans.induct)
+  apply (simp_all)
+done
+
+(* Rule DT5 *)
 (* This is an important guarantee: the protocol legally continues if the agent confirms the 
-     outputed message, which contains the transaction *)
-lemma Inputs_A_Smartphone_5 :
+   outputed message, which contains the transaction *)
+lemma Inputs_A_honest_Smartphone_5 :
   "\<lbrakk> Inputs A P \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; A \<noteq> Spy; evs \<in> sdaptrans \<rbrakk>
+    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
+        (\<exists> r' h\<^sub>s.
+          Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
+          Gets A \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs \<and>
+          Scans A (Smartphone A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs \<and>
+          Shows (Smartphone A) A \<lbrace>Agent A, Number T\<rbrace> \<in> set evs)"
+
+  apply (erule rev_mp)
+  apply (erule sdaptrans.induct)
+  apply (auto)
+done
+
+lemma Inputs_A_Smartphone_5 : 
+  "\<lbrakk> Inputs A P \<lbrace>Agent A, Number T\<rbrace> \<in> set evs; evs \<in> sdaptrans \<rbrakk>
     \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
         (\<exists> r' h\<^sub>s.
           Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
@@ -554,7 +581,6 @@ lemma Spy_knows_TAN :
     \<Longrightarrow> Nonce r \<in> knows Spy evs"
 by (blast dest!: Says_imp_knows_Spy)
 
-
 lemma TAN_Says_Server_analz_knows_Spy :
   "\<lbrakk> Says Server A \<lbrace>
        \<lbrace>Agent A, Number T\<rbrace>,
@@ -653,22 +679,7 @@ lemma Server_transaction_unique :
   apply (fastforce dest: Says_parts_used)
 done
 
-lemma Agent_transaction_unique : 
-  "\<lbrakk> A \<notin> bad;
-     Gets A \<lbrace>\<lbrace>Agent A, Number T\<rbrace>, r', hs\<rbrace> \<in> set evs;
-     Gets A \<lbrace>\<lbrace>Agent A', Number T'\<rbrace>, r', hs\<rbrace> \<in> set evs;
-      evs \<in> sdaptrans
-  \<rbrakk> \<Longrightarrow> T' = T \<and> A = A'"
-
-  apply (erule rev_mp)
-  apply (erule rev_mp)
-  apply (erule rev_mp)
-  apply (erule sdaptrans.induct)  
-  apply (simp_all)
-  apply auto
-oops
-
-lemma Smartphone_transaction_unique : 
+(* lemma Smartphone_transaction_unique : 
   "\<lbrakk> Scans A (Smartphone A) \<lbrace>
       \<lbrace>Agent A, Number T\<rbrace>,
       Crypt (shrK A) (Nonce r),
@@ -692,7 +703,7 @@ lemma Smartphone_transaction_unique :
   apply (simp_all)
   defer
   apply (blast)
-oops
+oops *)
 
 lemma Server_Transaction_not_unique : 
   "\<lbrakk> Says Server A \<lbrace> 
@@ -731,8 +742,8 @@ lemma Ciphers_authentic :
   apply (auto)
 done
 
-lemma TAN_identity :
-  "\<lbrakk> Says Server A' \<lbrace> 
+lemma TAN_A_identity_by_Server :
+  "\<lbrakk> Says Server A' \<lbrace>
       \<lbrace>Agent A, Number T\<rbrace>,
       Crypt (shrK A) (Nonce r),
       Crypt (shrK A) \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, Crypt (shrK A) (Nonce r) \<rbrace>
