@@ -404,17 +404,6 @@ lemma Scans_A_honest_Smartphone_3 :
   apply (simp_all)
 done
 
-
-lemma Scans_A_honest_Smartphone_3_2 :
-  "\<lbrakk> Scans A P \<lbrace> \<lbrace>Agent A, Number T\<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs;  evs \<in> sdaptrans \<rbrakk>
-    \<Longrightarrow> (legalUse(P)) \<and> P = (Smartphone A) \<and>
-        Says A Server \<lbrace>Agent A, Number T\<rbrace> \<in> set evs \<and>
-        Gets A \<lbrace> \<lbrace> Agent A, Number T \<rbrace>, r', h\<^sub>s \<rbrace> \<in> set evs"
-
-  apply (erule rev_mp, erule sdaptrans.induct)
-  apply (simp_all)
-done
-
 (* Rule DT5 *)
 (* This is an important guarantee: the protocol legally continues if the agent confirms the 
    outputed message, which contains the transaction *)
