@@ -33,7 +33,7 @@ The constant \texttt{sdaptrans} denotes the secured DAP model, consisting of the
   \end{align*}
   %
   \label{fig:dap-model-0}
-  \caption{Inductive model of secured DAP message transaction base case and reception}
+  \caption{Secure DAP message transaction base case and reception}
 \end{figure}
 
 The protocol rules are now presented. Rule \textit{DT1} represents an agent sending the intended transaction for authorization to the Server. The Server cannot be such agent, which leads to the inability of the Server to start the protocol. Following lemmas will state that the Servers cannot use a smartphone.
@@ -56,7 +56,7 @@ It is important to stress the first adaption of the protocol entities. The trans
     & \rBrack \ \# \ evs2 \in sdaptrans
   \end{align*}
   %
-  \caption{Inductive model of secured DAP message transaction first two rules}
+  \caption{Secure DAP rule 1 and 2 formalizations}
   \label{fig:dap-model-1-n-2}
 \end{figure}
 
@@ -78,7 +78,7 @@ Since the agent does not know her shared key, it cannot understand the contents 
   \end{align*}
   %
   \label{fig:dap-model-3}
-  \caption{Inductive model of secured DAP message transaction base case and reception}
+  \caption{Secure DAP rule 3 formalization}
 \end{figure}
 
 Rule \textit{DT4} happens inside the smartphone. Here, the agent also must be holding her smartphone. In this stage, two important security steps are performed: the TAN decryption and the hash checksum. Both of this actions are formalized in the \texttt{Scans} event, where both ciphers are presented in clear, stating that the smartphone must precisely know the format of the received message. Hence, in order to present the received transaction on its screen, the smartphone must be fed with the expected input, that is, the equivalent hash representing the transaction and encrypted TAN.
@@ -96,7 +96,7 @@ Rule \textit{DT4} happens inside the smartphone. Here, the agent also must be ho
   \end{align*}
   %
   \label{fig:dap-model-4}
-  \caption{Inductive model of secured DAP message transaction base case and reception}
+  \caption{Secure DAP rule 4 formalization}
 \end{figure}
 
 Rule \textit{DT5} models the agent confirming the visualized transaction in her smartphone screen. For this reason, the agent must have issued a transaction, received it again with its correspondent ciphers from the Server and saw the same transaction, inputed by her in \textit{DT3}, on the device screen. Again, we adapted the protocol: the confirmation act is represented with the \texttt{Inputs} event, using the transaction itself as an acknowledgement that the outputed transaction is correct.
@@ -113,7 +113,7 @@ Rule \textit{DT5} models the agent confirming the visualized transaction in her 
   \end{align*}
   %
   \label{fig:dap-model-5}
-  \caption{Inductive model of secured DAP message transaction base case and reception}
+  \caption{Secure DAP rule 5 formalization}
 \end{figure}
 
 Next, rule \texttt{DT6} models the smartphone presenting the decrypted TAN to the agent. In this case, we need that the smartphone had received the encrypted TAN and the correspondent hash and had the received transaction confirmed by the agent. Having these fulfilled, the smartphone can present the nonce.
@@ -133,7 +133,7 @@ Next, rule \texttt{DT6} models the smartphone presenting the decrypted TAN to th
   \end{align*}
   %
   \label{fig:dap-model-6}
-  \caption{Inductive model of secured DAP message transaction base case and reception}
+  \caption{Secure DAP rule 6 formalization}
 \end{figure}
 
 Rule \textit{DT7} starts the last stage of the protocol. Having issued and confirmed the transaction and received the correspondent TAN, the user can send it to the Server, in order to authorize the transaction at the bank side. Again, the agent does not know what the ciphers represent and the progress of the protocol should not rely in this fact.
@@ -152,7 +152,7 @@ Rule \textit{DT7} starts the last stage of the protocol. Having issued and confi
   \end{align*}
   %
   \label{fig:dap-model-7}
-  \caption{Inductive model of secured DAP rule 7}
+  \caption{Secure DAP rule 7 formalization}
 \end{figure}
 
 In the last step, rule \textit{DT8}, the Server acknowledges the transaction authorization if, and only if, the received TAN matches the one generated at early stages. Here, another adjustment takes place in this acknowledge message: we use the full transaction as a confirmation token, sent by the Server to the intended user. Finally, the protocol is concluded.
@@ -172,7 +172,7 @@ In the last step, rule \textit{DT8}, the Server acknowledges the transaction aut
   \end{align*}
   %
   \label{fig:dap-model-8}
-  \caption{Inductive model of secured DAP rule 8}
+  \caption{Secure DAP rule 8 formalization}
 \end{figure}
 
 \subsection{Threats}
