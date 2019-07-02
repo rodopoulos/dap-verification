@@ -42,13 +42,13 @@ It is important to stress the first adaption of the protocol entities. The trans
 
 \begin{figure}[h!]
   \begin{align*}
-    & \texttt{DT1}: \newline \\
+    & \texttt{DT1}: \\
     & \lBrace evs1 \in sdaptrans;\ A \neq \text{Server} \rBrace \\
     & \Longrightarrow \Says{A}{\Server}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \ \# \ evs1 \in sdaptrans \\
     & \\
     & \texttt{DT2}: \newline \\
-    & \lBrace evs2 \in sdaptrans;\ \Message{Nonce}{r} \notin\ used\ evs2;
-    & \\ \Gets{\Server}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \in \texttt{set} \ evs2 \\
+    & \lBrace evs2 \in sdaptrans;\ \Message{Nonce}{r} \notin\ used\ evs2; \\
+    & \Gets{\Server}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \in \texttt{set} \ evs2 \\
     & \Longrightarrow \Says{\Server}{A}{\lBrack} \\
     & \qquad \Bracks{\Message{Agent}{A}, \Message{Number}{T}}, \\
     & \qquad \Crypt{\Key{shrK}{A}}{\Message{Nonce}{r}}, \\
@@ -195,7 +195,7 @@ Still, it is necessary to model how the Spy can exploit illegally usable smartph
 
 \begin{figure}[!h]
   \begin{align*}
-    & \texttt{DT4\_Fake}:
+    & \texttt{DT4\_Fake}: \\
     & \lBrace evsf4 \in sdaptrans;\ \text{illegalUse}(\Smartphone{A}); \\
     & \quad \Scans{Spy}{\Smartphone{A}}{\lBrack} \\
     & \qquad \Bracks{\Message{Agent}{A}, \Message{Number}{T}} \\
@@ -213,7 +213,7 @@ Rule \textit{DT6\_Fake} models how the smartphone can obtain the displayed TAN b
 
 \begin{figure}[!h]
   \begin{align*}
-    & \texttt{DT6\_Fake}:
+    & \texttt{DT6\_Fake}: \\
     & \lBrace evs6 \in sdaptrans;\ \text{illegalUse}(\Smartphone{A}); \\
     & \quad \Scans{Spy}{\Smartphone{A}}{\lBrack} \\
     & \qquad \Bracks{\Message{Agent}{A}, \Message{Number}{T}} \\
