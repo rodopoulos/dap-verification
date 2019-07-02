@@ -599,7 +599,7 @@ lemma Hash_Scans_analz_knows_Spy :
   apply (blast dest!: DT3_analz_knows_Spy_snd)+
 done
 
-section\<open>REGULARITY LEMMAS\<close>
+section\<open>Regularity Lemmas\<close>
 lemma Spy_parts_keys [simp] : 
   "evs \<in> sdaptrans \<Longrightarrow> (Key (shrK A) \<in> parts (knows Spy evs)) = (Smartphone A \<in> badP)"
 

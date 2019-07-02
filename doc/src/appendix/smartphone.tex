@@ -25,10 +25,23 @@
   \ \ shrK\ \ {\isacharcolon}{\isacharcolon}\ \ {\isachardoublequoteopen}agent\ {\isasymRightarrow}\ key{\isachardoublequoteclose}\isanewline
   \isanewline
   \isakeyword{where}\isanewline
-  \ \ inj{\isacharunderscore}shrK\ {\isacharcolon}\ {\isachardoublequoteopen}inj\ shrK{\isachardoublequoteclose}\isanewline
-  \isanewline
-  \isanewline
-  \isanewline
+  \ \ inj{\isacharunderscore}shrK\ {\isacharcolon}\ {\isachardoublequoteopen}inj\ shrK{\isachardoublequoteclose}%
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Smartphone Usage%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
   \isacommand{definition}\isamarkupfalse%
   \ legalUse\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}smartphone\ {\isasymRightarrow}\ bool{\isachardoublequoteclose}\ {\isacharparenleft}{\isachardoublequoteopen}legalUse\ {\isacharparenleft}{\isacharunderscore}{\isacharparenright}{\isachardoublequoteclose}{\isacharparenright}\ \isakeyword{where}\isanewline
   \ \ {\isachardoublequoteopen}legalUse\ P\ {\isacharequal}{\isacharequal}\ P\ {\isasymnotin}\ stolen{\isachardoublequoteclose}\isanewline
@@ -38,9 +51,23 @@
   \ illegalUse\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}smartphone\ {\isasymRightarrow}\ bool{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
   \ \ illegalUse{\isacharunderscore}def{\isacharcolon}\ {\isachardoublequoteopen}illegalUse\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}\isanewline
   \ \ \ \ {\isacharparenleft}insecureP\ {\isasymand}\ {\isacharparenleft}Smartphone\ A\ {\isasymin}\ stolen{\isacharparenright}\ {\isasymor}\ {\isacharparenleft}Smartphone\ A\ {\isasymin}\ badP{\isacharparenright}{\isacharparenright}\ {\isasymor}\isanewline
-  \ \ \ \ {\isacharparenleft}secureP\ \ \ {\isasymand}\ {\isacharparenleft}Smartphone\ A\ {\isasymin}\ stolen{\isacharparenright}{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
-  \ \ \isanewline
-  \isanewline
+  \ \ \ \ {\isacharparenleft}secureP\ \ \ {\isasymand}\ {\isacharparenleft}Smartphone\ A\ {\isasymin}\ stolen{\isacharparenright}{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}%
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Agents' Initial State%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
   \isacommand{overloading}\isamarkupfalse%
   \ initState\ {\isasymequiv}\ initState\isanewline
   \ \ \isakeyword{begin}\isanewline
@@ -57,9 +84,23 @@
   \ \ Key{\isacharunderscore}supply{\isacharunderscore}ax{\isacharcolon}\ {\isachardoublequoteopen}finite\ KK\ {\isasymLongrightarrow}\ {\isasymexists}\ K{\isachardot}\ K\ {\isasymnotin}\ KK\ {\isacharampersand}\ Key\ K\ {\isasymnotin}\ used\ evs\ {\isachardoublequoteclose}\ \isakeyword{and}\isanewline
   \ \ \isanewline
   \ \ \isanewline
-  \ \ Nonce{\isacharunderscore}supply{\isacharunderscore}ax{\isacharcolon}\ {\isachardoublequoteopen}finite\ NN\ {\isasymLongrightarrow}\ {\isasymexists}\ N{\isachardot}\ N\ {\isasymnotin}\ NN\ {\isacharampersand}\ Nonce\ N\ {\isasymnotin}\ used\ evs{\isachardoublequoteclose}\isanewline
-  \isanewline
-  \isanewline
+  \ \ Nonce{\isacharunderscore}supply{\isacharunderscore}ax{\isacharcolon}\ {\isachardoublequoteopen}finite\ NN\ {\isasymLongrightarrow}\ {\isasymexists}\ N{\isachardot}\ N\ {\isasymnotin}\ NN\ {\isacharampersand}\ Nonce\ N\ {\isasymnotin}\ used\ evs{\isachardoublequoteclose}%
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Shared Key Properties%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
   \isacommand{declare}\isamarkupfalse%
   \ inj{\isacharunderscore}shrK\ {\isacharbrackleft}THEN\ inj{\isacharunderscore}eq{\isacharcomma}\ iff{\isacharbrackright}\isanewline
   \isanewline
@@ -262,12 +303,12 @@
   {\isafoldproof}%
   %
   \isadelimproof
-  \isanewline
   %
   \endisadelimproof
-  \isanewline
-  \isanewline
-  \isanewline
+  %
+  \begin{isamarkuptext}%
+  If a key is fresh, then it must not a long-term key%
+  \end{isamarkuptext}\isamarkuptrue%
   \isacommand{lemma}\isamarkupfalse%
   \ Key{\isacharunderscore}not{\isacharunderscore}used\ {\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}Key\ K\ {\isasymnotin}\ used\ evs\ {\isasymLongrightarrow}\ K\ {\isasymnotin}\ range\ shrK{\isachardoublequoteclose}\isanewline
   %
@@ -305,10 +346,23 @@
   \endisadelimproof
   \isanewline
   \isacommand{declare}\isamarkupfalse%
-  \ shrK{\isacharunderscore}neq\ {\isacharbrackleft}THEN\ not{\isacharunderscore}sym{\isacharcomma}\ simp{\isacharbrackright}\isanewline
-  \isanewline
-  \isanewline
-  \isanewline
+  \ shrK{\isacharunderscore}neq\ {\isacharbrackleft}THEN\ not{\isacharunderscore}sym{\isacharcomma}\ simp{\isacharbrackright}%
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Function \isa{knows}%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
   \isacommand{lemma}\isamarkupfalse%
   \ Spy{\isacharunderscore}knows{\isacharunderscore}bad{\isacharunderscore}phones\ {\isacharbrackleft}intro{\isacharbang}{\isacharbrackright}\ {\isacharcolon}\isanewline
   \ \ {\isachardoublequoteopen}Smartphone\ A\ {\isasymin}\ badP\ {\isasymLongrightarrow}\ Key\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
@@ -406,12 +460,25 @@
   {\isafoldproof}%
   %
   \isadelimproof
-  \isanewline
   %
   \endisadelimproof
-  \isanewline
-  \isanewline
-  \isanewline
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Nonce Lemmas%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
   \isacommand{lemma}\isamarkupfalse%
   \ Nonce{\isacharunderscore}notin{\isacharunderscore}initState\ {\isacharbrackleft}iff{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}Nonce\ N\ {\isasymnotin}\ parts\ {\isacharparenleft}initState\ {\isacharparenleft}Friend\ i{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
   %
@@ -545,7 +612,7 @@
   %
   \isatagdocument
   %
-  \isamarkupsubsection{Tactics for possibility theorems%
+  \isamarkupsection{Tactics for possibility theorems%
   }
   \isamarkuptrue%
   %
@@ -709,298 +776,285 @@
   %:%26=20%:%
   %:%27=21%:%
   %:%28=22%:%
-  %:%29=23%:%
-  %:%30=24%:%
-  %:%31=25%:%
-  %:%32=26%:%
-  %:%33=26%:%
-  %:%34=27%:%
-  %:%35=28%:%
-  %:%36=30%:%
-  %:%37=31%:%
-  %:%38=31%:%
-  %:%39=32%:%
-  %:%41=34%:%
-  %:%42=35%:%
-  %:%43=36%:%
-  %:%44=37%:%
-  %:%45=37%:%
-  %:%46=38%:%
-  %:%47=39%:%
-  %:%48=39%:%
-  %:%49=40%:%
-  %:%50=41%:%
-  %:%51=42%:%
-  %:%52=43%:%
-  %:%53=43%:%
-  %:%54=44%:%
-  %:%55=45%:%
-  %:%56=45%:%
-  %:%57=46%:%
-  %:%58=47%:%
-  %:%59=48%:%
-  %:%60=49%:%
-  %:%61=50%:%
-  %:%62=51%:%
-  %:%63=52%:%
-  %:%64=52%:%
-  %:%65=53%:%
-  %:%66=54%:%
-  %:%67=55%:%
-  %:%68=55%:%
-  %:%75=56%:%
-  %:%76=56%:%
-  %:%77=57%:%
-  %:%78=57%:%
-  %:%79=58%:%
-  %:%85=58%:%
-  %:%88=59%:%
-  %:%89=64%:%
-  %:%90=65%:%
-  %:%91=65%:%
-  %:%92=66%:%
-  %:%99=67%:%
-  %:%100=67%:%
-  %:%101=68%:%
-  %:%102=68%:%
-  %:%103=69%:%
-  %:%109=69%:%
-  %:%112=70%:%
-  %:%113=71%:%
-  %:%114=72%:%
-  %:%115=72%:%
-  %:%116=73%:%
-  %:%117=74%:%
-  %:%118=75%:%
-  %:%119=75%:%
-  %:%120=76%:%
-  %:%127=77%:%
-  %:%128=77%:%
-  %:%133=77%:%
-  %:%136=78%:%
-  %:%137=79%:%
-  %:%138=80%:%
-  %:%139=80%:%
-  %:%140=81%:%
-  %:%147=82%:%
-  %:%148=82%:%
-  %:%149=83%:%
-  %:%150=83%:%
-  %:%151=84%:%
-  %:%157=84%:%
-  %:%160=85%:%
-  %:%161=87%:%
-  %:%162=88%:%
-  %:%163=88%:%
-  %:%164=89%:%
-  %:%165=90%:%
-  %:%172=91%:%
-  %:%173=91%:%
-  %:%178=91%:%
-  %:%181=92%:%
-  %:%182=93%:%
-  %:%183=94%:%
-  %:%184=94%:%
-  %:%185=95%:%
-  %:%192=96%:%
-  %:%193=96%:%
-  %:%198=96%:%
-  %:%201=97%:%
-  %:%202=98%:%
-  %:%203=99%:%
-  %:%204=99%:%
-  %:%211=100%:%
-  %:%212=100%:%
-  %:%213=101%:%
-  %:%214=101%:%
-  %:%215=102%:%
-  %:%221=102%:%
-  %:%224=103%:%
-  %:%225=104%:%
-  %:%226=105%:%
-  %:%227=105%:%
-  %:%234=106%:%
-  %:%235=106%:%
-  %:%236=107%:%
-  %:%242=107%:%
-  %:%245=108%:%
-  %:%246=109%:%
-  %:%247=110%:%
-  %:%248=110%:%
-  %:%255=111%:%
-  %:%256=111%:%
-  %:%257=112%:%
-  %:%258=112%:%
-  %:%259=113%:%
-  %:%265=113%:%
-  %:%268=114%:%
-  %:%269=116%:%
-  %:%270=117%:%
-  %:%271=118%:%
-  %:%272=118%:%
-  %:%279=119%:%
-  %:%280=119%:%
-  %:%285=119%:%
-  %:%288=120%:%
-  %:%289=121%:%
-  %:%290=121%:%
-  %:%297=122%:%
-  %:%298=122%:%
-  %:%303=122%:%
-  %:%306=123%:%
-  %:%307=124%:%
-  %:%308=124%:%
-  %:%309=125%:%
-  %:%310=126%:%
-  %:%311=127%:%
-  %:%312=128%:%
-  %:%313=128%:%
-  %:%314=129%:%
-  %:%317=130%:%
-  %:%318=131%:%
-  %:%322=131%:%
-  %:%323=131%:%
-  %:%324=132%:%
-  %:%325=132%:%
-  %:%326=133%:%
-  %:%332=133%:%
-  %:%335=134%:%
-  %:%336=135%:%
-  %:%337=136%:%
-  %:%338=136%:%
-  %:%339=137%:%
-  %:%342=138%:%
-  %:%343=139%:%
-  %:%347=139%:%
-  %:%348=139%:%
-  %:%349=140%:%
-  %:%350=140%:%
-  %:%351=141%:%
-  %:%352=141%:%
-  %:%353=141%:%
-  %:%358=141%:%
-  %:%361=142%:%
-  %:%362=143%:%
-  %:%363=144%:%
-  %:%364=144%:%
-  %:%365=145%:%
-  %:%366=146%:%
-  %:%369=147%:%
-  %:%370=148%:%
-  %:%374=148%:%
-  %:%375=148%:%
-  %:%376=149%:%
-  %:%377=149%:%
-  %:%378=150%:%
-  %:%384=150%:%
-  %:%387=151%:%
-  %:%388=152%:%
-  %:%389=152%:%
-  %:%390=153%:%
-  %:%391=154%:%
-  %:%394=155%:%
-  %:%395=156%:%
-  %:%399=156%:%
-  %:%400=156%:%
-  %:%401=157%:%
-  %:%402=157%:%
-  %:%403=158%:%
-  %:%409=158%:%
-  %:%412=159%:%
-  %:%413=160%:%
-  %:%414=161%:%
-  %:%415=162%:%
-  %:%416=162%:%
-  %:%423=163%:%
-  %:%424=163%:%
-  %:%429=163%:%
-  %:%432=164%:%
-  %:%433=165%:%
-  %:%434=165%:%
-  %:%441=166%:%
-  %:%442=166%:%
-  %:%447=166%:%
-  %:%450=167%:%
-  %:%451=168%:%
-  %:%452=168%:%
-  %:%459=169%:%
-  %:%460=169%:%
-  %:%465=169%:%
-  %:%468=170%:%
-  %:%469=171%:%
-  %:%470=171%:%
-  %:%477=172%:%
-  %:%478=172%:%
-  %:%483=172%:%
-  %:%486=173%:%
-  %:%487=174%:%
-  %:%488=175%:%
-  %:%489=175%:%
-  %:%490=176%:%
-  %:%497=177%:%
-  %:%498=177%:%
-  %:%499=178%:%
-  %:%500=178%:%
-  %:%501=179%:%
-  %:%507=179%:%
-  %:%510=180%:%
-  %:%511=181%:%
-  %:%512=181%:%
-  %:%513=182%:%
-  %:%514=182%:%
-  %:%515=182%:%
-  %:%516=183%:%
-  %:%517=184%:%
-  %:%518=185%:%
-  %:%519=186%:%
-  %:%520=187%:%
-  %:%521=188%:%
-  %:%522=189%:%
-  %:%523=190%:%
-  %:%524=190%:%
-  %:%525=191%:%
-  %:%526=192%:%
-  %:%533=193%:%
-  %:%534=193%:%
-  %:%548=196%:%
-  %:%564=197%:%
-  %:%565=197%:%
-  %:%566=198%:%
-  %:%600=227%:%
-  %:%603=228%:%
-  %:%604=229%:%
-  %:%605=230%:%
-  %:%606=230%:%
-  %:%607=231%:%
-  %:%614=232%:%
-  %:%615=232%:%
-  %:%620=232%:%
-  %:%623=233%:%
-  %:%626=234%:%
-  %:%631=235%:%
-  %:%632=235%:%
-  %:%637=240%:%
-  %:%638=241%:%
-  %:%639=242%:%
-  %:%640=243%:%
-  %:%641=243%:%
-  %:%643=245%:%
-  %:%644=246%:%
-  %:%645=247%:%
-  %:%646=248%:%
-  %:%647=248%:%
-  %:%649=250%:%
-  %:%650=251%:%
-  %:%655=251%:%
-  %:%658=252%:%
-  %:%659=253%:%
-  %:%660=253%:%
-  %:%667=254%:%
-  %:%668=254%:%
-  %:%673=254%:%
-  %:%676=255%:%
-  %:%677=256%:%
-  %:%678=257%:%
-  %:%679=257%:%
-  %:%682=258%:%
-  %:%687=259%:%
+  %:%35=24%:%
+  %:%45=26%:%
+  %:%46=26%:%
+  %:%47=27%:%
+  %:%48=28%:%
+  %:%49=30%:%
+  %:%50=31%:%
+  %:%51=31%:%
+  %:%52=32%:%
+  %:%61=36%:%
+  %:%71=37%:%
+  %:%72=37%:%
+  %:%73=38%:%
+  %:%74=39%:%
+  %:%75=39%:%
+  %:%76=40%:%
+  %:%77=41%:%
+  %:%78=42%:%
+  %:%79=43%:%
+  %:%80=43%:%
+  %:%81=44%:%
+  %:%82=45%:%
+  %:%83=45%:%
+  %:%84=46%:%
+  %:%85=47%:%
+  %:%86=48%:%
+  %:%87=49%:%
+  %:%94=51%:%
+  %:%104=52%:%
+  %:%105=52%:%
+  %:%106=53%:%
+  %:%107=54%:%
+  %:%108=55%:%
+  %:%109=55%:%
+  %:%116=56%:%
+  %:%117=56%:%
+  %:%118=57%:%
+  %:%119=57%:%
+  %:%120=58%:%
+  %:%126=58%:%
+  %:%129=59%:%
+  %:%130=64%:%
+  %:%131=65%:%
+  %:%132=65%:%
+  %:%133=66%:%
+  %:%140=67%:%
+  %:%141=67%:%
+  %:%142=68%:%
+  %:%143=68%:%
+  %:%144=69%:%
+  %:%150=69%:%
+  %:%153=70%:%
+  %:%154=71%:%
+  %:%155=72%:%
+  %:%156=72%:%
+  %:%157=73%:%
+  %:%158=74%:%
+  %:%159=75%:%
+  %:%160=75%:%
+  %:%161=76%:%
+  %:%168=77%:%
+  %:%169=77%:%
+  %:%174=77%:%
+  %:%177=78%:%
+  %:%178=79%:%
+  %:%179=80%:%
+  %:%180=80%:%
+  %:%181=81%:%
+  %:%188=82%:%
+  %:%189=82%:%
+  %:%190=83%:%
+  %:%191=83%:%
+  %:%192=84%:%
+  %:%198=84%:%
+  %:%201=85%:%
+  %:%202=87%:%
+  %:%203=88%:%
+  %:%204=88%:%
+  %:%205=89%:%
+  %:%206=90%:%
+  %:%213=91%:%
+  %:%214=91%:%
+  %:%219=91%:%
+  %:%222=92%:%
+  %:%223=93%:%
+  %:%224=94%:%
+  %:%225=94%:%
+  %:%226=95%:%
+  %:%233=96%:%
+  %:%234=96%:%
+  %:%239=96%:%
+  %:%242=97%:%
+  %:%243=98%:%
+  %:%244=99%:%
+  %:%245=99%:%
+  %:%252=100%:%
+  %:%253=100%:%
+  %:%254=101%:%
+  %:%255=101%:%
+  %:%256=102%:%
+  %:%262=102%:%
+  %:%265=103%:%
+  %:%266=104%:%
+  %:%267=105%:%
+  %:%268=105%:%
+  %:%275=106%:%
+  %:%276=106%:%
+  %:%277=107%:%
+  %:%283=107%:%
+  %:%286=108%:%
+  %:%287=109%:%
+  %:%288=110%:%
+  %:%289=110%:%
+  %:%296=111%:%
+  %:%297=111%:%
+  %:%298=112%:%
+  %:%299=112%:%
+  %:%300=113%:%
+  %:%310=117%:%
+  %:%312=118%:%
+  %:%313=118%:%
+  %:%320=119%:%
+  %:%321=119%:%
+  %:%326=119%:%
+  %:%329=120%:%
+  %:%330=121%:%
+  %:%331=121%:%
+  %:%338=122%:%
+  %:%339=122%:%
+  %:%344=122%:%
+  %:%347=123%:%
+  %:%348=124%:%
+  %:%349=124%:%
+  %:%356=126%:%
+  %:%366=128%:%
+  %:%367=128%:%
+  %:%368=129%:%
+  %:%371=130%:%
+  %:%372=131%:%
+  %:%376=131%:%
+  %:%377=131%:%
+  %:%378=132%:%
+  %:%379=132%:%
+  %:%380=133%:%
+  %:%386=133%:%
+  %:%389=134%:%
+  %:%390=135%:%
+  %:%391=136%:%
+  %:%392=136%:%
+  %:%393=137%:%
+  %:%396=138%:%
+  %:%397=139%:%
+  %:%401=139%:%
+  %:%402=139%:%
+  %:%403=140%:%
+  %:%404=140%:%
+  %:%405=141%:%
+  %:%406=141%:%
+  %:%407=141%:%
+  %:%412=141%:%
+  %:%415=142%:%
+  %:%416=143%:%
+  %:%417=144%:%
+  %:%418=144%:%
+  %:%419=145%:%
+  %:%420=146%:%
+  %:%423=147%:%
+  %:%424=148%:%
+  %:%428=148%:%
+  %:%429=148%:%
+  %:%430=149%:%
+  %:%431=149%:%
+  %:%432=150%:%
+  %:%438=150%:%
+  %:%441=151%:%
+  %:%442=152%:%
+  %:%443=152%:%
+  %:%444=153%:%
+  %:%445=154%:%
+  %:%448=155%:%
+  %:%449=156%:%
+  %:%453=156%:%
+  %:%454=156%:%
+  %:%455=157%:%
+  %:%456=157%:%
+  %:%457=158%:%
+  %:%472=160%:%
+  %:%482=162%:%
+  %:%483=162%:%
+  %:%490=163%:%
+  %:%491=163%:%
+  %:%496=163%:%
+  %:%499=164%:%
+  %:%500=165%:%
+  %:%501=165%:%
+  %:%508=166%:%
+  %:%509=166%:%
+  %:%514=166%:%
+  %:%517=167%:%
+  %:%518=168%:%
+  %:%519=168%:%
+  %:%526=169%:%
+  %:%527=169%:%
+  %:%532=169%:%
+  %:%535=170%:%
+  %:%536=171%:%
+  %:%537=171%:%
+  %:%544=172%:%
+  %:%545=172%:%
+  %:%550=172%:%
+  %:%553=173%:%
+  %:%554=174%:%
+  %:%555=175%:%
+  %:%556=175%:%
+  %:%557=176%:%
+  %:%564=177%:%
+  %:%565=177%:%
+  %:%566=178%:%
+  %:%567=178%:%
+  %:%568=179%:%
+  %:%574=179%:%
+  %:%577=180%:%
+  %:%578=181%:%
+  %:%579=181%:%
+  %:%580=182%:%
+  %:%581=182%:%
+  %:%582=182%:%
+  %:%583=183%:%
+  %:%584=184%:%
+  %:%585=185%:%
+  %:%586=186%:%
+  %:%587=187%:%
+  %:%588=188%:%
+  %:%589=189%:%
+  %:%590=190%:%
+  %:%591=190%:%
+  %:%592=191%:%
+  %:%593=192%:%
+  %:%600=193%:%
+  %:%601=193%:%
+  %:%615=196%:%
+  %:%631=197%:%
+  %:%632=197%:%
+  %:%633=198%:%
+  %:%667=227%:%
+  %:%670=228%:%
+  %:%671=229%:%
+  %:%672=230%:%
+  %:%673=230%:%
+  %:%674=231%:%
+  %:%681=232%:%
+  %:%682=232%:%
+  %:%687=232%:%
+  %:%690=233%:%
+  %:%693=234%:%
+  %:%698=235%:%
+  %:%699=235%:%
+  %:%704=240%:%
+  %:%705=241%:%
+  %:%706=242%:%
+  %:%707=243%:%
+  %:%708=243%:%
+  %:%710=245%:%
+  %:%711=246%:%
+  %:%712=247%:%
+  %:%713=248%:%
+  %:%714=248%:%
+  %:%716=250%:%
+  %:%717=251%:%
+  %:%722=251%:%
+  %:%725=252%:%
+  %:%726=253%:%
+  %:%727=253%:%
+  %:%734=254%:%
+  %:%735=254%:%
+  %:%740=254%:%
+  %:%743=255%:%
+  %:%744=256%:%
+  %:%745=257%:%
+  %:%746=257%:%
+  %:%749=258%:%
+  %:%754=259%:%

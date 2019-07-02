@@ -21,7 +21,7 @@ axiomatization
 where
   inj_shrK : "inj shrK"
 
-(* SMARTPHONE USAGE *)
+section\<open>Smartphone Usage\<close>
 (* Legal agents use their smartphone if they hold it *)
 definition legalUse :: "smartphone \<Rightarrow> bool" ("legalUse (_)") where
   "legalUse P == P \<notin> stolen"
@@ -33,7 +33,7 @@ primrec illegalUse :: "smartphone \<Rightarrow> bool" where
     (insecureP \<and> (Smartphone A \<in> stolen) \<or> (Smartphone A \<in> badP)) \<or>
     (secureP   \<and> (Smartphone A \<in> stolen)))"
   
-(* AGENTS' INITIAL STATE *)
+section\<open>Agents' Initial State\<close>
 overloading initState \<equiv> initState
   begin
   primrec initState where
@@ -48,7 +48,7 @@ axiomatization where
   (*Needed because of Spy's knowledge of Pairkeys*)
   Nonce_supply_ax: "finite NN \<Longrightarrow> \<exists> N. N \<notin> NN & Nonce N \<notin> used evs"
 
-(* PROPERTIES OF SHARED KEYS *)
+section\<open>Shared Key Properties\<close>
 declare inj_shrK [THEN inj_eq, iff]
 
 (* Shared key encryption is symmetric *)
@@ -114,7 +114,7 @@ done
 
 (* Following lemmas are used in parts_induct_tac and analz_Fake_tac to distinguish session keys
    from long-term shared keys *)
-(* If a key is fresh, then it must not a long-term key *)
+text\<open>If a key is fresh, then it must not a long-term key\<close>
 lemma Key_not_used [simp]: "Key K \<notin> used evs \<Longrightarrow> K \<notin> range shrK"
 by blast
 
@@ -123,7 +123,7 @@ by blast
 
 declare shrK_neq [THEN not_sym, simp]
 
-(* FUNCTION KNOWS *)
+section\<open>Function \<^term>\<open>knows\<close>\<close>
 (* An agent's compromised Smartphone disclose hers shared keys *)
 lemma Spy_knows_bad_phones [intro!] :
   "Smartphone A \<in> badP \<Longrightarrow> Key (shrK A) \<in> knows Spy evs"
@@ -157,7 +157,7 @@ lemma Crypt_Spy_analz_stolen :
   apply (simp add: Spy_knows_stolen_phones)
 done
 
-(* NONCE LEMMAS *)
+section\<open>Nonce Lemmas\<close>
 (* Nonces must be fresh! So no nonces in initial state of agents knowledge *)
 lemma Nonce_notin_initState [iff]: "Nonce N \<notin> parts (initState (Friend i))"
 by auto
@@ -193,7 +193,7 @@ lemma analz_image_freshK_lemma:
 by (blast intro: analz_mono [THEN [2] rev_subsetD])
 
 
-subsection\<open>Tactics for possibility theorems\<close>
+section\<open>Tactics for possibility theorems\<close>
 ML
 \<open>
 structure Smartphone =
