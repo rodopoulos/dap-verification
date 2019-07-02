@@ -1,0 +1,2728 @@
+%
+\begin{isabellebody}%
+  \setisabellecontext{SDAP{\isacharunderscore}Transaction}%
+  %
+  \isadelimtheory
+  \isanewline
+  \isanewline
+  %
+  \endisadelimtheory
+  %
+  \isatagtheory
+  \isacommand{theory}\isamarkupfalse%
+  \ SDAP{\isacharunderscore}Transaction\ \isakeyword{imports}\ {\isachardoublequoteopen}{\isachardot}{\isacharslash}Smartphone{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \isakeyword{begin}%
+  \endisatagtheory
+  {\isafoldtheory}%
+  %
+  \isadelimtheory
+  \isanewline
+  %
+  \endisadelimtheory
+  \isanewline
+  \isacommand{axiomatization}\isamarkupfalse%
+  \ \isakeyword{where}\isanewline
+  \ \ sdaptrans{\isacharunderscore}assume{\isacharunderscore}insecure{\isacharunderscore}devices\ {\isacharbrackleft}iff{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ secureP{\isachardoublequoteclose}%
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Protocol Model%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{inductive{\isacharunderscore}set}\isamarkupfalse%
+  \ sdaptrans\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}event\ list\ set{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
+  \ \ Nil{\isacharcolon}\ {\isachardoublequoteopen}{\isacharbrackleft}{\isacharbrackright}\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ {\isacharbar}\ DT{\isadigit{1}}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{1}}\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ A\ {\isasymnoteq}\ Server\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Says\ A\ Server\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isacharhash}\ evs{\isadigit{1}}\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ {\isacharbar}\ DT{\isadigit{2}}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{2}}\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ Nonce\ r\ {\isasymnotin}\ used\ evs{\isadigit{2}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Gets\ Server\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{2}}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Says\ Server\ A\ {\isasymlbrace}\ \isanewline
+  \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isacharhash}\ evs{\isadigit{2}}\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ {\isacharbar}\ DT{\isadigit{3}}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{3}}\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ legalUse\ {\isacharparenleft}Smartphone\ A{\isacharparenright}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Says\ A\ Server\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{3}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Gets\ A\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{3}}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isacharhash}\ evs{\isadigit{3}}\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ {\isacharbar}\ DT{\isadigit{4}}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{4}}\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ legalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{4}}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isacharhash}\ evs{\isadigit{4}}\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ {\isacharbar}\ DT{\isadigit{4}}{\isacharunderscore}Fake{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{4}}f\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ illegalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Scans\ Spy\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{4}}f{\isasymrbrakk}\isanewline
+  \ \ \ \ \ {\isasymLongrightarrow}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ Spy\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isacharhash}\ evs{\isadigit{4}}f\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ \isanewline
+  \ \ {\isacharbar}\ DT{\isadigit{5}}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{5}}\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ legalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Says\ A\ Server\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{5}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Gets\ A\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{5}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{5}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{5}}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Inputs\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isacharhash}\ evs{\isadigit{5}}\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ {\isacharbar}\ DT{\isadigit{6}}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{6}}\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ legalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{6}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{6}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Inputs\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{6}}\ {\isasymrbrakk}\isanewline
+  \ \ \ {\isasymLongrightarrow}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isacharhash}\ evs{\isadigit{6}}\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ \ {\isacharbar}\ DT{\isadigit{6}}{\isacharunderscore}Fake{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{6}}f\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ illegalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Scans\ Spy\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{6}}f{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ Spy\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{6}}f{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Inputs\ Spy\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{6}}f\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ Spy\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isacharhash}\ evs{\isadigit{6}}f\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ {\isacharbar}\ DT{\isadigit{7}}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{7}}\ {\isasymin}\ sdaptrans{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Says\ A\ Server\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{7}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Gets\ A\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{7}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{7}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{7}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Inputs\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{7}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ set\ evs{\isadigit{7}}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Says\ A\ Server\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isacharhash}\ evs{\isadigit{7}}\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ {\isacharbar}\ DT{\isadigit{8}}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evs{\isadigit{8}}\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ A\ {\isasymnoteq}\ Server{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Gets\ Server\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{8}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Says\ Server\ A\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isadigit{8}}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Gets\ Server\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ set\ evs{\isadigit{8}}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Says\ Server\ A\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ \ {\isacharhash}\ evs{\isadigit{8}}\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \ \ \isanewline
+  \ \ {\isacharbar}\ Fake{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evsF\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ X\ {\isasymin}\ synth{\isacharparenleft}analz{\isacharparenleft}knows\ Spy\ evsF{\isacharparenright}{\isacharparenright}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ \ illegalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Says\ Spy\ B\ X\ {\isacharhash}\isanewline
+  \ \ \ \ \ \ \ \ Scans\ Spy\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ X\ {\isacharhash}\ evsF\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \ \ \isanewline
+  \ \ \isanewline
+  \ \ {\isacharbar}\ Rcpt{\isacharcolon}\ {\isachardoublequoteopen}{\isasymlbrakk}\ evsR\ {\isasymin}\ sdaptrans{\isacharsemicolon}\ Says\ A\ B\ X\ {\isasymin}\ set\ evsR\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ Gets\ B\ X\ {\isacharhash}\ evsR\ {\isasymin}\ sdaptrans{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \isanewline
+  \isacommand{declare}\isamarkupfalse%
+  \ Fake{\isacharunderscore}parts{\isacharunderscore}insert{\isacharunderscore}in{\isacharunderscore}Un\ \ {\isacharbrackleft}dest{\isacharbrackright}\isanewline
+  \isacommand{declare}\isamarkupfalse%
+  \ analz{\isacharunderscore}into{\isacharunderscore}parts\ {\isacharbrackleft}dest{\isacharbrackright}%
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Message Reception Lemmas%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Gets{\isacharunderscore}imp{\isacharunderscore}Says\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Gets\ B\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ {\isasymexists}\ A{\isachardot}\ Says\ A\ B\ X\ {\isasymin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Gets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Gets\ B\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ Gets{\isacharunderscore}imp{\isacharunderscore}Says\ Says{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \ \ \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Gets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}analz\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Gets\ B\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ X\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ Gets{\isacharunderscore}imp{\isacharunderscore}Says\ Says{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Gets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}analz{\isacharunderscore}Snd\ {\isacharcolon}\isanewline
+  \ {\isachardoublequoteopen}{\isasymlbrakk}\ Gets\ B\ {\isasymlbrace}X{\isacharcomma}\ Y{\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ Y\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ Gets{\isacharunderscore}imp{\isacharunderscore}Says\ Says{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy\ analz{\isachardot}Inj\ analz{\isachardot}Snd{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemmas}\isamarkupfalse%
+  \ Gets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}parts\ {\isacharbrackleft}dest{\isacharbrackright}\ {\isacharequal}\ Gets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}analz\ {\isacharbrackleft}THEN\ analz{\isacharunderscore}into{\isacharunderscore}parts{\isacharbrackright}\isanewline
+  \isacommand{lemmas}\isamarkupfalse%
+  \ Gets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}parts{\isacharunderscore}Snd\ {\isacharbrackleft}dest{\isacharbrackright}\ {\isacharequal}\ Gets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}analz{\isacharunderscore}Snd\ {\isacharbrackleft}THEN\ analz{\isacharunderscore}into{\isacharunderscore}parts{\isacharbrackright}\isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ SGets{\isacharunderscore}imp{\isacharunderscore}Scans\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ SGets\ P\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ \isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isasymexists}\ A{\isachardot}\ {\isacharparenleft}Scans\ A\ P\ X\ {\isasymin}\ set\ evs{\isacharparenright}\ {\isasymor}\ {\isacharparenleft}Inputs\ A\ P\ X\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ SGets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ SGets\ {\isacharparenleft}Smartphone\ B{\isacharparenright}\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ {\isacharparenleft}Smartphone\ B{\isacharparenright}\ {\isasymin}\ badP{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ SGets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}analz\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ SGets\ {\isacharparenleft}Smartphone\ B{\isacharparenright}\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ {\isacharparenleft}Smartphone\ B{\isacharparenright}\ {\isasymin}\ badP{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ X\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ SGets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemmas}\isamarkupfalse%
+  \ SGets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}parts\ {\isacharbrackleft}dest{\isacharbrackright}\ {\isacharequal}\ SGets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}analz\ {\isacharbrackleft}THEN\ analz{\isacharunderscore}into{\isacharunderscore}parts{\isacharbrackright}\isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ AGets{\isacharunderscore}imp{\isacharunderscore}Shows\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ AGets\ A\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ {\isasymexists}\ P{\isachardot}\ Shows\ P\ A\ X\ {\isasymin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Smartphone Device Lemmas%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}insecureP{\isacharunderscore}sdaptrans\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ Spy\ P\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ add{\isacharcolon}\ Scans{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Scans{\isacharunderscore}insecureP{\isacharunderscore}sdaptrans{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}Scans\ Spy\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Scans{\isacharunderscore}insecureP{\isacharunderscore}sdaptrans\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ A\ {\isasymnoteq}\ Spy{\isacharsemicolon}\ A\ {\isasymin}\ bad{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ \isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}Scans\ A\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Shows{\isacharunderscore}secureM{\isacharunderscore}sdaptrans{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}Shows\ P\ Spy\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Shows{\isacharunderscore}secureP{\isacharunderscore}sdaptrans\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ P\ {\isasymin}\ stolen{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}Shows\ P\ Spy\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Inputs{\isacharunderscore}sdaptrans{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}Inputs\ Spy\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Inputs{\isacharunderscore}sdaptrans\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ A\ {\isasymnoteq}\ Spy{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ \isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}Inputs\ A\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Reliability Lemmas%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \begin{isamarkuptext}%
+  For reasoning about encrypted portion of messages%
+  \end{isamarkuptext}\isamarkuptrue%
+  \isacommand{lemma}\isamarkupfalse%
+  \ DT{\isadigit{3}}{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}fst\ {\isacharcolon}\isanewline
+  \ {\isachardoublequoteopen}{\isasymlbrakk}\ Gets\ A\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ r{\isacharprime}\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ Gets{\isacharunderscore}imp{\isacharunderscore}Says\ Gets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}analz{\isacharunderscore}Snd{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ DT{\isadigit{3}}{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}snd\ {\isacharcolon}\isanewline
+  \ {\isachardoublequoteopen}{\isasymlbrakk}\ Gets\ A\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ h\isactrlsub s\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ Gets{\isacharunderscore}imp{\isacharunderscore}Says\ Gets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}analz{\isacharunderscore}Snd{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemmas}\isamarkupfalse%
+  \ DT{\isadigit{3}}{\isacharunderscore}parts{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}fst\ {\isacharequal}\ DT{\isadigit{3}}{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}fst\ {\isacharbrackleft}THEN\ analz{\isacharunderscore}into{\isacharunderscore}parts{\isacharbrackright}\isanewline
+  \isacommand{lemmas}\isamarkupfalse%
+  \ DT{\isadigit{3}}{\isacharunderscore}parts{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}snd\ {\isacharequal}\ DT{\isadigit{3}}{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}snd\ {\isacharbrackleft}THEN\ analz{\isacharunderscore}into{\isacharunderscore}parts{\isacharbrackright}%
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsubsection{Server Guarantees%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Says{\isacharunderscore}Server{\isacharunderscore}DT{\isadigit{1}}{\isacharunderscore}not{\isacharunderscore}evs\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ Says\ Server\ Server\ {\isasymlbrace}\ Agent\ Server{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymnotin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Server{\isacharunderscore}cannot{\isacharunderscore}initiate\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ A\ Server\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ A\ {\isasymnoteq}\ Server{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \begin{isamarkuptext}%
+  The Server smartphone is not usable%
+  \end{isamarkuptext}\isamarkuptrue%
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}Agent{\isacharunderscore}Server{\isacharunderscore}not{\isacharunderscore}evs\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharcomma}\ simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ Scans\ Server\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ X\ {\isasymnotin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharcolon}Server{\isacharunderscore}cannot{\isacharunderscore}initiate{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}Server{\isacharunderscore}Agent{\isacharunderscore}not{\isacharunderscore}evs\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ Scans\ A\ {\isacharparenleft}Smartphone\ Server{\isacharparenright}\ X\ {\isasymnotin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharcolon}Server{\isacharunderscore}cannot{\isacharunderscore}initiate{\isacharparenright}{\isacharplus}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}Agent{\isacharunderscore}Server{\isacharunderscore}not{\isacharunderscore}evs\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ Server\ X\ {\isasymnotin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharcolon}Scans{\isacharunderscore}Server{\isacharunderscore}Agent{\isacharunderscore}not{\isacharunderscore}evs{\isacharparenright}{\isacharplus}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}Server{\isacharunderscore}Agent{\isacharunderscore}not{\isacharunderscore}evs\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}{\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ Shows\ {\isacharparenleft}Smartphone\ Server{\isacharparenright}\ A\ X\ {\isasymnotin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharcolon}Scans{\isacharunderscore}Server{\isacharunderscore}Agent{\isacharunderscore}not{\isacharunderscore}evs{\isacharparenright}{\isacharplus}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \begin{isamarkuptext}%
+  Server expected message form to the sender%
+  \end{isamarkuptext}\isamarkuptrue%
+  \isacommand{lemma}\isamarkupfalse%
+  \ Says{\isacharunderscore}Server{\isacharunderscore}DT{\isadigit{2}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ Server\ A\ {\isasymlbrace}\ \isanewline
+  \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ \isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\ \isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\ \isanewline
+  \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Gets\ Server\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \begin{isamarkuptext}%
+  The Server only authorizes a transaction if it received a nonce that matches the produced TAN%
+  \end{isamarkuptext}\isamarkuptrue%
+  \isacommand{lemma}\isamarkupfalse%
+  \ Says{\isacharunderscore}Server{\isacharunderscore}DT{\isadigit{8}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Server\ {\isasymnoteq}\ A{\isacharsemicolon}\isanewline
+  \ \ \ \ Says\ Server\ A\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\isanewline
+  \ \ \ \ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isasymexists}\ r{\isachardot}\isanewline
+  \ \ \ \ \ \ Gets\ Server\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ Says\ Server\ A\ {\isasymlbrace}\ \isanewline
+  \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ \isanewline
+  \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}{\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isasymrbrace}\isanewline
+  \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ Gets\ Server\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsubsection{Smartphone Usability Guarantees%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}Smartphone{\isacharunderscore}legalUse\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ legalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}Smartphone{\isacharunderscore}legalUse\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\ {\isasymLongrightarrow}\ legalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}Smartphone\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ A\ P\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ A\ {\isasymnoteq}\ Spy{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\ legalUse{\isacharparenleft}P{\isacharparenright}{\isacharparenright}\ {\isasymor}\ {\isacharparenleft}P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ Spy{\isacharparenright}\ {\isasymand}\ illegalUse{\isacharparenleft}P{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}Smartphone\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ P\ A\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ A\ {\isasymnoteq}\ Spy{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\ legalUse{\isacharparenleft}P{\isacharparenright}{\isacharparenright}\ {\isasymor}\ {\isacharparenleft}P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ Spy{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}Shows{\isacharunderscore}Smartphone\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ A\ P\ X\ {\isasymin}\ set\ evs\ {\isasymor}\ Shows\ P\ A\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ A\ {\isasymnoteq}\ Spy{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\ legalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast{\isacharparenright}{\isacharplus}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}Smartphone{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ Spy\ P\ X\ {\isasymin}\ set\ evs\ {\isasymor}\ Shows\ P\ Spy\ X\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ Spy{\isacharparenright}{\isacharparenright}\ {\isasymand}\ {\isacharparenleft}legalUse{\isacharparenleft}Smartphone\ Spy{\isacharparenright}{\isacharparenright}\ {\isasymor}\isanewline
+  \ \ \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}\ A{\isachardot}\ P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\ illegalUse{\isacharparenleft}Smartphone\ A{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsubsection{Protocol termination%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Protocol{\isacharunderscore}terminates\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymexists}\ A\ T{\isachardot}\ {\isasymexists}\ evs\ {\isasymin}\ sdaptrans{\isachardot}\ A\ {\isasymnoteq}\ Server\ {\isasymand}\ Says\ Server\ A\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}intro\ exI\ bexI{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}rule{\isacharunderscore}tac\ {\isacharbrackleft}{\isadigit{2}}{\isacharbrackright}\ sdaptrans{\isachardot}Nil\ {\isacharbrackleft}THEN\ sdaptrans{\isachardot}DT{\isadigit{1}}{\isacharcomma}\ THEN\ sdaptrans{\isachardot}Rcpt{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ THEN\ sdaptrans{\isachardot}DT{\isadigit{2}}{\isacharcomma}\ THEN\ sdaptrans{\isachardot}Rcpt{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ THEN\ sdaptrans{\isachardot}DT{\isadigit{3}}{\isacharcomma}\ THEN\ sdaptrans{\isachardot}DT{\isadigit{4}}{\isacharcomma}\ \isanewline
+  \ \ \ \ \ \ \ \ THEN\ sdaptrans{\isachardot}DT{\isadigit{5}}{\isacharcomma}\ THEN\ sdaptrans{\isachardot}DT{\isadigit{6}}{\isacharcomma}\ \isanewline
+  \ \ \ \ \ \ \ \ THEN\ sdaptrans{\isachardot}DT{\isadigit{7}}{\isacharcomma}\ THEN\ sdaptrans{\isachardot}Rcpt{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ THEN\ sdaptrans{\isachardot}DT{\isadigit{8}}{\isacharbrackright}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}possibility{\isacharcomma}\ auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsubsection{Scans Event Guarantees%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}A{\isacharunderscore}honest{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{3}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ A\ P\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ A\ {\isasymnoteq}\ Spy{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}legalUse{\isacharparenleft}P{\isacharparenright}{\isacharparenright}\ {\isasymand}\ P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ Says\ A\ Server\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ Gets\ A\ {\isasymlbrace}\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \begin{isamarkuptext}%
+  This is an important guarantee: the protocol legally continues if the agent confirms the outputed message, which contains the transaction%
+  \end{isamarkuptext}\isamarkuptrue%
+  \isacommand{lemma}\isamarkupfalse%
+  \ Inputs{\isacharunderscore}A{\isacharunderscore}honest{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{5}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Inputs\ A\ P\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ A\ {\isasymnoteq}\ Spy{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}legalUse{\isacharparenleft}P{\isacharparenright}{\isacharparenright}\ {\isasymand}\ P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}\ r{\isacharprime}\ h\isactrlsub s{\isachardot}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Says\ A\ Server\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Gets\ A\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Inputs{\isacharunderscore}A{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{5}}\ {\isacharcolon}\ \isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Inputs\ A\ P\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}legalUse{\isacharparenleft}P{\isacharparenright}{\isacharparenright}\ {\isasymand}\ P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}\ r{\isacharprime}\ h\isactrlsub s{\isachardot}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Says\ A\ Server\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Gets\ A\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsubsection{Shows Event Guarantees%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}which{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{4}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}{\isasymexists}\ r{\isachardot}\ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}honest{\isacharunderscore}A{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{4}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ P\ A\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ A\ {\isasymnoteq}\ Spy{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}legalUse{\isacharparenleft}P{\isacharparenright}{\isacharparenright}\ {\isasymand}\ P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}\ r{\isachardot}\ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}force{\isacharplus}{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}A{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{4}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ P\ A\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}legalUse{\isacharparenleft}P{\isacharparenright}{\isacharparenright}\ {\isasymand}\ P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}\ r{\isachardot}\ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharcomma}\ force{\isacharplus}{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}uncompromised{\isacharunderscore}A{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{6}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ P\ A\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ legalUse{\isacharparenleft}P{\isacharparenright}{\isacharsemicolon}\ P\ {\isasymnotin}\ badP{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}{\isacharparenright}\ {\isasymand}\ {\isacharparenleft}{\isasymexists}\ T{\isachardot}\ Inputs\ A\ P\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast{\isacharplus}{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}honest{\isacharunderscore}A{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{6}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ P\ A\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ A\ {\isasymnoteq}\ Spy{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}legalUse{\isacharparenleft}P{\isacharparenright}{\isacharparenright}\ {\isasymand}\ P\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}\ T{\isachardot}\ Inputs\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharcomma}\ force{\isacharplus}{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}Someone{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{6}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ B\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}{\isasymexists}\ T{\isachardot}\ Inputs\ B\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast{\isacharplus}{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}which{\isacharunderscore}Smartphone{\isacharunderscore}{\isadigit{6}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}{\isasymexists}\ T{\isachardot}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ \ Inputs\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}A{\isacharunderscore}Smartphone{\isacharunderscore}form{\isacharunderscore}{\isadigit{3}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ Transaction{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ \isanewline
+  \ \ \ \ \ {\isasymforall}\ p\ q{\isachardot}\ Transaction\ {\isacharequal}\ {\isasymlbrace}p{\isacharcomma}\ q{\isasymrbrace}{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}{\isasymexists}\ T\ r{\isachardot}\ Transaction\ {\isacharequal}\ {\isasymlbrace}\ Agent\ A{\isacharcomma}\ Number\ T\ {\isasymrbrace}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}A{\isacharunderscore}Smartphone{\isacharunderscore}form{\isacharunderscore}{\isadigit{4}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ Transaction\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans{\isacharsemicolon}\isanewline
+  \ \ \ \ {\isasymforall}\ p\ q{\isachardot}\ Transaction\ {\isacharequal}\ {\isasymlbrace}p{\isacharcomma}\ q{\isasymrbrace}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isasymexists}\ T{\isachardot}\ Transaction\ {\isacharequal}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}A{\isacharunderscore}Smartphone{\isacharunderscore}form{\isacharunderscore}{\isadigit{6}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ TAN\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans{\isacharsemicolon}\isanewline
+  \ \ \ \ {\isasymforall}\ p\ q{\isachardot}\ TAN\ {\isasymnoteq}\ {\isasymlbrace}p{\isacharcomma}\ q{\isasymrbrace}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isasymexists}\ r{\isachardot}\ TAN\ {\isacharequal}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Spy Counterguarantees%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Spy{\isacharunderscore}knows{\isacharunderscore}Transaction\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ A\ Server\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ \ {\isasymLongrightarrow}\ Number\ T\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ Says{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharbrackleft}THEN\ analz{\isachardot}Inj{\isacharcomma}\ THEN\ analz{\isachardot}Snd{\isacharbrackright}{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Spy{\isacharunderscore}knows{\isacharunderscore}TAN\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ A\ Server\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ Nonce\ r\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ Says{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ TAN{\isacharunderscore}Says{\isacharunderscore}Server{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ Server\ A\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ {\isasymLongrightarrow}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ add{\isacharcolon}\ analz{\isacharunderscore}insertI{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Hash{\isacharunderscore}Says{\isacharunderscore}Server{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ Server\ A\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ {\isasymLongrightarrow}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ add{\isacharcolon}\ analz{\isacharunderscore}insertI{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ TAN{\isacharunderscore}Scans{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\ \isanewline
+  \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ {\isasymLongrightarrow}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ add{\isacharcolon}\ analz{\isacharunderscore}insertI{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ DT{\isadigit{3}}{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}fst{\isacharparenright}{\isacharplus}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Hash{\isacharunderscore}Scans{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\ \isanewline
+  \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ {\isasymLongrightarrow}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ add{\isacharcolon}\ analz{\isacharunderscore}insertI{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ dest{\isacharbang}{\isacharcolon}\ DT{\isadigit{3}}{\isacharunderscore}analz{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}snd{\isacharparenright}{\isacharplus}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{REGULARITY LEMMAS%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Spy{\isacharunderscore}parts{\isacharunderscore}keys\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\ \isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ {\isacharparenleft}Key\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymin}\ parts\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A\ {\isasymin}\ badP{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}frule{\isacharunderscore}tac\ {\isacharbrackleft}{\isadigit{4}}{\isacharbrackright}\ DT{\isadigit{3}}{\isacharunderscore}parts{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}fst{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}frule{\isacharunderscore}tac\ {\isacharbrackleft}{\isadigit{5}}{\isacharbrackright}\ DT{\isadigit{3}}{\isacharunderscore}parts{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}snd{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto\ intro{\isacharbang}{\isacharcolon}parts{\isacharunderscore}insertI{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Spy{\isacharunderscore}analz{\isacharunderscore}shrK\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}evs\ {\isasymin}\ sdaptrans\ {\isasymLongrightarrow}\ {\isacharparenleft}Key\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymin}\ analz\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}Smartphone\ A\ {\isasymin}\ badP{\isacharparenright}{\isachardoublequoteclose}\ \isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}auto\ dest{\isacharbang}{\isacharcolon}\ Spy{\isacharunderscore}knows{\isacharunderscore}bad{\isacharunderscore}phones{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Propeties Lemmas%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Server{\isacharunderscore}transaction{\isacharunderscore}unique\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ Server\ A\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isacharsemicolon}\isanewline
+  \ \ \ \ Says\ Server\ A{\isacharprime}\ {\isasymlbrace}\ \isanewline
+  \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharprime}{\isacharcomma}\ Number\ T{\isacharprime}{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharprime}{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharprime}{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharprime}{\isacharcomma}\ Number\ T{\isacharprime}{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharprime}{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\isanewline
+  \ \ \ \ evs\ {\isasymin}\ sdaptrans{\isasymrbrakk}\isanewline
+  \ \ \ {\isasymLongrightarrow}\ A\ {\isacharequal}\ A{\isacharprime}\ {\isasymand}\ T\ {\isacharequal}\ T{\isacharprime}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\ \ \isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}fastforce\ dest{\isacharcolon}\ Says{\isacharunderscore}parts{\isacharunderscore}used{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Server{\isacharunderscore}Transaction{\isacharunderscore}not{\isacharunderscore}unique\ {\isacharcolon}\ \isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ Server\ A\ {\isasymlbrace}\ \isanewline
+  \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs\ {\isacharsemicolon}\isanewline
+  \ \ \ \ Says\ Server\ A\ {\isasymlbrace}\ \isanewline
+  \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharprime}{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharprime}{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\isanewline
+  \ \ \ \ evs\ {\isasymin}\ sdaptrans{\isasymrbrakk}\isanewline
+  \ \ \ {\isasymLongrightarrow}\ {\isasymexists}\ r\ r{\isacharprime}{\isachardot}\ {\isacharparenleft}r\ {\isacharequal}\ r{\isacharprime}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Ciphers{\isacharunderscore}authentic\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ parts\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isacharsemicolon}\isanewline
+  \ \ \ \ \ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymnotin}\ badP{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ \ {\isasymLongrightarrow}\ r{\isacharprime}\ {\isacharequal}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ h\isactrlsub s\ {\isacharequal}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isasymrbrace}\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ Says\ Server\ A\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\ \isanewline
+  \ \ \ \ \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ \ \ \ \ \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharcomma}\ erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ TAN{\isacharunderscore}A{\isacharunderscore}identity{\isacharunderscore}by{\isacharunderscore}Server\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ Server\ A{\isacharprime}\ {\isasymlbrace}\isanewline
+  \ \ \ \ \ \ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharcomma}\isanewline
+  \ \ \ \ \ \ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}\isanewline
+  \ \ \ \ \ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ \ {\isasymLongrightarrow}\ A{\isacharprime}\ {\isacharequal}\ A{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \begin{isamarkuptext}%
+  \isa{step{\isadigit{2}}{\isacharunderscore}integrity} also is a reliability theorem%
+  \end{isamarkuptext}\isamarkuptrue%
+  \isacommand{lemma}\isamarkupfalse%
+  \ Says{\isacharunderscore}Server{\isacharunderscore}message{\isacharunderscore}form{\isacharunderscore}DT{\isadigit{2}}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Says\ Server\ A\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ \ \ {\isasymLongrightarrow}\ {\isacharparenleft}{\isasymexists}\ r{\isachardot}\isanewline
+  \ \ \ \ \ \ \ \ \ r{\isacharprime}\ {\isacharequal}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymand}\isanewline
+  \ \ \ \ \ \ \ \ \ h\isactrlsub s\ {\isacharequal}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}\ {\isasymrbrace}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \begin{isamarkuptext}%
+  Rule DT3 format is the form of the message which the agent redirect to its smartphone.
+  It cannot be proven, since there is no way to the agent know what he is forwarding%
+  \end{isamarkuptext}\isamarkuptrue%
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}Smartphone{\isacharunderscore}A{\isacharunderscore}DT{\isadigit{3}}{\isacharunderscore}message{\isacharunderscore}form{\isacharunderscore}unprovable\ {\isacharcolon}\ \isanewline
+  \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymlbrace}\ {\isasymlbrace}Agent\ A{\isacharcomma}\ Number\ T{\isasymrbrace}{\isacharcomma}\ r{\isacharprime}{\isacharcomma}\ h\isactrlsub s\ {\isasymrbrace}\ {\isasymin}\ set\ evs{\isacharsemicolon}\ evs\ {\isasymin}\ sdaptrans\ {\isasymrbrakk}\isanewline
+  \ \ {\isasymLongrightarrow}\ {\isacharparenleft}{\isasymexists}\ r{\isacharprime}{\isachardot}\ {\isacharparenleft}{\isasymexists}\ r{\isachardot}\ r{\isacharprime}\ {\isasymnoteq}\ Crypt\ {\isacharparenleft}shrK\ A{\isacharparenright}\ {\isacharparenleft}Nonce\ r{\isacharparenright}{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ rev{\isacharunderscore}mp{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}erule\ sdaptrans{\isachardot}induct{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  %
+  \isadelimtheory
+  \isanewline
+  %
+  \endisadelimtheory
+  %
+  \isatagtheory
+  \isacommand{end}\isamarkupfalse%
+  %
+  \endisatagtheory
+  {\isafoldtheory}%
+  %
+  \isadelimtheory
+  %
+  \endisadelimtheory
+  %
+  \end{isabellebody}%
+  \endinput
+  %:%file=~/workspace/dap-verification/scripts/SDAP_Transaction.thy%:%
+  %:%6=4%:%
+  %:%7=5%:%
+  %:%12=6%:%
+  %:%13=6%:%
+  %:%14=7%:%
+  %:%15=8%:%
+  %:%20=8%:%
+  %:%23=9%:%
+  %:%24=10%:%
+  %:%25=10%:%
+  %:%26=11%:%
+  %:%33=13%:%
+  %:%43=14%:%
+  %:%44=14%:%
+  %:%45=15%:%
+  %:%46=16%:%
+  %:%47=17%:%
+  %:%48=18%:%
+  %:%49=19%:%
+  %:%50=20%:%
+  %:%56=26%:%
+  %:%57=27%:%
+  %:%58=28%:%
+  %:%61=31%:%
+  %:%62=32%:%
+  %:%63=33%:%
+  %:%69=39%:%
+  %:%70=40%:%
+  %:%71=41%:%
+  %:%77=47%:%
+  %:%78=48%:%
+  %:%79=49%:%
+  %:%80=50%:%
+  %:%85=55%:%
+  %:%86=56%:%
+  %:%87=57%:%
+  %:%95=65%:%
+  %:%96=66%:%
+  %:%97=67%:%
+  %:%106=76%:%
+  %:%107=77%:%
+  %:%108=78%:%
+  %:%115=85%:%
+  %:%116=86%:%
+  %:%117=87%:%
+  %:%125=95%:%
+  %:%126=96%:%
+  %:%127=97%:%
+  %:%128=98%:%
+  %:%131=101%:%
+  %:%132=102%:%
+  %:%133=103%:%
+  %:%134=104%:%
+  %:%135=105%:%
+  %:%136=106%:%
+  %:%137=107%:%
+  %:%138=107%:%
+  %:%139=108%:%
+  %:%140=108%:%
+  %:%147=110%:%
+  %:%157=111%:%
+  %:%158=111%:%
+  %:%159=112%:%
+  %:%162=113%:%
+  %:%163=114%:%
+  %:%167=114%:%
+  %:%168=114%:%
+  %:%169=115%:%
+  %:%170=115%:%
+  %:%171=116%:%
+  %:%177=116%:%
+  %:%180=117%:%
+  %:%181=118%:%
+  %:%182=118%:%
+  %:%183=119%:%
+  %:%190=120%:%
+  %:%191=120%:%
+  %:%196=120%:%
+  %:%199=121%:%
+  %:%200=122%:%
+  %:%201=122%:%
+  %:%202=123%:%
+  %:%209=124%:%
+  %:%210=124%:%
+  %:%215=124%:%
+  %:%218=125%:%
+  %:%219=126%:%
+  %:%220=126%:%
+  %:%221=127%:%
+  %:%224=128%:%
+  %:%225=129%:%
+  %:%229=129%:%
+  %:%230=129%:%
+  %:%231=130%:%
+  %:%237=130%:%
+  %:%240=131%:%
+  %:%241=132%:%
+  %:%242=132%:%
+  %:%243=133%:%
+  %:%244=133%:%
+  %:%245=134%:%
+  %:%246=135%:%
+  %:%247=135%:%
+  %:%248=136%:%
+  %:%249=137%:%
+  %:%252=138%:%
+  %:%253=139%:%
+  %:%257=139%:%
+  %:%258=139%:%
+  %:%259=140%:%
+  %:%260=140%:%
+  %:%261=141%:%
+  %:%267=141%:%
+  %:%270=142%:%
+  %:%271=143%:%
+  %:%272=143%:%
+  %:%273=144%:%
+  %:%274=145%:%
+  %:%277=146%:%
+  %:%278=147%:%
+  %:%282=147%:%
+  %:%283=147%:%
+  %:%284=148%:%
+  %:%285=148%:%
+  %:%286=149%:%
+  %:%287=149%:%
+  %:%288=150%:%
+  %:%294=150%:%
+  %:%297=151%:%
+  %:%298=152%:%
+  %:%299=152%:%
+  %:%300=153%:%
+  %:%301=154%:%
+  %:%308=155%:%
+  %:%309=155%:%
+  %:%314=155%:%
+  %:%317=156%:%
+  %:%318=157%:%
+  %:%319=157%:%
+  %:%320=158%:%
+  %:%321=159%:%
+  %:%322=159%:%
+  %:%323=160%:%
+  %:%326=161%:%
+  %:%327=162%:%
+  %:%331=162%:%
+  %:%332=162%:%
+  %:%333=163%:%
+  %:%334=163%:%
+  %:%335=164%:%
+  %:%350=168%:%
+  %:%360=169%:%
+  %:%361=169%:%
+  %:%362=170%:%
+  %:%365=171%:%
+  %:%366=172%:%
+  %:%370=172%:%
+  %:%371=172%:%
+  %:%372=173%:%
+  %:%378=173%:%
+  %:%381=174%:%
+  %:%382=175%:%
+  %:%383=175%:%
+  %:%384=176%:%
+  %:%391=177%:%
+  %:%392=177%:%
+  %:%397=177%:%
+  %:%400=178%:%
+  %:%401=179%:%
+  %:%402=179%:%
+  %:%403=180%:%
+  %:%404=181%:%
+  %:%411=182%:%
+  %:%412=182%:%
+  %:%417=182%:%
+  %:%420=183%:%
+  %:%421=184%:%
+  %:%422=184%:%
+  %:%423=185%:%
+  %:%430=186%:%
+  %:%431=186%:%
+  %:%436=186%:%
+  %:%439=187%:%
+  %:%440=188%:%
+  %:%441=188%:%
+  %:%442=189%:%
+  %:%443=190%:%
+  %:%450=191%:%
+  %:%451=191%:%
+  %:%456=191%:%
+  %:%459=192%:%
+  %:%460=193%:%
+  %:%461=193%:%
+  %:%462=194%:%
+  %:%469=195%:%
+  %:%470=195%:%
+  %:%475=195%:%
+  %:%478=196%:%
+  %:%479=197%:%
+  %:%480=197%:%
+  %:%481=198%:%
+  %:%482=199%:%
+  %:%489=200%:%
+  %:%490=200%:%
+  %:%504=202%:%
+  %:%516=204%:%
+  %:%518=205%:%
+  %:%519=205%:%
+  %:%520=206%:%
+  %:%521=207%:%
+  %:%528=208%:%
+  %:%529=208%:%
+  %:%534=208%:%
+  %:%537=209%:%
+  %:%538=210%:%
+  %:%539=210%:%
+  %:%540=211%:%
+  %:%541=212%:%
+  %:%548=213%:%
+  %:%549=213%:%
+  %:%554=213%:%
+  %:%557=214%:%
+  %:%558=215%:%
+  %:%559=215%:%
+  %:%560=216%:%
+  %:%561=216%:%
+  %:%568=218%:%
+  %:%578=220%:%
+  %:%579=220%:%
+  %:%580=221%:%
+  %:%583=222%:%
+  %:%584=223%:%
+  %:%588=223%:%
+  %:%589=223%:%
+  %:%590=224%:%
+  %:%591=224%:%
+  %:%592=225%:%
+  %:%598=225%:%
+  %:%601=226%:%
+  %:%602=227%:%
+  %:%603=227%:%
+  %:%604=228%:%
+  %:%607=229%:%
+  %:%608=230%:%
+  %:%612=230%:%
+  %:%613=230%:%
+  %:%614=231%:%
+  %:%615=231%:%
+  %:%616=232%:%
+  %:%626=235%:%
+  %:%628=236%:%
+  %:%629=236%:%
+  %:%630=237%:%
+  %:%633=238%:%
+  %:%634=239%:%
+  %:%638=239%:%
+  %:%639=239%:%
+  %:%640=240%:%
+  %:%641=240%:%
+  %:%642=241%:%
+  %:%643=241%:%
+  %:%644=242%:%
+  %:%650=242%:%
+  %:%653=243%:%
+  %:%654=244%:%
+  %:%655=244%:%
+  %:%656=245%:%
+  %:%659=246%:%
+  %:%660=247%:%
+  %:%664=247%:%
+  %:%665=247%:%
+  %:%666=248%:%
+  %:%667=248%:%
+  %:%668=249%:%
+  %:%669=249%:%
+  %:%670=250%:%
+  %:%676=250%:%
+  %:%679=251%:%
+  %:%680=252%:%
+  %:%681=252%:%
+  %:%682=253%:%
+  %:%685=254%:%
+  %:%686=255%:%
+  %:%690=255%:%
+  %:%691=255%:%
+  %:%692=256%:%
+  %:%693=256%:%
+  %:%694=257%:%
+  %:%695=257%:%
+  %:%696=258%:%
+  %:%702=258%:%
+  %:%705=259%:%
+  %:%706=260%:%
+  %:%707=260%:%
+  %:%708=261%:%
+  %:%711=262%:%
+  %:%712=263%:%
+  %:%716=263%:%
+  %:%717=263%:%
+  %:%718=264%:%
+  %:%719=264%:%
+  %:%720=265%:%
+  %:%721=265%:%
+  %:%722=266%:%
+  %:%732=269%:%
+  %:%734=271%:%
+  %:%735=271%:%
+  %:%736=272%:%
+  %:%741=277%:%
+  %:%744=278%:%
+  %:%745=279%:%
+  %:%749=279%:%
+  %:%750=279%:%
+  %:%751=280%:%
+  %:%752=280%:%
+  %:%753=281%:%
+  %:%763=283%:%
+  %:%765=285%:%
+  %:%766=285%:%
+  %:%767=286%:%
+  %:%777=296%:%
+  %:%780=297%:%
+  %:%781=298%:%
+  %:%785=298%:%
+  %:%786=298%:%
+  %:%787=299%:%
+  %:%788=299%:%
+  %:%789=300%:%
+  %:%790=300%:%
+  %:%791=301%:%
+  %:%792=301%:%
+  %:%793=302%:%
+  %:%808=307%:%
+  %:%818=310%:%
+  %:%819=310%:%
+  %:%820=311%:%
+  %:%827=312%:%
+  %:%828=312%:%
+  %:%829=313%:%
+  %:%830=313%:%
+  %:%831=314%:%
+  %:%837=314%:%
+  %:%840=315%:%
+  %:%841=316%:%
+  %:%842=316%:%
+  %:%843=317%:%
+  %:%850=318%:%
+  %:%851=318%:%
+  %:%852=319%:%
+  %:%853=319%:%
+  %:%854=320%:%
+  %:%860=320%:%
+  %:%863=321%:%
+  %:%864=322%:%
+  %:%865=323%:%
+  %:%866=323%:%
+  %:%867=324%:%
+  %:%868=325%:%
+  %:%871=326%:%
+  %:%872=327%:%
+  %:%876=327%:%
+  %:%877=327%:%
+  %:%878=328%:%
+  %:%879=328%:%
+  %:%880=329%:%
+  %:%886=329%:%
+  %:%889=330%:%
+  %:%890=331%:%
+  %:%891=331%:%
+  %:%892=332%:%
+  %:%893=333%:%
+  %:%896=334%:%
+  %:%897=335%:%
+  %:%901=335%:%
+  %:%902=335%:%
+  %:%903=336%:%
+  %:%904=336%:%
+  %:%905=337%:%
+  %:%911=337%:%
+  %:%914=338%:%
+  %:%915=339%:%
+  %:%916=339%:%
+  %:%917=340%:%
+  %:%918=341%:%
+  %:%921=342%:%
+  %:%922=343%:%
+  %:%926=343%:%
+  %:%927=343%:%
+  %:%928=344%:%
+  %:%929=344%:%
+  %:%930=345%:%
+  %:%931=345%:%
+  %:%932=346%:%
+  %:%933=346%:%
+  %:%934=347%:%
+  %:%940=347%:%
+  %:%943=348%:%
+  %:%944=349%:%
+  %:%945=350%:%
+  %:%946=350%:%
+  %:%947=351%:%
+  %:%949=353%:%
+  %:%952=354%:%
+  %:%953=355%:%
+  %:%957=355%:%
+  %:%958=355%:%
+  %:%959=356%:%
+  %:%960=356%:%
+  %:%961=357%:%
+  %:%976=359%:%
+  %:%986=360%:%
+  %:%987=360%:%
+  %:%988=361%:%
+  %:%991=362%:%
+  %:%992=363%:%
+  %:%996=363%:%
+  %:%997=363%:%
+  %:%998=364%:%
+  %:%999=364%:%
+  %:%1000=365%:%
+  %:%1001=366%:%
+  %:%1002=367%:%
+  %:%1003=368%:%
+  %:%1004=369%:%
+  %:%1005=370%:%
+  %:%1006=370%:%
+  %:%1007=371%:%
+  %:%1022=376%:%
+  %:%1032=378%:%
+  %:%1033=378%:%
+  %:%1034=379%:%
+  %:%1037=382%:%
+  %:%1040=383%:%
+  %:%1041=384%:%
+  %:%1045=384%:%
+  %:%1046=384%:%
+  %:%1047=385%:%
+  %:%1048=385%:%
+  %:%1049=386%:%
+  %:%1059=389%:%
+  %:%1061=390%:%
+  %:%1062=390%:%
+  %:%1063=391%:%
+  %:%1069=397%:%
+  %:%1072=398%:%
+  %:%1073=399%:%
+  %:%1077=399%:%
+  %:%1078=399%:%
+  %:%1079=400%:%
+  %:%1080=400%:%
+  %:%1081=401%:%
+  %:%1082=401%:%
+  %:%1083=402%:%
+  %:%1089=402%:%
+  %:%1092=403%:%
+  %:%1093=404%:%
+  %:%1094=404%:%
+  %:%1095=405%:%
+  %:%1101=411%:%
+  %:%1104=412%:%
+  %:%1105=413%:%
+  %:%1109=413%:%
+  %:%1110=413%:%
+  %:%1111=414%:%
+  %:%1112=414%:%
+  %:%1113=415%:%
+  %:%1114=415%:%
+  %:%1115=416%:%
+  %:%1130=418%:%
+  %:%1140=420%:%
+  %:%1141=420%:%
+  %:%1142=421%:%
+  %:%1147=426%:%
+  %:%1150=427%:%
+  %:%1151=428%:%
+  %:%1155=428%:%
+  %:%1156=428%:%
+  %:%1157=429%:%
+  %:%1158=429%:%
+  %:%1159=430%:%
+  %:%1160=430%:%
+  %:%1161=431%:%
+  %:%1167=431%:%
+  %:%1170=432%:%
+  %:%1171=433%:%
+  %:%1172=433%:%
+  %:%1173=434%:%
+  %:%1179=440%:%
+  %:%1182=441%:%
+  %:%1183=442%:%
+  %:%1187=442%:%
+  %:%1188=442%:%
+  %:%1189=443%:%
+  %:%1190=443%:%
+  %:%1191=444%:%
+  %:%1192=444%:%
+  %:%1193=445%:%
+  %:%1199=445%:%
+  %:%1202=446%:%
+  %:%1203=449%:%
+  %:%1204=450%:%
+  %:%1205=450%:%
+  %:%1206=451%:%
+  %:%1212=457%:%
+  %:%1215=458%:%
+  %:%1216=459%:%
+  %:%1220=459%:%
+  %:%1221=459%:%
+  %:%1222=460%:%
+  %:%1223=460%:%
+  %:%1224=461%:%
+  %:%1230=461%:%
+  %:%1233=462%:%
+  %:%1234=463%:%
+  %:%1235=464%:%
+  %:%1236=464%:%
+  %:%1237=465%:%
+  %:%1238=466%:%
+  %:%1241=467%:%
+  %:%1242=468%:%
+  %:%1246=468%:%
+  %:%1247=468%:%
+  %:%1248=469%:%
+  %:%1249=469%:%
+  %:%1250=470%:%
+  %:%1251=470%:%
+  %:%1252=471%:%
+  %:%1253=471%:%
+  %:%1254=472%:%
+  %:%1255=472%:%
+  %:%1256=473%:%
+  %:%1262=473%:%
+  %:%1265=474%:%
+  %:%1266=475%:%
+  %:%1267=475%:%
+  %:%1268=476%:%
+  %:%1270=478%:%
+  %:%1273=479%:%
+  %:%1274=480%:%
+  %:%1278=480%:%
+  %:%1279=480%:%
+  %:%1280=481%:%
+  %:%1281=481%:%
+  %:%1282=482%:%
+  %:%1288=482%:%
+  %:%1291=483%:%
+  %:%1292=484%:%
+  %:%1293=484%:%
+  %:%1294=485%:%
+  %:%1295=486%:%
+  %:%1298=487%:%
+  %:%1302=487%:%
+  %:%1303=487%:%
+  %:%1304=488%:%
+  %:%1305=488%:%
+  %:%1306=489%:%
+  %:%1307=489%:%
+  %:%1308=490%:%
+  %:%1309=490%:%
+  %:%1310=491%:%
+  %:%1316=491%:%
+  %:%1319=492%:%
+  %:%1320=493%:%
+  %:%1321=493%:%
+  %:%1322=494%:%
+  %:%1329=501%:%
+  %:%1332=502%:%
+  %:%1333=503%:%
+  %:%1337=503%:%
+  %:%1338=503%:%
+  %:%1339=504%:%
+  %:%1340=504%:%
+  %:%1341=505%:%
+  %:%1347=505%:%
+  %:%1350=506%:%
+  %:%1351=507%:%
+  %:%1352=508%:%
+  %:%1353=508%:%
+  %:%1354=509%:%
+  %:%1356=511%:%
+  %:%1359=512%:%
+  %:%1360=513%:%
+  %:%1364=513%:%
+  %:%1365=513%:%
+  %:%1366=514%:%
+  %:%1367=514%:%
+  %:%1368=515%:%
+  %:%1374=515%:%
+  %:%1377=516%:%
+  %:%1378=517%:%
+  %:%1379=517%:%
+  %:%1380=518%:%
+  %:%1382=520%:%
+  %:%1385=521%:%
+  %:%1386=522%:%
+  %:%1390=522%:%
+  %:%1391=522%:%
+  %:%1392=523%:%
+  %:%1393=523%:%
+  %:%1394=524%:%
+  %:%1400=524%:%
+  %:%1403=525%:%
+  %:%1404=526%:%
+  %:%1405=526%:%
+  %:%1406=527%:%
+  %:%1408=529%:%
+  %:%1411=530%:%
+  %:%1412=531%:%
+  %:%1416=531%:%
+  %:%1417=531%:%
+  %:%1418=532%:%
+  %:%1419=532%:%
+  %:%1420=533%:%
+  %:%1435=537%:%
+  %:%1445=538%:%
+  %:%1446=538%:%
+  %:%1447=539%:%
+  %:%1448=540%:%
+  %:%1455=541%:%
+  %:%1456=541%:%
+  %:%1461=541%:%
+  %:%1464=542%:%
+  %:%1465=543%:%
+  %:%1466=543%:%
+  %:%1467=544%:%
+  %:%1468=545%:%
+  %:%1475=546%:%
+  %:%1476=546%:%
+  %:%1481=546%:%
+  %:%1484=547%:%
+  %:%1485=548%:%
+  %:%1486=548%:%
+  %:%1487=549%:%
+  %:%1492=554%:%
+  %:%1495=555%:%
+  %:%1496=556%:%
+  %:%1500=556%:%
+  %:%1501=556%:%
+  %:%1502=557%:%
+  %:%1503=557%:%
+  %:%1504=558%:%
+  %:%1505=558%:%
+  %:%1506=559%:%
+  %:%1512=559%:%
+  %:%1515=560%:%
+  %:%1516=561%:%
+  %:%1517=561%:%
+  %:%1518=562%:%
+  %:%1523=567%:%
+  %:%1526=568%:%
+  %:%1527=569%:%
+  %:%1531=569%:%
+  %:%1532=569%:%
+  %:%1533=570%:%
+  %:%1534=570%:%
+  %:%1535=571%:%
+  %:%1536=571%:%
+  %:%1537=572%:%
+  %:%1543=572%:%
+  %:%1546=573%:%
+  %:%1547=574%:%
+  %:%1548=574%:%
+  %:%1549=575%:%
+  %:%1554=580%:%
+  %:%1557=581%:%
+  %:%1558=582%:%
+  %:%1562=582%:%
+  %:%1563=582%:%
+  %:%1564=583%:%
+  %:%1565=583%:%
+  %:%1566=584%:%
+  %:%1567=584%:%
+  %:%1568=585%:%
+  %:%1569=585%:%
+  %:%1570=586%:%
+  %:%1576=586%:%
+  %:%1579=587%:%
+  %:%1580=588%:%
+  %:%1581=588%:%
+  %:%1582=589%:%
+  %:%1587=594%:%
+  %:%1590=595%:%
+  %:%1591=596%:%
+  %:%1595=596%:%
+  %:%1596=596%:%
+  %:%1597=597%:%
+  %:%1598=597%:%
+  %:%1599=598%:%
+  %:%1600=598%:%
+  %:%1601=599%:%
+  %:%1602=599%:%
+  %:%1603=600%:%
+  %:%1618=602%:%
+  %:%1628=603%:%
+  %:%1629=603%:%
+  %:%1630=604%:%
+  %:%1633=605%:%
+  %:%1634=606%:%
+  %:%1638=606%:%
+  %:%1639=606%:%
+  %:%1640=607%:%
+  %:%1641=607%:%
+  %:%1642=608%:%
+  %:%1643=608%:%
+  %:%1644=609%:%
+  %:%1645=609%:%
+  %:%1646=610%:%
+  %:%1647=610%:%
+  %:%1648=611%:%
+  %:%1654=611%:%
+  %:%1657=612%:%
+  %:%1658=613%:%
+  %:%1659=613%:%
+  %:%1660=614%:%
+  %:%1667=615%:%
+  %:%1668=615%:%
+  %:%1682=617%:%
+  %:%1692=619%:%
+  %:%1693=619%:%
+  %:%1694=620%:%
+  %:%1705=631%:%
+  %:%1708=632%:%
+  %:%1709=633%:%
+  %:%1713=633%:%
+  %:%1714=633%:%
+  %:%1715=634%:%
+  %:%1716=634%:%
+  %:%1717=635%:%
+  %:%1718=635%:%
+  %:%1719=636%:%
+  %:%1720=636%:%
+  %:%1721=637%:%
+  %:%1722=637%:%
+  %:%1723=638%:%
+  %:%1729=638%:%
+  %:%1732=639%:%
+  %:%1733=640%:%
+  %:%1734=640%:%
+  %:%1735=641%:%
+  %:%1746=652%:%
+  %:%1749=653%:%
+  %:%1750=654%:%
+  %:%1754=654%:%
+  %:%1755=654%:%
+  %:%1756=655%:%
+  %:%1757=655%:%
+  %:%1758=656%:%
+  %:%1759=656%:%
+  %:%1760=657%:%
+  %:%1761=657%:%
+  %:%1762=658%:%
+  %:%1768=658%:%
+  %:%1771=659%:%
+  %:%1772=660%:%
+  %:%1773=661%:%
+  %:%1774=661%:%
+  %:%1775=662%:%
+  %:%1783=670%:%
+  %:%1786=671%:%
+  %:%1787=672%:%
+  %:%1791=672%:%
+  %:%1792=672%:%
+  %:%1793=673%:%
+  %:%1794=673%:%
+  %:%1795=674%:%
+  %:%1796=674%:%
+  %:%1797=675%:%
+  %:%1803=675%:%
+  %:%1806=676%:%
+  %:%1807=677%:%
+  %:%1808=677%:%
+  %:%1809=678%:%
+  %:%1814=683%:%
+  %:%1817=684%:%
+  %:%1818=685%:%
+  %:%1822=685%:%
+  %:%1823=685%:%
+  %:%1824=686%:%
+  %:%1825=686%:%
+  %:%1826=687%:%
+  %:%1827=687%:%
+  %:%1828=688%:%
+  %:%1838=691%:%
+  %:%1840=692%:%
+  %:%1841=692%:%
+  %:%1842=693%:%
+  %:%1845=696%:%
+  %:%1848=697%:%
+  %:%1849=698%:%
+  %:%1853=698%:%
+  %:%1854=698%:%
+  %:%1855=699%:%
+  %:%1856=699%:%
+  %:%1857=700%:%
+  %:%1858=700%:%
+  %:%1859=701%:%
+  %:%1869=703%:%
+  %:%1870=704%:%
+  %:%1872=705%:%
+  %:%1873=705%:%
+  %:%1874=706%:%
+  %:%1875=707%:%
+  %:%1878=708%:%
+  %:%1882=708%:%
+  %:%1883=708%:%
+  %:%1884=709%:%
+  %:%1885=709%:%
+  %:%1886=710%:%
+  %:%1887=710%:%
+  %:%1888=711%:%
+  %:%1894=711%:%
+  %:%1899=712%:%
+  %:%1904=713%:%

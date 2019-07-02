@@ -1,0 +1,2420 @@
+%
+\begin{isabellebody}%
+  \setisabellecontext{EventSP}%
+  %
+  \isadelimtheory
+  \isanewline
+  \isanewline
+  %
+  \endisadelimtheory
+  %
+  \isatagtheory
+  \isacommand{theory}\isamarkupfalse%
+  \ EventSP\ \isakeyword{imports}\ {\isachardoublequoteopen}{\isachartilde}{\isachartilde}{\isacharslash}src{\isacharslash}HOL{\isacharslash}Auth{\isacharslash}Message{\isachardoublequoteclose}\ {\isachardoublequoteopen}{\isachartilde}{\isachartilde}{\isacharslash}src{\isacharslash}HOL{\isacharslash}Library{\isacharslash}Simps{\isacharunderscore}Case{\isacharunderscore}Conv{\isachardoublequoteclose}\ \isakeyword{begin}%
+  \endisatagtheory
+  {\isafoldtheory}%
+  %
+  \isadelimtheory
+  \isanewline
+  %
+  \endisadelimtheory
+  \isanewline
+  \isacommand{consts}\isamarkupfalse%
+  \ \isanewline
+  \ \ initState\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}agent\ {\isacharequal}{\isachargreater}\ msg\ set{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \isacommand{datatype}\isamarkupfalse%
+  \ smartphone\ {\isacharequal}\ Smartphone\ agent\isanewline
+  \isanewline
+  \isacommand{datatype}\isamarkupfalse%
+  \isanewline
+  \ \ event\ {\isacharequal}\ Says\ \ \ \ agent\ agent\ msg\isanewline
+  \ \ \ \ \ \ \ \ {\isacharbar}\ Notes\ \ \ agent\ \ \ \ \ \ \ msg\isanewline
+  \ \ \ \ \ \ \ \ {\isacharbar}\ Gets\ \ \ \ agent\ \ \ \ \ \ \ msg\isanewline
+  \ \ \ \ \ \ \ \ {\isacharbar}\ Scans\ \ \ agent\ \ \ \ \ \ \ smartphone\ msg\ \isanewline
+  \ \ \ \ \ \ \ \ {\isacharbar}\ SGets\ \ smartphone\ \ msg\ \isanewline
+  \ \ \ \ \ \ \ \ {\isacharbar}\ Shows\ smartphone\ \ agent\ msg\ \isanewline
+  \ \ \ \ \ \ \ \ {\isacharbar}\ AGets\ \ agent\ \ \ \ \ \ \ msg\ \isanewline
+  \ \ \ \ \ \ \ \ {\isacharbar}\ Inputs\ \ agent\ \ \ \ \ \ \ smartphone\ msg\ \isanewline
+  \isanewline
+  \isacommand{consts}\isamarkupfalse%
+  \isanewline
+  \ \ bad\ \ \ \ \ \ \ \ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}agent\ set{\isachardoublequoteclose}\ \ \ \ \ \ \isanewline
+  \ \ badP\ \ \ \ \ \ \ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}smartphone\ set{\isachardoublequoteclose}\ \isanewline
+  \ \ stolen\ \ \ \ \ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}smartphone\ set{\isachardoublequoteclose}\ \isanewline
+  \ \ secureP\ \ \ \ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}bool{\isachardoublequoteclose}\ \isanewline
+  \isanewline
+  \isacommand{abbreviation}\isamarkupfalse%
+  \isanewline
+  \ \ insecureP\ {\isacharcolon}{\isacharcolon}\ bool\ \isakeyword{where}\ \isanewline
+  \ \ \ \ {\isachardoublequoteopen}insecureP\ {\isacharequal}{\isacharequal}\ {\isasymnot}secureP{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \isacommand{specification}\isamarkupfalse%
+  \ {\isacharparenleft}bad{\isacharparenright}\isanewline
+  \ \ Spy{\isacharunderscore}in{\isacharunderscore}bad\ \ \ \ \ {\isacharbrackleft}iff{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}Spy\ {\isasymin}\ bad{\isachardoublequoteclose}\isanewline
+  \ \ Server{\isacharunderscore}not{\isacharunderscore}bad\ {\isacharbrackleft}iff{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}Server\ {\isasymnotin}\ bad{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}rule\ exI\ {\isacharbrackleft}of\ {\isacharunderscore}\ {\isachardoublequoteopen}{\isacharbraceleft}Spy{\isacharbraceright}{\isachardoublequoteclose}{\isacharbrackright}{\isacharcomma}\ simp{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{specification}\isamarkupfalse%
+  \ {\isacharparenleft}badP{\isacharparenright}\isanewline
+  \ \ \isanewline
+  \ \ Spy{\isacharunderscore}phone{\isacharunderscore}not{\isacharunderscore}badP\ \ \ \ \ {\isacharbrackleft}iff{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}Smartphone\ Spy\ {\isasymnotin}\ badP{\isachardoublequoteclose}\isanewline
+  \ \ Server{\isacharunderscore}phone{\isacharunderscore}not{\isacharunderscore}badP\ {\isacharbrackleft}iff{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}Smartphone\ Server\ {\isasymnotin}\ badP{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ blast\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{specification}\isamarkupfalse%
+  \ {\isacharparenleft}stolen{\isacharparenright}\isanewline
+  \ \ Server{\isacharunderscore}phone{\isacharunderscore}not{\isacharunderscore}stolen\ {\isacharbrackleft}iff{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}Smartphone\ Server\ {\isasymnotin}\ stolen{\isachardoublequoteclose}\isanewline
+  \ \ Spy{\isacharunderscore}phone{\isacharunderscore}not{\isacharunderscore}stolen\ \ \ \ {\isacharbrackleft}iff{\isacharbrackright}{\isacharcolon}\ {\isachardoublequoteopen}Smartphone\ Spy\ {\isasymnotin}\ stolen{\isachardoublequoteclose}\isanewline
+  \ \ Stolen{\isacharunderscore}in{\isacharunderscore}badP\ {\isacharbrackleft}iff{\isacharbrackright}\ {\isacharcolon}\ {\isachardoublequoteopen}stolen\ {\isasymsubseteq}\ badP{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ blast\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{primrec}\isamarkupfalse%
+  \ knows\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}agent\ {\isasymRightarrow}\ event\ list\ {\isasymRightarrow}\ msg\ set{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
+  \ \ knows{\isacharunderscore}Nil\ {\isacharcolon}\ \ {\isachardoublequoteopen}knows\ A\ {\isacharbrackleft}{\isacharbrackright}\ {\isacharequal}\ initState\ A{\isachardoublequoteclose}\ {\isacharbar}\isanewline
+  \ \ knows{\isacharunderscore}Cons\ {\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ {\isacharparenleft}ev\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\isanewline
+  \ \ \ \ {\isacharparenleft}case\ ev\ of\isanewline
+  \ \ \ \ \ \ %
+  \isamarkupcmt{An agent knows what he sends to anyone. The Spy knows everything sent on a trace%
+  }\isanewline
+  \ \ \ \ \ \ Says\ A{\isacharprime}\ B\ X\ {\isasymRightarrow}\isanewline
+  \ \ \ \ \ \ \ \ if\ {\isacharparenleft}A\ {\isacharequal}\ A{\isacharprime}\ {\isacharbar}\ A\ {\isacharequal}\ Spy{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ \ \ else\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \isanewline
+  \ \ \ \ \ \ %
+  \isamarkupcmt{An agent knows what he notes. The Spy knows what compromised agents knows on a trace%
+  }\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Notes\ A{\isacharprime}\ X\ {\isasymRightarrow}\isanewline
+  \ \ \ \ \ \ \ \ if\ {\isacharparenleft}A\ {\isacharequal}\ A{\isacharprime}\ {\isacharbar}\ {\isacharparenleft}A\ {\isacharequal}\ Spy\ {\isacharampersand}\ A{\isacharprime}\ {\isasymin}\ bad{\isacharparenright}{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ \ \ else\ knows\ A\ evs\isanewline
+  \isanewline
+  \ \ \ \ \ \ %
+  \isamarkupcmt{An agent, except the Spy, knows what she receives in a trace. Due to the Says event and
+        reception invariant, the Spy knowledge does not need to be extended%
+  }\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Gets\ A{\isacharprime}\ X\ {\isasymRightarrow}\isanewline
+  \ \ \ \ \ \ \ \ if\ {\isacharparenleft}A\ {\isacharequal}\ A{\isacharprime}\ {\isacharampersand}\ A\ {\isasymnoteq}\ Spy{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ \ \ else\ knows\ A\ evs\isanewline
+  \isanewline
+  \ \ \ \ \ \ %
+  \isamarkupcmt{An agent knows what she shows to her smartphone to scan. The Spy knows what a compromised
+           agent shows to her smartphones to scan%
+  }\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Scans\ A{\isacharprime}\ P\ X\ {\isasymRightarrow}\isanewline
+  \ \ \ \ \ \ \ \ if\ {\isacharparenleft}A\ {\isacharequal}\ A{\isacharprime}\ {\isacharbar}\ {\isacharparenleft}A\ {\isacharequal}\ Spy\ {\isacharampersand}\ A{\isacharprime}\ {\isasymin}\ bad{\isacharparenright}{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ \ \ else\ knows\ A\ evs\isanewline
+  \isanewline
+  \ \ \ \ \ \ %
+  \isamarkupcmt{Due to reception invariant of Scans event, an agent does not enrich her knowledge set 
+           from what her smartphone receives%
+  }\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ SGets\ P\ X\ {\isasymRightarrow}\ \isanewline
+  \ \ \ \ \ \ \ \ if\ secureP\ then\ knows\ A\ evs\isanewline
+  \ \ \ \ \ \ \ \ %
+  \isamarkupcmt{However, if devices can be compromised, the Spy knows what a compromised phone receives%
+  }\isanewline
+  \ \ \ \ \ \ \ \ else\isanewline
+  \ \ \ \ \ \ \ \ \ \ if\ {\isacharparenleft}A\ {\isacharequal}\ Spy\ {\isacharampersand}\ P\ {\isasymin}\ badP{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ \ \ \ \ else\ knows\ A\ evs\isanewline
+  \isanewline
+  \ \ \ \ \ \ %
+  \isamarkupcmt{An agent, including the Spy, knows what her smartphone shows to her%
+  }\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Shows\ P\ A{\isacharprime}\ X\ {\isasymRightarrow}\isanewline
+  \ \ \ \ \ \ \ \ if\ secureP\ then\isanewline
+  \ \ \ \ \ \ \ \ \ \ if\ {\isacharparenleft}A\ {\isacharequal}\ A{\isacharprime}{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ \ \ \ \ else\ knows\ A\ evs\isanewline
+  \ \ \ \ \ \ \ \ %
+  \isamarkupcmt{When insecure devices hold, the Spy knows what compromised devices shows%
+  }\isanewline
+  \ \ \ \ \ \ \ \ else\ \isanewline
+  \ \ \ \ \ \ \ \ \ \ if\ {\isacharparenleft}A\ {\isacharequal}\ Spy\ {\isacharampersand}\ P\ {\isasymin}\ badP{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ \ \ \ \ else\ knows\ A\ evs\isanewline
+  \isanewline
+  \ \ \ \ \ \ %
+  \isamarkupcmt{An agent knows what she receives from her smartphone. The Spy already knows from the previous event%
+  }\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ AGets\ A{\isacharprime}\ X\ {\isasymRightarrow}\isanewline
+  \ \ \ \ \ \ \ \ if\ {\isacharparenleft}A\ {\isacharequal}\ A{\isacharprime}\ {\isacharampersand}\ A\ {\isasymnoteq}\ Spy{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ \ \ else\ knows\ A\ evs\isanewline
+  \isanewline
+  \ \ \ \ \ \ %
+  \isamarkupcmt{An agent, and only her, knows what she manually inputs to her smartphone%
+  }\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Inputs\ A{\isacharprime}\ P\ X\ {\isasymRightarrow}\isanewline
+  \ \ \ \ \ \ \ \ if\ {\isacharparenleft}A\ {\isacharequal}\ A{\isacharprime}{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ \ \ else\ knows\ A\ evs\isanewline
+  \ \ {\isacharparenright}{\isachardoublequoteclose}\isanewline
+  \isanewline
+  \isanewline
+  \isacommand{primrec}\isamarkupfalse%
+  \ used\ {\isacharcolon}{\isacharcolon}\ {\isachardoublequoteopen}event\ list\ {\isasymRightarrow}\ msg\ set{\isachardoublequoteclose}\ \isakeyword{where}\isanewline
+  \ \ used{\isacharunderscore}Nil\ \ {\isacharcolon}\ {\isachardoublequoteopen}used\ {\isacharbrackleft}{\isacharbrackright}\ {\isacharequal}\ {\isacharparenleft}{\isasymUnion}\ B{\isachardot}\ parts\ {\isacharparenleft}initState\ B{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\ {\isacharbar}\isanewline
+  \ \ used{\isacharunderscore}Cons\ {\isacharcolon}\ {\isachardoublequoteopen}used\ {\isacharparenleft}ev\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\isanewline
+  \ \ \ \ {\isacharparenleft}case\ ev\ of\isanewline
+  \ \ \ \ \ \ \ \ Says\ A\ B\ X\ {\isasymRightarrow}\ parts\ {\isacharbraceleft}X{\isacharbraceright}\ {\isasymunion}\ {\isacharparenleft}used\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Notes\ A\ X\ {\isasymRightarrow}\ parts\ {\isacharbraceleft}X{\isacharbraceright}\ {\isasymunion}\ {\isacharparenleft}used\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Gets\ A\ X\ {\isasymRightarrow}\ used\ evs\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Scans\ A\ P\ X\ {\isasymRightarrow}\ parts\ {\isacharbraceleft}X{\isacharbraceright}\ {\isasymunion}\ used\ evs\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ SGets\ P\ X\ {\isasymRightarrow}\ parts\ {\isacharbraceleft}X{\isacharbraceright}\ {\isasymunion}\ used\ evs\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Shows\ P\ A\ X\ {\isasymRightarrow}\ parts\ {\isacharbraceleft}X{\isacharbraceright}\ {\isasymunion}\ used\ evs\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ AGets\ A\ X\ {\isasymRightarrow}\ used\ evs\isanewline
+  \ \ \ \ \ \ {\isacharbar}\ Inputs\ A\ P\ X\ {\isasymRightarrow}\ parts\ {\isacharbraceleft}X{\isacharbraceright}\ {\isasymunion}\ used\ evs\isanewline
+  \ \ {\isacharparenright}{\isachardoublequoteclose}%
+  \begin{isamarkuptext}%
+  Describing how some the set used evs is enriched given our events%
+  \end{isamarkuptext}\isamarkuptrue%
+  \isacommand{lemma}\isamarkupfalse%
+  \ Notes{\isacharunderscore}imp{\isacharunderscore}used\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Notes\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ evs{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Says{\isacharunderscore}imp{\isacharunderscore}used\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Says\ A\ B\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ evs{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}imp{\isacharunderscore}used\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Scans\ A\ P\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ evs{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}imp{\isacharunderscore}used\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Shows\ P\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ evs{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Inputs{\isacharunderscore}imp{\isacharunderscore}used\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Inputs\ A\ P\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ evs{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Function \isa{knows}%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemmas}\isamarkupfalse%
+  \ parts{\isacharunderscore}insert{\isacharunderscore}knows{\isacharunderscore}A\ {\isacharequal}\ parts{\isacharunderscore}insert\ {\isacharbrackleft}of\ {\isacharunderscore}\ {\isachardoublequoteopen}knows\ A\ evs{\isachardoublequoteclose}{\isacharbrackright}\ \isakeyword{for}\ A\ evs\isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Says\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ {\isacharparenleft}Says\ A\ B\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Gets\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ {\isacharparenleft}Gets\ B\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Notes\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ {\isacharparenleft}Notes\ A\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\isanewline
+  \ \ \ \ {\isacharparenleft}if\ A\ {\isasymin}\ bad\ then\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ else\ knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Scans\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ {\isacharparenleft}Scans\ A\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\isanewline
+  \ \ \ \ {\isacharparenleft}if\ A\ {\isasymin}\ bad\ then\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ else\ knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}SGets{\isacharunderscore}secureP\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}secureP\ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}SGets\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}SGets{\isacharunderscore}insecureP\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}insecureP\ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}SGets\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ \isanewline
+  \ \ \ \ {\isacharparenleft}if\ {\isacharparenleft}P\ {\isasymin}\ badP{\isacharparenright}\ then\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}\isanewline
+  \ \ \ \ else\ knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Shows{\isacharunderscore}secureP\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}secureP\ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}Shows\ P\ A\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\isanewline
+  \ \ \ \ {\isacharparenleft}if\ A\ {\isacharequal}\ Spy\ then\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ else\ knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Shows{\isacharunderscore}insecureP\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}insecureP\ {\isasymLongrightarrow}\ knows\ Spy\ {\isacharparenleft}Shows\ P\ A\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\isanewline
+  \ \ \ \ {\isacharparenleft}if\ P\ {\isasymin}\ badP\ then\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ else\ knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}AGets\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ {\isacharparenleft}AGets\ A\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}Inputs\ {\isacharbrackleft}simp{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ {\isacharparenleft}Inputs\ A\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ \isanewline
+  \ \ \ \ {\isacharparenleft}if\ A\ {\isacharequal}\ Spy\ then\ insert\ X\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}\isanewline
+  \ \ \ \ \ else\ knows\ Spy\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}Says\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ evs\ {\isasymsubseteq}\ knows\ Spy\ {\isacharparenleft}Says\ A\ B\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}Notes\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ evs\ {\isasymsubseteq}\ knows\ Spy\ {\isacharparenleft}Notes\ A\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ force%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}Gets\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ evs\ {\isasymsubseteq}\ knows\ Spy\ {\isacharparenleft}Gets\ A\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}Scans\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ evs\ {\isasymsubseteq}\ knows\ Spy\ {\isacharparenleft}Scans\ A\ P\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ auto%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}SGets\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ evs\ {\isasymsubseteq}\ knows\ Spy\ {\isacharparenleft}SGets\ P\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}Shows\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ evs\ {\isasymsubseteq}\ knows\ Spy\ {\isacharparenleft}Shows\ P\ A\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}AGets\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ evs\ {\isasymsubseteq}\ knows\ Spy\ {\isacharparenleft}AGets\ A\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}Inputs\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ Spy\ evs\ {\isasymsubseteq}\ knows\ Spy\ {\isacharparenleft}Inputs\ A\ P\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Says{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Says\ A\ B\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Notes{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Notes\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ A\ {\isasymin}\ bad\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  \isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Nothing can be stated about Gets event%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Scans\ A\ P\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ A\ {\isasymin}\ bad\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  \isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Nothing can be stated on a SGets when phones are secured event%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isacommand{lemma}\isamarkupfalse%
+  \ SGets{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}insecureP\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}SGets\ P\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ {\isacharparenleft}insecureP\ {\isasymand}\ P\ {\isasymin}\ badP{\isacharparenright}\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\ \isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}secureM\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Shows\ P\ Spy\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ secureP\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}imp{\isacharunderscore}know{\isacharunderscore}Spy{\isacharunderscore}insecureM\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Shows\ P\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ {\isacharparenleft}insecureP\ {\isasymand}\ P\ {\isasymin}\ badP{\isacharparenright}\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  \isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Nothing can be stated here on a AGets event%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isacommand{lemma}\isamarkupfalse%
+  \ Inputs{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Inputs\ Spy\ P\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemmas}\isamarkupfalse%
+  \ knows{\isacharunderscore}Spy{\isacharunderscore}partsEs\ {\isacharequal}\isanewline
+  \ \ \ \ \ Says{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}Spy\ {\isacharbrackleft}THEN\ parts{\isachardot}Inj{\isacharcomma}\ elim{\isacharunderscore}format{\isacharbrackright}\isanewline
+  \ \ \ \ \ parts{\isachardot}Body\ {\isacharbrackleft}elim{\isacharunderscore}format{\isacharbrackright}\isanewline
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Says{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ {\isacharparenleft}Says\ A\ B\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Notes{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ {\isacharparenleft}Notes\ A\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Gets{\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}A\ {\isasymnoteq}\ Spy\ {\isasymlongrightarrow}\ knows\ A\ {\isacharparenleft}Gets\ A\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Scans{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ {\isacharparenleft}Scans\ A\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}SGets{\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}A\ {\isasymnoteq}\ Spy\ {\isasymlongrightarrow}\ knows\ A\ {\isacharparenleft}SGets\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Shows{\isacharunderscore}secureP{\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}secureP\ {\isasymlongrightarrow}\ knows\ A\ {\isacharparenleft}Shows\ P\ A\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Shows{\isacharunderscore}insecureP{\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isacharparenleft}insecureP\ {\isasymand}\ A\ {\isasymnoteq}\ Spy{\isacharparenright}\ {\isasymlongrightarrow}\ knows\ A\ {\isacharparenleft}Shows\ P\ A\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}Inputs{\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ A\ {\isacharparenleft}Inputs\ A\ P\ X\ {\isacharhash}\ evs{\isacharparenright}\ {\isacharequal}\ insert\ X\ {\isacharparenleft}knows\ A\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ simp%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Says{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ evs\ {\isasymsubseteq}\ knows\ A\ {\isacharparenleft}Says\ A{\isacharprime}\ B\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Notes{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ evs\ {\isasymsubseteq}\ knows\ A\ {\isacharparenleft}Notes\ A{\isacharprime}\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Gets{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ evs\ {\isasymsubseteq}\ knows\ A\ {\isacharparenleft}Gets\ A{\isacharprime}\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Scans{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ evs\ {\isasymsubseteq}\ knows\ A\ {\isacharparenleft}Scans\ A{\isacharprime}\ P\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}SGets{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ evs\ {\isasymsubseteq}\ knows\ A\ {\isacharparenleft}SGets\ P\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Shows{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ evs\ {\isasymsubseteq}\ knows\ A\ {\isacharparenleft}Shows\ P\ A{\isacharprime}\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}AGets{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ evs\ {\isasymsubseteq}\ knows\ A\ {\isacharparenleft}AGets\ A{\isacharprime}\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Inputs{\isacharcolon}\ {\isachardoublequoteopen}knows\ A\ evs\ {\isasymsubseteq}\ knows\ A\ {\isacharparenleft}Inputs\ A{\isacharprime}\ P\ X\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ subset{\isacharunderscore}insertI{\isacharparenright}\isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Agents know what they say%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isacommand{lemma}\isamarkupfalse%
+  \ Says{\isacharunderscore}imp{\isacharunderscore}knows\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Says\ A\ B\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  \isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Agents know what they note%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isacommand{lemma}\isamarkupfalse%
+  \ Notes{\isacharunderscore}imp{\isacharunderscore}knows\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Notes\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  \isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Agents know what they receive%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isacommand{lemma}\isamarkupfalse%
+  \ Gets{\isacharunderscore}imp{\isacharunderscore}knows\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}A\ {\isasymnoteq}\ Spy\ {\isasymlongrightarrow}\ Gets\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  \isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Agents know what their smartphone scans%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}imp{\isacharunderscore}knows\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Scans\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  \isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Agents know what they input to their smartphone%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isacommand{lemma}\isamarkupfalse%
+  \ Inputs{\isacharunderscore}imp{\isacharunderscore}knows\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Inputs\ A\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  \isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Agents do not know what they smartphones reads...%
+  }\isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Agents know what their smartphones shows to them, if the device are secured%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}secureP\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}secureP\ {\isasymlongrightarrow}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}imp{\isacharunderscore}knows{\isacharunderscore}insecureP\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}{\isacharparenleft}insecureP\ {\isasymand}\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ {\isasymin}\ badP{\isacharparenright}\ {\isasymlongrightarrow}\ Shows\ {\isacharparenleft}Smartphone\ A{\isacharparenright}\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ Spy\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  \isanewline
+  \isanewline
+  %
+  \isamarkupcmt{Agents know what they receive from a smartphone%
+  }%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isacommand{lemma}\isamarkupfalse%
+  \ AGets{\isacharunderscore}imp{\isacharunderscore}knows\ {\isacharbrackleft}rule{\isacharunderscore}format{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}A\ {\isasymnoteq}\ Spy\ {\isasymlongrightarrow}\ AGets\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ X\ {\isasymin}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  \isanewline
+  \ \ %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \ \ \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ parts{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}used\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}parts\ {\isacharparenleft}knows\ Spy\ evs{\isacharparenright}\ {\isasymsubseteq}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharcomma}\ force{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp\ add{\isacharcolon}\ parts{\isacharunderscore}insert{\isacharunderscore}knows{\isacharunderscore}A\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemmas}\isamarkupfalse%
+  \ usedI\ {\isacharequal}\ parts{\isacharunderscore}knows{\isacharunderscore}Spy{\isacharunderscore}subset{\isacharunderscore}used\ {\isacharbrackleft}THEN\ subsetD{\isacharcomma}\ intro{\isacharbrackright}\isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ initState{\isacharunderscore}into{\isacharunderscore}used\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}X\ {\isasymin}\ parts\ {\isacharparenleft}initState\ B{\isacharparenright}\ {\isacharequal}{\isacharequal}{\isachargreater}\ X\ {\isasymin}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ add{\isacharcolon}\ parts{\isacharunderscore}insert{\isacharunderscore}knows{\isacharunderscore}A\ split{\isacharcolon}\ event{\isachardot}split{\isacharcomma}\ blast{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{simps{\isacharunderscore}of{\isacharunderscore}case}\isamarkupfalse%
+  \ used{\isacharunderscore}Cons{\isacharunderscore}simps\ {\isacharbrackleft}simp{\isacharbrackright}{\isacharcolon}\ used{\isacharunderscore}Cons%
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  %
+  \isatagdocument
+  %
+  \isamarkupsection{Function \isa{used}%
+  }
+  \isamarkuptrue%
+  %
+  \endisatagdocument
+  {\isafolddocument}%
+  %
+  \isadelimdocument
+  %
+  \endisadelimdocument
+  \isacommand{lemma}\isamarkupfalse%
+  \ Says{\isacharunderscore}parts{\isacharunderscore}used\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Says\ A\ B\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ {\isacharparenleft}parts\ {\isacharbraceleft}X{\isacharbraceright}{\isacharparenright}\ {\isasymsubseteq}\ used\ evs\ {\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Notes{\isacharunderscore}parts{\isacharunderscore}used\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Notes\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ {\isacharparenleft}parts\ {\isacharbraceleft}X{\isacharbraceright}{\isacharparenright}\ {\isasymsubseteq}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Scans{\isacharunderscore}parts{\isacharunderscore}used\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Scans\ A\ P\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ {\isacharparenleft}parts\ {\isacharbraceleft}X{\isacharbraceright}{\isacharparenright}\ {\isasymsubseteq}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Shows{\isacharunderscore}parts{\isacharunderscore}used\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Shows\ P\ A\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ {\isacharparenleft}parts\ {\isacharbraceleft}X{\isacharbraceright}{\isacharparenright}\ {\isasymsubseteq}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ Inputs{\isacharunderscore}parts{\isacharunderscore}used\ {\isacharbrackleft}rule{\isacharunderscore}format\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharparenright}{\isacharbrackright}\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}Inputs\ A\ P\ X\ {\isasymin}\ set\ evs\ {\isasymlongrightarrow}\ {\isacharparenleft}parts\ {\isacharbraceleft}X{\isacharbraceright}{\isacharparenright}\ {\isasymsubseteq}\ used\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ {\isachardoublequoteopen}evs{\isachardoublequoteclose}{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}simp{\isacharunderscore}all\ {\isacharparenleft}no{\isacharunderscore}asm{\isacharunderscore}simp{\isacharparenright}\ split{\isacharcolon}\ event{\isachardot}split{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}auto{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isanewline
+  \isacommand{declare}\isamarkupfalse%
+  \ knows{\isacharunderscore}Cons\ {\isacharbrackleft}simp\ del{\isacharbrackright}\isanewline
+  \ \ \ \ \ \ \ \ used{\isacharunderscore}Nil\ {\isacharbrackleft}simp\ del{\isacharbrackright}\isanewline
+  \ \ \ \ \ \ \ \ used{\isacharunderscore}Cons\ {\isacharbrackleft}simp\ del{\isacharbrackright}\isanewline
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Cons\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}knows\ A\ evs\ {\isasymsubseteq}\ knows\ A\ {\isacharparenleft}e\ {\isacharhash}\ evs{\isacharparenright}{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}induct\ e{\isacharcomma}\ auto\ simp{\isacharcolon}\ knows{\isacharunderscore}Cons{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ initState{\isacharunderscore}subset{\isacharunderscore}knows\ {\isacharcolon}\isanewline
+  \ \ {\isachardoublequoteopen}initState\ A\ {\isasymsubseteq}\ knows\ A\ evs{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}induct{\isacharunderscore}tac\ evs{\isacharcomma}\ simp{\isacharparenright}\isanewline
+  \isacommand{apply}\isamarkupfalse%
+  \ {\isacharparenleft}blast\ intro{\isacharcolon}\ knows{\isacharunderscore}subset{\isacharunderscore}knows{\isacharunderscore}Cons\ {\isacharbrackleft}THEN\ subsetD{\isacharbrackright}{\isacharparenright}\isanewline
+  \isacommand{done}\isamarkupfalse%
+  %
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  \isanewline
+  \isacommand{lemma}\isamarkupfalse%
+  \ keysFor{\isacharunderscore}parts{\isacharunderscore}insert{\isacharcolon}\isanewline
+  \ \ \ \ \ {\isachardoublequoteopen}{\isasymlbrakk}\ K\ {\isasymin}\ keysFor\ {\isacharparenleft}parts\ {\isacharparenleft}insert\ X\ G{\isacharparenright}{\isacharparenright}{\isacharsemicolon}\ \ X\ {\isasymin}\ synth\ {\isacharparenleft}analz\ H{\isacharparenright}\ {\isasymrbrakk}\isanewline
+  \ \ \ \ \ \ {\isasymLongrightarrow}\ K\ {\isasymin}\ keysFor\ {\isacharparenleft}parts\ {\isacharparenleft}G\ {\isasymunion}\ H{\isacharparenright}{\isacharparenright}\ {\isasymor}\ Key\ {\isacharparenleft}invKey\ K{\isacharparenright}\ {\isasymin}\ parts\ H{\isachardoublequoteclose}\isanewline
+  %
+  \isadelimproof
+  %
+  \endisadelimproof
+  %
+  \isatagproof
+  \isacommand{by}\isamarkupfalse%
+  \ {\isacharparenleft}force\isanewline
+  \ \ \ \ dest{\isacharbang}{\isacharcolon}\ parts{\isacharunderscore}insert{\isacharunderscore}subset{\isacharunderscore}Un\ {\isacharbrackleft}THEN\ keysFor{\isacharunderscore}mono{\isacharcomma}\ THEN\ {\isacharbrackleft}{\isadigit{2}}{\isacharbrackright}\ rev{\isacharunderscore}subsetD{\isacharbrackright}\isanewline
+  \ \ \ \ \ \ \ \ \ \ \ analz{\isacharunderscore}subset{\isacharunderscore}parts\ {\isacharbrackleft}THEN\ keysFor{\isacharunderscore}mono{\isacharcomma}\ THEN\ {\isacharbrackleft}{\isadigit{2}}{\isacharbrackright}\ rev{\isacharunderscore}subsetD{\isacharbrackright}\isanewline
+  \ \ \ \ intro{\isacharcolon}\ analz{\isacharunderscore}subset{\isacharunderscore}parts\ {\isacharbrackleft}THEN\ subsetD{\isacharbrackright}\ parts{\isacharunderscore}mono\ {\isacharbrackleft}THEN\ {\isacharbrackleft}{\isadigit{2}}{\isacharbrackright}\ rev{\isacharunderscore}subsetD{\isacharbrackright}{\isacharparenright}%
+  \endisatagproof
+  {\isafoldproof}%
+  %
+  \isadelimproof
+  \isanewline
+  %
+  \endisadelimproof
+  %
+  \isadelimtheory
+  \isanewline
+  %
+  \endisadelimtheory
+  %
+  \isatagtheory
+  \isacommand{end}\isamarkupfalse%
+  %
+  \endisatagtheory
+  {\isafoldtheory}%
+  %
+  \isadelimtheory
+  %
+  \endisadelimtheory
+  %
+  \end{isabellebody}%
+  \endinput
+  %:%file=~/workspace/dap-verification/scripts/EventSP.thy%:%
+  %:%6=11%:%
+  %:%7=12%:%
+  %:%12=13%:%
+  %:%13=13%:%
+  %:%18=13%:%
+  %:%21=14%:%
+  %:%22=15%:%
+  %:%23=15%:%
+  %:%24=16%:%
+  %:%25=17%:%
+  %:%26=18%:%
+  %:%27=18%:%
+  %:%28=19%:%
+  %:%29=20%:%
+  %:%30=20%:%
+  %:%31=21%:%
+  %:%32=22%:%
+  %:%33=23%:%
+  %:%34=24%:%
+  %:%35=25%:%
+  %:%36=26%:%
+  %:%37=27%:%
+  %:%38=28%:%
+  %:%39=29%:%
+  %:%40=30%:%
+  %:%41=30%:%
+  %:%42=31%:%
+  %:%43=32%:%
+  %:%44=33%:%
+  %:%45=34%:%
+  %:%46=35%:%
+  %:%47=36%:%
+  %:%48=36%:%
+  %:%49=37%:%
+  %:%50=38%:%
+  %:%51=39%:%
+  %:%52=40%:%
+  %:%53=40%:%
+  %:%54=41%:%
+  %:%55=42%:%
+  %:%58=43%:%
+  %:%62=43%:%
+  %:%63=43%:%
+  %:%64=44%:%
+  %:%70=44%:%
+  %:%73=45%:%
+  %:%74=46%:%
+  %:%75=46%:%
+  %:%76=47%:%
+  %:%77=48%:%
+  %:%78=49%:%
+  %:%81=50%:%
+  %:%85=50%:%
+  %:%86=50%:%
+  %:%87=51%:%
+  %:%93=51%:%
+  %:%96=52%:%
+  %:%97=53%:%
+  %:%98=53%:%
+  %:%99=54%:%
+  %:%100=55%:%
+  %:%101=56%:%
+  %:%104=57%:%
+  %:%108=57%:%
+  %:%109=57%:%
+  %:%110=58%:%
+  %:%116=58%:%
+  %:%119=59%:%
+  %:%120=60%:%
+  %:%121=61%:%
+  %:%122=61%:%
+  %:%123=62%:%
+  %:%124=63%:%
+  %:%127=65%:%
+  %:%128=65%:%
+  %:%134=70%:%
+  %:%135=70%:%
+  %:%141=75%:%
+  %:%142=76%:%
+  %:%143=76%:%
+  %:%149=81%:%
+  %:%150=82%:%
+  %:%151=82%:%
+  %:%157=87%:%
+  %:%158=88%:%
+  %:%159=88%:%
+  %:%163=91%:%
+  %:%164=91%:%
+  %:%170=96%:%
+  %:%171=96%:%
+  %:%177=101%:%
+  %:%178=101%:%
+  %:%184=106%:%
+  %:%185=106%:%
+  %:%191=111%:%
+  %:%192=111%:%
+  %:%196=115%:%
+  %:%197=116%:%
+  %:%198=117%:%
+  %:%199=118%:%
+  %:%200=118%:%
+  %:%201=119%:%
+  %:%202=120%:%
+  %:%214=132%:%
+  %:%216=133%:%
+  %:%217=133%:%
+  %:%218=134%:%
+  %:%225=135%:%
+  %:%226=135%:%
+  %:%227=136%:%
+  %:%228=136%:%
+  %:%229=137%:%
+  %:%235=137%:%
+  %:%238=138%:%
+  %:%239=139%:%
+  %:%240=139%:%
+  %:%241=140%:%
+  %:%248=141%:%
+  %:%249=141%:%
+  %:%250=142%:%
+  %:%251=142%:%
+  %:%252=143%:%
+  %:%258=143%:%
+  %:%261=144%:%
+  %:%262=145%:%
+  %:%263=145%:%
+  %:%264=146%:%
+  %:%271=147%:%
+  %:%272=147%:%
+  %:%273=148%:%
+  %:%274=148%:%
+  %:%275=149%:%
+  %:%281=149%:%
+  %:%284=150%:%
+  %:%285=151%:%
+  %:%286=151%:%
+  %:%287=152%:%
+  %:%294=153%:%
+  %:%295=153%:%
+  %:%296=154%:%
+  %:%297=154%:%
+  %:%298=155%:%
+  %:%304=155%:%
+  %:%307=156%:%
+  %:%308=157%:%
+  %:%309=157%:%
+  %:%310=158%:%
+  %:%317=159%:%
+  %:%318=159%:%
+  %:%319=160%:%
+  %:%320=160%:%
+  %:%321=161%:%
+  %:%336=163%:%
+  %:%346=166%:%
+  %:%347=166%:%
+  %:%348=167%:%
+  %:%349=168%:%
+  %:%350=168%:%
+  %:%351=169%:%
+  %:%358=170%:%
+  %:%359=170%:%
+  %:%364=170%:%
+  %:%367=171%:%
+  %:%368=172%:%
+  %:%369=172%:%
+  %:%370=173%:%
+  %:%377=174%:%
+  %:%378=174%:%
+  %:%383=174%:%
+  %:%386=175%:%
+  %:%387=176%:%
+  %:%388=176%:%
+  %:%389=177%:%
+  %:%391=179%:%
+  %:%398=180%:%
+  %:%399=180%:%
+  %:%404=180%:%
+  %:%407=181%:%
+  %:%408=182%:%
+  %:%409=182%:%
+  %:%410=183%:%
+  %:%412=185%:%
+  %:%419=186%:%
+  %:%420=186%:%
+  %:%425=186%:%
+  %:%428=187%:%
+  %:%429=188%:%
+  %:%430=188%:%
+  %:%431=189%:%
+  %:%438=190%:%
+  %:%439=190%:%
+  %:%444=190%:%
+  %:%447=191%:%
+  %:%448=192%:%
+  %:%449=192%:%
+  %:%450=193%:%
+  %:%452=195%:%
+  %:%459=196%:%
+  %:%460=196%:%
+  %:%465=196%:%
+  %:%468=197%:%
+  %:%469=198%:%
+  %:%470=198%:%
+  %:%471=199%:%
+  %:%473=201%:%
+  %:%480=202%:%
+  %:%481=202%:%
+  %:%486=202%:%
+  %:%489=203%:%
+  %:%490=204%:%
+  %:%491=204%:%
+  %:%492=205%:%
+  %:%494=207%:%
+  %:%501=208%:%
+  %:%502=208%:%
+  %:%507=208%:%
+  %:%510=209%:%
+  %:%511=210%:%
+  %:%512=210%:%
+  %:%513=211%:%
+  %:%520=212%:%
+  %:%521=212%:%
+  %:%526=212%:%
+  %:%529=213%:%
+  %:%530=214%:%
+  %:%531=214%:%
+  %:%532=215%:%
+  %:%534=217%:%
+  %:%541=218%:%
+  %:%542=218%:%
+  %:%547=218%:%
+  %:%550=219%:%
+  %:%551=220%:%
+  %:%552=221%:%
+  %:%553=221%:%
+  %:%554=222%:%
+  %:%561=223%:%
+  %:%562=223%:%
+  %:%567=223%:%
+  %:%570=224%:%
+  %:%571=225%:%
+  %:%572=225%:%
+  %:%573=226%:%
+  %:%580=227%:%
+  %:%581=227%:%
+  %:%586=227%:%
+  %:%589=228%:%
+  %:%590=229%:%
+  %:%591=229%:%
+  %:%592=230%:%
+  %:%599=231%:%
+  %:%600=231%:%
+  %:%605=231%:%
+  %:%608=232%:%
+  %:%609=233%:%
+  %:%610=233%:%
+  %:%611=234%:%
+  %:%618=235%:%
+  %:%619=235%:%
+  %:%624=235%:%
+  %:%627=236%:%
+  %:%628=237%:%
+  %:%629=237%:%
+  %:%630=238%:%
+  %:%637=239%:%
+  %:%638=239%:%
+  %:%643=239%:%
+  %:%646=240%:%
+  %:%647=241%:%
+  %:%648=241%:%
+  %:%649=242%:%
+  %:%656=243%:%
+  %:%657=243%:%
+  %:%662=243%:%
+  %:%665=244%:%
+  %:%666=245%:%
+  %:%667=245%:%
+  %:%668=246%:%
+  %:%675=247%:%
+  %:%676=247%:%
+  %:%681=247%:%
+  %:%684=248%:%
+  %:%685=249%:%
+  %:%686=249%:%
+  %:%687=250%:%
+  %:%694=251%:%
+  %:%695=251%:%
+  %:%700=251%:%
+  %:%703=252%:%
+  %:%704=253%:%
+  %:%705=254%:%
+  %:%706=254%:%
+  %:%707=255%:%
+  %:%710=256%:%
+  %:%711=257%:%
+  %:%715=257%:%
+  %:%716=257%:%
+  %:%717=258%:%
+  %:%718=258%:%
+  %:%719=259%:%
+  %:%725=259%:%
+  %:%728=260%:%
+  %:%729=261%:%
+  %:%730=261%:%
+  %:%731=262%:%
+  %:%734=263%:%
+  %:%735=264%:%
+  %:%739=264%:%
+  %:%740=264%:%
+  %:%741=265%:%
+  %:%742=265%:%
+  %:%743=266%:%
+  %:%744=266%:%
+  %:%745=267%:%
+  %:%747=268%:%
+  %:%753=268%:%
+  %:%756=269%:%
+  %:%757=270%:%
+  %:%758=270%:%
+  %:%759=271%:%
+  %:%762=272%:%
+  %:%763=273%:%
+  %:%767=273%:%
+  %:%768=273%:%
+  %:%769=274%:%
+  %:%770=274%:%
+  %:%771=275%:%
+  %:%772=275%:%
+  %:%773=276%:%
+  %:%775=277%:%
+  %:%781=277%:%
+  %:%784=278%:%
+  %:%785=278%:%
+  %:%786=279%:%
+  %:%789=280%:%
+  %:%790=281%:%
+  %:%794=281%:%
+  %:%795=281%:%
+  %:%796=282%:%
+  %:%797=282%:%
+  %:%798=283%:%
+  %:%804=283%:%
+  %:%807=284%:%
+  %:%808=285%:%
+  %:%809=285%:%
+  %:%810=286%:%
+  %:%813=287%:%
+  %:%814=288%:%
+  %:%818=288%:%
+  %:%819=288%:%
+  %:%820=289%:%
+  %:%821=289%:%
+  %:%822=290%:%
+  %:%828=290%:%
+  %:%831=291%:%
+  %:%832=292%:%
+  %:%833=292%:%
+  %:%834=293%:%
+  %:%837=294%:%
+  %:%838=295%:%
+  %:%842=295%:%
+  %:%843=295%:%
+  %:%844=296%:%
+  %:%845=296%:%
+  %:%846=297%:%
+  %:%847=297%:%
+  %:%848=298%:%
+  %:%850=299%:%
+  %:%856=299%:%
+  %:%859=300%:%
+  %:%860=300%:%
+  %:%861=301%:%
+  %:%864=302%:%
+  %:%865=303%:%
+  %:%869=303%:%
+  %:%870=303%:%
+  %:%871=304%:%
+  %:%872=304%:%
+  %:%873=305%:%
+  %:%879=305%:%
+  %:%882=306%:%
+  %:%883=307%:%
+  %:%884=307%:%
+  %:%885=308%:%
+  %:%886=309%:%
+  %:%887=310%:%
+  %:%888=311%:%
+  %:%889=312%:%
+  %:%890=312%:%
+  %:%897=313%:%
+  %:%898=313%:%
+  %:%903=313%:%
+  %:%906=314%:%
+  %:%907=315%:%
+  %:%908=315%:%
+  %:%915=316%:%
+  %:%916=316%:%
+  %:%921=316%:%
+  %:%924=317%:%
+  %:%925=318%:%
+  %:%926=318%:%
+  %:%927=319%:%
+  %:%934=320%:%
+  %:%935=320%:%
+  %:%940=320%:%
+  %:%943=321%:%
+  %:%944=322%:%
+  %:%945=322%:%
+  %:%952=323%:%
+  %:%953=323%:%
+  %:%958=323%:%
+  %:%961=324%:%
+  %:%962=325%:%
+  %:%963=325%:%
+  %:%964=326%:%
+  %:%971=327%:%
+  %:%972=327%:%
+  %:%977=327%:%
+  %:%980=328%:%
+  %:%981=329%:%
+  %:%982=329%:%
+  %:%983=330%:%
+  %:%990=331%:%
+  %:%991=331%:%
+  %:%996=331%:%
+  %:%999=332%:%
+  %:%1000=333%:%
+  %:%1001=333%:%
+  %:%1002=334%:%
+  %:%1009=335%:%
+  %:%1010=335%:%
+  %:%1015=335%:%
+  %:%1018=336%:%
+  %:%1019=337%:%
+  %:%1020=337%:%
+  %:%1021=338%:%
+  %:%1028=339%:%
+  %:%1029=339%:%
+  %:%1034=339%:%
+  %:%1037=340%:%
+  %:%1038=341%:%
+  %:%1039=341%:%
+  %:%1046=342%:%
+  %:%1047=342%:%
+  %:%1052=342%:%
+  %:%1055=343%:%
+  %:%1056=344%:%
+  %:%1057=344%:%
+  %:%1064=345%:%
+  %:%1065=345%:%
+  %:%1070=345%:%
+  %:%1073=346%:%
+  %:%1074=347%:%
+  %:%1075=347%:%
+  %:%1082=348%:%
+  %:%1083=348%:%
+  %:%1088=348%:%
+  %:%1091=349%:%
+  %:%1092=350%:%
+  %:%1093=350%:%
+  %:%1100=351%:%
+  %:%1101=351%:%
+  %:%1106=351%:%
+  %:%1109=352%:%
+  %:%1110=353%:%
+  %:%1111=353%:%
+  %:%1118=354%:%
+  %:%1119=354%:%
+  %:%1124=354%:%
+  %:%1127=355%:%
+  %:%1128=356%:%
+  %:%1129=356%:%
+  %:%1136=357%:%
+  %:%1137=357%:%
+  %:%1142=357%:%
+  %:%1145=358%:%
+  %:%1146=359%:%
+  %:%1147=359%:%
+  %:%1154=360%:%
+  %:%1155=360%:%
+  %:%1160=360%:%
+  %:%1163=361%:%
+  %:%1164=362%:%
+  %:%1165=362%:%
+  %:%1172=363%:%
+  %:%1173=363%:%
+  %:%1174=364%:%
+  %:%1176=365%:%
+  %:%1182=365%:%
+  %:%1185=366%:%
+  %:%1186=366%:%
+  %:%1187=367%:%
+  %:%1190=368%:%
+  %:%1194=368%:%
+  %:%1195=368%:%
+  %:%1196=369%:%
+  %:%1197=369%:%
+  %:%1198=370%:%
+  %:%1199=370%:%
+  %:%1200=371%:%
+  %:%1201=371%:%
+  %:%1202=372%:%
+  %:%1204=373%:%
+  %:%1210=373%:%
+  %:%1213=374%:%
+  %:%1214=374%:%
+  %:%1215=375%:%
+  %:%1218=376%:%
+  %:%1219=377%:%
+  %:%1223=377%:%
+  %:%1224=377%:%
+  %:%1225=378%:%
+  %:%1226=378%:%
+  %:%1227=379%:%
+  %:%1228=379%:%
+  %:%1229=380%:%
+  %:%1230=380%:%
+  %:%1231=381%:%
+  %:%1233=382%:%
+  %:%1239=382%:%
+  %:%1242=383%:%
+  %:%1243=383%:%
+  %:%1244=384%:%
+  %:%1247=385%:%
+  %:%1248=386%:%
+  %:%1252=386%:%
+  %:%1253=386%:%
+  %:%1254=387%:%
+  %:%1255=387%:%
+  %:%1256=388%:%
+  %:%1257=388%:%
+  %:%1258=389%:%
+  %:%1260=390%:%
+  %:%1266=390%:%
+  %:%1269=391%:%
+  %:%1270=391%:%
+  %:%1271=392%:%
+  %:%1274=393%:%
+  %:%1278=393%:%
+  %:%1279=393%:%
+  %:%1280=394%:%
+  %:%1281=394%:%
+  %:%1282=395%:%
+  %:%1283=395%:%
+  %:%1284=396%:%
+  %:%1285=396%:%
+  %:%1286=397%:%
+  %:%1288=398%:%
+  %:%1294=398%:%
+  %:%1297=399%:%
+  %:%1298=399%:%
+  %:%1299=400%:%
+  %:%1302=401%:%
+  %:%1303=402%:%
+  %:%1307=402%:%
+  %:%1308=402%:%
+  %:%1309=403%:%
+  %:%1310=403%:%
+  %:%1311=404%:%
+  %:%1312=404%:%
+  %:%1313=405%:%
+  %:%1314=405%:%
+  %:%1315=406%:%
+  %:%1317=407%:%
+  %:%1318=407%:%
+  %:%1319=408%:%
+  %:%1321=409%:%
+  %:%1327=409%:%
+  %:%1330=410%:%
+  %:%1331=410%:%
+  %:%1332=411%:%
+  %:%1335=412%:%
+  %:%1336=413%:%
+  %:%1340=413%:%
+  %:%1341=413%:%
+  %:%1342=414%:%
+  %:%1343=414%:%
+  %:%1344=415%:%
+  %:%1350=415%:%
+  %:%1353=416%:%
+  %:%1354=417%:%
+  %:%1355=417%:%
+  %:%1356=418%:%
+  %:%1359=419%:%
+  %:%1360=420%:%
+  %:%1364=420%:%
+  %:%1365=420%:%
+  %:%1366=421%:%
+  %:%1367=421%:%
+  %:%1368=422%:%
+  %:%1369=422%:%
+  %:%1370=423%:%
+  %:%1372=424%:%
+  %:%1378=424%:%
+  %:%1381=425%:%
+  %:%1382=425%:%
+  %:%1383=426%:%
+  %:%1386=427%:%
+  %:%1387=428%:%
+  %:%1391=428%:%
+  %:%1392=428%:%
+  %:%1393=429%:%
+  %:%1394=429%:%
+  %:%1395=430%:%
+  %:%1401=430%:%
+  %:%1404=431%:%
+  %:%1405=432%:%
+  %:%1406=433%:%
+  %:%1407=434%:%
+  %:%1408=434%:%
+  %:%1409=435%:%
+  %:%1416=436%:%
+  %:%1417=436%:%
+  %:%1418=437%:%
+  %:%1419=437%:%
+  %:%1420=438%:%
+  %:%1421=438%:%
+  %:%1422=439%:%
+  %:%1428=439%:%
+  %:%1431=440%:%
+  %:%1432=441%:%
+  %:%1433=441%:%
+  %:%1434=442%:%
+  %:%1435=443%:%
+  %:%1436=443%:%
+  %:%1437=444%:%
+  %:%1444=445%:%
+  %:%1445=445%:%
+  %:%1446=446%:%
+  %:%1447=446%:%
+  %:%1448=447%:%
+  %:%1454=447%:%
+  %:%1457=448%:%
+  %:%1458=449%:%
+  %:%1459=449%:%
+  %:%1466=451%:%
+  %:%1476=452%:%
+  %:%1477=452%:%
+  %:%1478=453%:%
+  %:%1485=454%:%
+  %:%1486=454%:%
+  %:%1487=455%:%
+  %:%1488=455%:%
+  %:%1489=456%:%
+  %:%1490=456%:%
+  %:%1491=457%:%
+  %:%1497=457%:%
+  %:%1500=458%:%
+  %:%1501=459%:%
+  %:%1502=459%:%
+  %:%1503=460%:%
+  %:%1510=461%:%
+  %:%1511=461%:%
+  %:%1512=462%:%
+  %:%1513=462%:%
+  %:%1514=463%:%
+  %:%1515=463%:%
+  %:%1516=464%:%
+  %:%1522=464%:%
+  %:%1525=465%:%
+  %:%1526=466%:%
+  %:%1527=466%:%
+  %:%1528=467%:%
+  %:%1535=468%:%
+  %:%1536=468%:%
+  %:%1537=469%:%
+  %:%1538=469%:%
+  %:%1539=470%:%
+  %:%1540=470%:%
+  %:%1541=471%:%
+  %:%1547=471%:%
+  %:%1550=472%:%
+  %:%1551=473%:%
+  %:%1552=473%:%
+  %:%1553=474%:%
+  %:%1560=475%:%
+  %:%1561=475%:%
+  %:%1562=476%:%
+  %:%1563=476%:%
+  %:%1564=477%:%
+  %:%1565=477%:%
+  %:%1566=478%:%
+  %:%1572=478%:%
+  %:%1575=479%:%
+  %:%1576=480%:%
+  %:%1577=480%:%
+  %:%1578=481%:%
+  %:%1585=482%:%
+  %:%1586=482%:%
+  %:%1587=483%:%
+  %:%1588=483%:%
+  %:%1589=484%:%
+  %:%1590=484%:%
+  %:%1591=485%:%
+  %:%1597=485%:%
+  %:%1600=486%:%
+  %:%1601=487%:%
+  %:%1602=488%:%
+  %:%1603=488%:%
+  %:%1604=489%:%
+  %:%1605=490%:%
+  %:%1606=491%:%
+  %:%1607=492%:%
+  %:%1608=492%:%
+  %:%1609=493%:%
+  %:%1616=494%:%
+  %:%1617=494%:%
+  %:%1622=494%:%
+  %:%1625=495%:%
+  %:%1626=496%:%
+  %:%1627=496%:%
+  %:%1628=497%:%
+  %:%1635=498%:%
+  %:%1636=498%:%
+  %:%1637=499%:%
+  %:%1638=499%:%
+  %:%1639=500%:%
+  %:%1645=500%:%
+  %:%1648=501%:%
+  %:%1649=502%:%
+  %:%1650=502%:%
+  %:%1651=503%:%
+  %:%1652=504%:%
+  %:%1659=505%:%
+  %:%1660=505%:%
+  %:%1661=506%:%
+  %:%1662=507%:%
+  %:%1663=508%:%
+  %:%1668=508%:%
+  %:%1673=509%:%
+  %:%1678=510%:%
