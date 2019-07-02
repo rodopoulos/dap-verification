@@ -57,11 +57,6 @@ specification (stolen)
   apply blast
 done
 
-
-
-
-
-
 (* Agents' knowledge definition over a trace is extended to comprehend new Smartphone events *)
 primrec knows :: "agent \<Rightarrow> event list \<Rightarrow> msg set" where
   knows_Nil :  "knows A [] = initState A" |
@@ -120,8 +115,6 @@ primrec knows :: "agent \<Rightarrow> event list \<Rightarrow> msg set" where
   )"
 
 
-
-
 primrec used :: "event list \<Rightarrow> msg set" where
   used_Nil  : "used [] = (\<Union> B. parts (initState B))" |
   used_Cons : "used (ev # evs) =
@@ -130,19 +123,13 @@ primrec used :: "event list \<Rightarrow> msg set" where
       | Notes A X \<Rightarrow> parts {X} \<union> (used evs)
       | Gets A X \<Rightarrow> used evs
       | Scans A P X \<Rightarrow> parts {X} \<union> used evs
-      \<comment> \<open>We need to extend the used set here due to lemma parts_knows_Spy_subset_used
-         We do not violate the reception invariant, since every message received here was already
-         been added in the above definition\<close>
       | SGets P X \<Rightarrow> parts {X} \<union> used evs
       | Shows P A X \<Rightarrow> parts {X} \<union> used evs
       | AGets A X \<Rightarrow> used evs
       | Inputs A P X \<Rightarrow> parts {X} \<union> used evs
   )"
 
-
-
-
-(* Describing how some the set used evs is enriched given our events *)
+text\<open>Describing how some the set used evs is enriched given our events\<close>
 lemma Notes_imp_used [rule_format] :
   "Notes A X \<in> set evs \<longrightarrow> X \<in> used evs"
 apply (induct_tac evs)
@@ -173,10 +160,7 @@ apply (induct_tac evs)
 apply (auto split: event.split)
 done
 
-
-
-
-(* AGENTS' KNOWLEDGE LEMMAS *)
+section\<open>Function \<^term>\<open>knows\<close>\<close>
 (* Simplifying:
    parts(insert X (knows Spy evs)) = parts{X} \<union> parts(knows Spy evs) *)
 lemmas parts_insert_knows_A = parts_insert [of _ "knows A evs"] for A evs
@@ -234,8 +218,6 @@ lemma knows_Spy_Inputs [simp] :
 by simp
 
 
-
-
 lemma knows_Spy_subset_knows_Spy_Says :
   "knows Spy evs \<subseteq> knows Spy (Says A B X # evs)"
 by (simp add: subset_insertI)
@@ -269,8 +251,6 @@ lemma knows_Spy_subset_knows_Spy_Inputs :
 by (simp add: subset_insertI)
 
 
-
-
 lemma Says_imp_knows_Spy [rule_format (no_asm)] :
   "Says A B X \<in> set evs \<longrightarrow> X \<in> knows Spy evs"
 
@@ -285,7 +265,7 @@ lemma Notes_imp_knows_Spy [rule_format (no_asm)] :
   apply (simp_all (no_asm_simp) split: event.split)
 done
 
-(*Nothing can be stated on a Gets event*)
+\<comment> \<open>Nothing can be stated about Gets event\<close>
 
 lemma Scans_imp_knows_Spy [rule_format (no_asm)] :
   "Scans A P X \<in> set evs \<longrightarrow> A \<in> bad \<longrightarrow> X \<in> knows Spy evs"
@@ -294,8 +274,7 @@ lemma Scans_imp_knows_Spy [rule_format (no_asm)] :
   apply (simp_all (no_asm_simp) split: event.split)
 done
 
-(*Nothing can be stated on a SGets when phones are secured event*)
-
+\<comment> \<open>Nothing can be stated on a SGets when phones are secured event\<close>
 lemma SGets_imp_knows_Spy_insecureP [rule_format (no_asm)] :
   "SGets P X \<in> set evs \<longrightarrow> (insecureP \<and> P \<in> badP) \<longrightarrow> X \<in> knows Spy evs" 
 
@@ -317,8 +296,7 @@ lemma Shows_imp_know_Spy_insecureM [rule_format (no_asm)] :
   apply (simp_all (no_asm_simp) split: event.split)
 done
 
-(* Nothing can be stated here on a AGets event *)
-
+\<comment> \<open>Nothing can be stated here on a AGets event\<close>
 lemma Inputs_imp_knows_Spy [rule_format] :
   "Inputs Spy P X \<in> set evs \<longrightarrow> X \<in> knows Spy evs"
   
@@ -329,8 +307,6 @@ done
 lemmas knows_Spy_partsEs =
      Says_imp_knows_Spy [THEN parts.Inj, elim_format]
      parts.Body [elim_format]
-
-
 
 
 lemma knows_Says: "knows A (Says A B X # evs) = insert X (knows A evs)"
@@ -358,16 +334,9 @@ lemma knows_Shows_insecureP:
   "(insecureP \<and> A \<noteq> Spy) \<longrightarrow> knows A (Shows P A X # evs) = knows A evs"
 by simp
 
-(* lemma knows_AGets: *)
-  (* "A \<noteq> Spy \<longrightarrow> knows A (AGets A X # evs) = insert X (knows A evs)" *)
-(* by simp *)
-
 lemma knows_Inputs:
   "knows A (Inputs A P X # evs) = insert X (knows A evs)"
 by simp
-
-
-
 
 lemma knows_subset_knows_Says: "knows A evs \<subseteq> knows A (Says A' B X # evs)"
 by (simp add: subset_insertI)
@@ -393,8 +362,7 @@ by (simp add: subset_insertI)
 lemma knows_subset_knows_Inputs: "knows A evs \<subseteq> knows A (Inputs A' P X # evs)"
 by (simp add: subset_insertI)
 
-
-(* Agents know what they say *)
+\<comment> \<open>Agents know what they say\<close>
 lemma Says_imp_knows [rule_format] :
   "Says A B X \<in> set evs \<longrightarrow> X \<in> knows A evs"
   apply (induct_tac "evs")
@@ -402,7 +370,7 @@ lemma Says_imp_knows [rule_format] :
   apply (auto)
 done
 
-(* Agents know what they note *)
+\<comment> \<open>Agents know what they note\<close>
 lemma Notes_imp_knows [rule_format] :
   "Notes A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 
@@ -411,7 +379,7 @@ lemma Notes_imp_knows [rule_format] :
   apply (auto)
 done
 
-(* Agents know what they receive *)
+\<comment> \<open>Agents know what they receive\<close>
 lemma Gets_imp_knows [rule_format] :
   "A \<noteq> Spy \<longrightarrow> Gets A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 
@@ -419,7 +387,7 @@ lemma Gets_imp_knows [rule_format] :
   apply (simp_all (no_asm_simp) split: event.split)
 done
 
-(* Agents know what their smartphone scans *)
+\<comment> \<open>Agents know what their smartphone scans\<close>
 lemma Scans_imp_knows [rule_format] :
   "Scans A (Smartphone A) X \<in> set evs \<longrightarrow> X \<in> knows A evs"
   apply (induct_tac "evs")
@@ -427,7 +395,7 @@ lemma Scans_imp_knows [rule_format] :
   apply (auto)
 done
 
-(* Agents know what they input to their smartphone *)
+\<comment> \<open>Agents know what they input to their smartphone\<close>
 lemma Inputs_imp_knows [rule_format] :
   "Inputs A (Smartphone A) X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 
@@ -436,10 +404,9 @@ lemma Inputs_imp_knows [rule_format] :
   apply (auto)
 done
 
-(* Agents do NOT know what they smartphones reads... *)
-(* So no rule for this *)
+\<comment> \<open>Agents do not know what they smartphones reads...\<close>
 
-(* Agents knows what their smartphones shows to them, if the device are secured *)
+\<comment> \<open>Agents know what their smartphones shows to them, if the device are secured\<close>
 lemma Shows_imp_knows_secureP [rule_format] :
   "secureP \<longrightarrow> Shows (Smartphone A) A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 
@@ -454,15 +421,13 @@ lemma Shows_imp_knows_insecureP [rule_format] :
   apply (simp_all (no_asm_simp) split: event.split)
 done
 
-(* Agents knows what they receive from a smartphone *)
+\<comment> \<open>Agents know what they receive from a smartphone\<close>
 lemma AGets_imp_knows [rule_format] :
   "A \<noteq> Spy \<longrightarrow> AGets A X \<in> set evs \<longrightarrow> X \<in> knows A evs"
 
   apply (induct_tac "evs")
   apply (simp_all (no_asm_simp) split: event.split)
 done
-
-
 
 (* REMEMBER: knows (Spy evs) = everything that appeared in the trace so far *)
 (* Everything that appeared in the trace is not fresh *)
@@ -483,9 +448,7 @@ done
 
 simps_of_case used_Cons_simps [simp]: used_Cons
 
-
-
-(* USED FUNCTION LEMMAS *)
+section\<open>Function \<^term>\<open>used\<close>\<close>
 lemma Says_parts_used [rule_format (no_asm)] :
   "Says A B X \<in> set evs \<longrightarrow> (parts {X}) \<subseteq> used evs "
 apply (induct_tac "evs")
@@ -522,7 +485,6 @@ apply (auto)
 done
 
 
-
 declare knows_Cons [simp del]
         used_Nil [simp del]
         used_Cons [simp del]
@@ -536,8 +498,6 @@ lemma initState_subset_knows :
 apply (induct_tac evs, simp)
 apply (blast intro: knows_subset_knows_Cons [THEN subsetD])
 done
-
-text\<open>For proving \<open>new_keys_not_used\<close>\<close>
 
 lemma keysFor_parts_insert:
      "\<lbrakk> K \<in> keysFor (parts (insert X G));  X \<in> synth (analz H) \<rbrakk>

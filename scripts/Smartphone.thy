@@ -21,8 +21,6 @@ axiomatization
 where
   inj_shrK : "inj shrK"
 
-
-  
 (* SMARTPHONE USAGE *)
 (* Legal agents use their smartphone if they hold it *)
 definition legalUse :: "smartphone \<Rightarrow> bool" ("legalUse (_)") where
@@ -34,8 +32,6 @@ primrec illegalUse :: "smartphone \<Rightarrow> bool" where
   illegalUse_def: "illegalUse (Smartphone A) = (
     (insecureP \<and> (Smartphone A \<in> stolen) \<or> (Smartphone A \<in> badP)) \<or>
     (secureP   \<and> (Smartphone A \<in> stolen)))"
-
-
   
 (* AGENTS' INITIAL STATE *)
 overloading initState \<equiv> initState
@@ -52,8 +48,6 @@ axiomatization where
   (*Needed because of Spy's knowledge of Pairkeys*)
   Nonce_supply_ax: "finite NN \<Longrightarrow> \<exists> N. N \<notin> NN & Nonce N \<notin> used evs"
 
-
-  
 (* PROPERTIES OF SHARED KEYS *)
 declare inj_shrK [THEN inj_eq, iff]
 
@@ -118,10 +112,8 @@ apply (rule initState_into_used)
 apply blast
 done
 
-
 (* Following lemmas are used in parts_induct_tac and analz_Fake_tac to distinguish session keys
    from long-term shared keys *)
-
 (* If a key is fresh, then it must not a long-term key *)
 lemma Key_not_used [simp]: "Key K \<notin> used evs \<Longrightarrow> K \<notin> range shrK"
 by blast
@@ -130,8 +122,6 @@ lemma shrK_neq [simp]: "Key K \<notin> used evs \<Longrightarrow> shrK B \<noteq
 by blast
 
 declare shrK_neq [THEN not_sym, simp]
-
-
 
 (* FUNCTION KNOWS *)
 (* An agent's compromised Smartphone disclose hers shared keys *)
@@ -167,7 +157,6 @@ lemma Crypt_Spy_analz_stolen :
   apply (simp add: Spy_knows_stolen_phones)
 done
 
-
 (* NONCE LEMMAS *)
 (* Nonces must be fresh! So no nonces in initial state of agents knowledge *)
 lemma Nonce_notin_initState [iff]: "Nonce N \<notin> parts (initState (Friend i))"
@@ -189,7 +178,6 @@ apply (rule finite.emptyI [THEN Nonce_supply_ax, THEN exE])
 apply (rule someI, blast)
 done
 
-
 lemmas analz_image_freshK_simps =
        simp_thms mem_simps \<comment>\<open>these two allow its use with \<open>only:\<close>\<close>
        disj_comms 
@@ -206,7 +194,6 @@ by (blast intro: analz_mono [THEN [2] rev_subsetD])
 
 
 subsection\<open>Tactics for possibility theorems\<close>
-
 ML
 \<open>
 structure Smartphone =
@@ -239,14 +226,12 @@ val analz_image_freshK_ss =
 end
 \<close>
 
-
 (*Lets blast_tac perform this step without needing the simplifier*)
 lemma invKey_shrK_iff [iff]:
      "(Key (invKey K) \<in> X) = (Key K \<in> X)"
 by auto
 
 (*Specialized methods*)
-
 method_setup analz_freshK = \<open>
     Scan.succeed (fn ctxt =>
      (SIMPLE_METHOD
@@ -269,7 +254,6 @@ lemma knows_subset_knows_Cons: "knows A evs \<subseteq> knows A (e # evs)"
 by (induct e) (auto simp: knows_Cons)
 
 (*Needed for actual protocols that will follow*)
-
 declare legalUse_def [iff] illegalUse_def [iff]
 
 end
