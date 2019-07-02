@@ -9,7 +9,7 @@ The proof scripts regarding the formalization are partially described, where onl
 \section{Message Transaction}
 The protocol model states that no devices can be compromised, hence the \texttt{secureP} flag holds against all protocol possible traces. Most definitions concerning messages, events and the new additions related to the smartphone use are in the \textit{Smartphone.thy} and \textit{EventSP.thy} theories.
 
-An observation about legal agents' initial knowledge set is necessary. In this protocol, legal agents do not own any knowledge, specially any necessary key for secure communication, since this is the base security premise of the DAP. Hence, we update the \texttt{initState} function for legal agents, as showed below.
+An observation about legal agents' initial knowledge set is necessary. In this protocol, legal agents do not own any knowledge, specially any necessary key for secure communication, since this is the base security premise of the DAP. Hence, we update the \texttt{initState} function, defined in Chapter \ref{chap:inductive}, altering its definition on legal agents.
 
 \begin{enumerate}
   \setcounter{enumi}{1}
@@ -47,7 +47,8 @@ It is important to stress the first adaption of the protocol entities. The trans
     & \Longrightarrow \Says{A}{\Server}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \ \# \ evs1 \in sdaptrans \\
     & \\
     & \texttt{DT2}: \newline \\
-    & \lBrace evs2 \in sdaptrans;\ \Gets{\Server}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \in \texttt{set} \ evs2 \\
+    & \lBrace evs2 \in sdaptrans;\ \Message{Nonce}{r} \notin\ used\ evs2;
+    & \\ \Gets{\Server}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \in \texttt{set} \ evs2 \\
     & \Longrightarrow \Says{\Server}{A}{\lBrack} \\
     & \qquad \Bracks{\Message{Agent}{A}, \Message{Number}{T}}, \\
     & \qquad \Crypt{\Key{shrK}{A}}{\Message{Nonce}{r}}, \\
@@ -61,9 +62,9 @@ It is important to stress the first adaption of the protocol entities. The trans
 
 Rule \textit{DT2} has more complex premises. In this rule, the Server instances the TAN, which must be fresh. Moreover, the Server must be triggered in order to respond an initiator, thus we include the reception of a transaction by the Server. 
 
-Finally, The Server uses the symmetric key both for generating the cipher with the TAN and the checksum hash for the offline phase. With the received transaction, the Server can respond the initial sender with the \(m'\) message. Note that we have another adaptation of the protocol: we do not distinguish the keys for encryption and hash creation. Since they are produced from just taking a part from the original key, the Spy could have access to both keys \(k_1\) and \(k_2\) if she has access to the shared key \(K\).
+Finally, the Server uses the symmetric key both for generating the cipher with the TAN and the checksum hash for the offline phase. With the received transaction, the Server can respond the initial sender with the message \(m'\). Note that we have another adaptation of the protocol: we do not distinguish the keys for encryption and hash creation. Since they are produced from just taking a part from the original key, the Spy could have access to both keys \(k_1\) and \(k_2\) if she has access to the shared key \(K\).
 
-Rule \textit{DT3} concerns the phase where the agent inputs data to her smartphone using its camera. Such action is preceded by the issue of a transaction and reception of the \(m'\) message. Also, the agent must be legally capable of using her smartphone, that is, it must not be stolen.
+Rule \textit{DT3} concerns the phase where the agent inputs data to her smartphone using its camera. Such action is preceded by the issue of a transaction and reception of the message \(m'\). Also, the agent must be legally capable of using her smartphone, that is, it must not be stolen.
 
 Since the agent does not know her shared key, it cannot understand the contents of the ciphers. Therefore, such entities are hidden and are represented using the \(r'\) and \(h_s\) messages.
 
@@ -98,7 +99,7 @@ Rule \textit{DT4} happens inside the smartphone. Here, the agent also must be ho
   \caption{Inductive model of secured DAP message transaction base case and reception}
 \end{figure}
 
-Rule \textit{DT5} models the agent confirming the visualized transaction in her smartphone screen. For this reason, the agent must have issued a transaction, received it again with its correspondent ciphers from the Server and saw the same transaction, inputed by her in \textit{DT3}, on the device screen. Again, we adapted the protocol: the confirmation act is represented with the \texttt{Inputs} event, using the transaction itself as an acknowledge that the outputed transaction is correct.
+Rule \textit{DT5} models the agent confirming the visualized transaction in her smartphone screen. For this reason, the agent must have issued a transaction, received it again with its correspondent ciphers from the Server and saw the same transaction, inputed by her in \textit{DT3}, on the device screen. Again, we adapted the protocol: the confirmation act is represented with the \texttt{Inputs} event, using the transaction itself as an acknowledgement that the outputed transaction is correct.
 
 \begin{figure}[!h]
   \begin{align*}
@@ -135,7 +136,7 @@ Next, rule \texttt{DT6} models the smartphone presenting the decrypted TAN to th
   \caption{Inductive model of secured DAP message transaction base case and reception}
 \end{figure}
 
-Rule \textit{DT7} starts the last stage of the protocol. Having issued and confirmed the transaction and received the correspondent TAN, the user can send it to the Server, in order to authorized the transaction at the bank side. Again, the agent does not know what the ciphers represent and the progress of the protocol should not rely in this fact.
+Rule \textit{DT7} starts the last stage of the protocol. Having issued and confirmed the transaction and received the correspondent TAN, the user can send it to the Server, in order to authorize the transaction at the bank side. Again, the agent does not know what the ciphers represent and the progress of the protocol should not rely in this fact.
 
 \begin{figure}[!h]
   \begin{align*}
@@ -195,6 +196,13 @@ Still, it is necessary to model how the Spy can exploit illegally usable smartph
 \begin{figure}[!h]
   \begin{align*}
     & \texttt{DT4\_Fake}:
+    & \lBrace evsf4 \in sdaptrans;\ \text{illegalUse}(\Smartphone{A}); \\
+    & \quad \Scans{Spy}{\Smartphone{A}}{\lBrack} \\
+    & \qquad \Bracks{\Message{Agent}{A}, \Message{Number}{T}} \\
+    & \qquad \Crypt{\Key{shrK}{A}}{\Message{Nonce}{r}}, \\
+    & \qquad \Crypt{\Key{shrK}{A}}{\Bracks{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}, \Crypt{\Key{shrK}{A}}{\Message{Nonce}{r}}}} \\
+    & \quad \in \texttt{set} \ evsf4 \rBrace \\
+    & \Longrightarrow \Outputs{\Smartphone{A}}{Spy}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \ \# \ evsf4 \in sdaptrans
   \end{align*}
   %
   \label{fig:dap-model-threat-dt4}
@@ -206,6 +214,15 @@ Rule \textit{DT6\_Fake} models how the smartphone can obtain the displayed TAN b
 \begin{figure}[!h]
   \begin{align*}
     & \texttt{DT6\_Fake}:
+    & \lBrace evs6 \in sdaptrans;\ \text{illegalUse}(\Smartphone{A}); \\
+    & \quad \Scans{Spy}{\Smartphone{A}}{\lBrack} \\
+    & \qquad \Bracks{\Message{Agent}{A}, \Message{Number}{T}} \\
+    & \qquad \Crypt{\Key{shrK}{A}}{\Message{Nonce}{r}}, \\
+    & \qquad \Crypt{\Key{shrK}{A}}{\Bracks{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}, \Crypt{\Key{shrK}{A}}{\Message{Nonce}{r}}}} \\
+    & \quad \in \texttt{set} \ evs6 \\
+    & \quad \Outputs{\Smartphone{A}}{Spy}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \in \texttt{set} \ evs6 \\
+    & \quad \Inputs{Spy}{\Smartphone{A}}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}} \in \texttt{set} \ evs6 \rBrace \\ 
+    & \Longrightarrow \Outputs{\Smartphone{A}}{Spy}{\Message{Nonce}{r}} \ \# \ evs6 \in sdaptrans
   \end{align*}
   %
   \label{fig:dap-model-threat-dt4}
@@ -283,7 +300,7 @@ The Spy can act in two different ways. She can only legally use her own smartpho
 \end{lemma}
 
 \subsection{Smartphone Outputs}
-The way how a smartphone produce outputs concerns how they interact with other peers. First, the proof focuses on how smartphones depend on the correct inputs to give the expected outputs, removing any unlimited power from then, specially if it in the Spy's possession. Therefore, such lemmas concern rules where the \texttt{Shows} events are appended to the trace. 
+The way how a smartphone produce outputs concerns how they interact with other peers. First, the proof focuses on how smartphones depend on the correct inputs to give the expected outputs, removing any unlimited power from them, specially if it in the Spy's possession. Therefore, such lemmas concern rules where the \texttt{Shows} events are appended to the trace. 
 
 We use Rule \textit{DT4} as an example. Lemma \ref{thm:shows-which-smartphone-4} demonstrates the conditions that must be fulfilled in order to a smartphone present the received transaction on its screen for further confirmation. 
 
@@ -307,7 +324,7 @@ A second version of the this lemma defines a stronger scenario, where the agent 
 \label{thm:shows-a-smartphone-4}
   If \text{evs} contains
   \[\Outputs{P}{A}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}}\]
-  Then, $P$ is A's smartphone, it have been legally used and, for a given r, the set \text{evs} contains
+  Then, $P$ is A's smartphone, it has been legally used and, for a given r, the set \text{evs} contains
   \begin{align*}
     & \Scans{A}{\Smartphone{A}}{\lBrack} \\
       & \quad \Bracks{\Message{Agent}{A}, \Message{Number}{T}}, \\
@@ -331,7 +348,7 @@ Another type of guarantees are the ones related to the format of the messages in
 
 
 \subsection{Smartphone Inputs}
-The proofs for smartphone inputs also have the two cited categories. Here, both the \textit{Scans} and the \textit{Inputs} events are considered. Like the weaker guarantees for Rule \textit{DT6}, Rule \textit{DT3} is another rule that suffers from the Spy threats. Since the smartphone can be robbed, a Spy could input a desired transaction in the stolen phone. Therefore, event if the event of a smartphone scanning the message \(m'\) is detected within a trace, it is not obvious that a legal use the smartphone was performed. Theorem \ref{thm:scans-a-honest-smartphone-3} is the strongest guarantee for such event, where the premises include the fact that the agent performing the scanning action is not the Spy. In this case, a legal use of the agent smartphone can be assured.
+The proofs for smartphone inputs also have the two cited categories. Here, both the \textit{Scans} and the \textit{Inputs} events are considered. Like the weaker guarantees for Rule \textit{DT6}, Rule \textit{DT3} is another rule that suffers from the Spy threats. Since the smartphone can be robbed, a Spy could input a desired transaction in the stolen phone. Therefore, even if the event of a smartphone scanning the message \(m'\) is detected within a trace, it is not obvious that a legal use the smartphone was performed. Theorem \ref{thm:scans-a-honest-smartphone-3} is the strongest guarantee for such event, where the premises include the fact that the agent performing the scanning action is not the Spy. In this case, a legal use of the agent smartphone can be assured.
 
 \begin{theorem}[\textbf{Scans\_A\_honest\_Smartphone\_3}]
 \label{thm:scans-a-honest-smartphone-3}
@@ -376,7 +393,7 @@ Lemmas about Rule \textit{DT5} format are straightforward, once it is the only \
 
 
 \subsection{Regularity}
-The DAP message transaction phase does not send any long-term keys over the network. Therefore, such keys are only present in the network if the Spy is sending then. In order to do so, the Spy must know such keys prior to the protocol execution, which means that she must have access to the legal agent smartphone, which retains the user long-term key. She cannot obtain the key from the Server, since it is a secure entity. At the same time, if the agent smartphone is compromised, the Spy can send its store long-term key in the network. Theorem \ref{thm:spy-analz-shrk} is a message regularity guarantee that expresses this situation.
+The DAP message transaction phase does not send any long-term keys over the network. Therefore, such keys are only present in the network if the Spy is sending then. In order to do so, the Spy must know such keys prior to the protocol execution, which means that she must have access to the legal agent smartphone, which retains the user long-term key. She cannot obtain the key from the Server, since it is a secure entity. At the same time, if the agent smartphone is compromised, the Spy can send its stored long-term key in the network. Theorem \ref{thm:spy-analz-shrk} is a message regularity guarantee that expresses this situation.
 
 \begin{theorem}[\textbf{Spy\_analz\_shrK}]
 \label{thm:spy-analz-shrk}
@@ -385,7 +402,7 @@ The DAP message transaction phase does not send any long-term keys over the netw
 
 
 \section{Model Properties}
-In this section, the obtained model properties so far are described. This properties relate to the protocol guarantees and it is a partial formalization. More work on confidentiality and authorization guarantees must be made, but the results are satisfying since they explore some core features in the protocol.
+In this section, the verified model properties are described. These properties relate to the protocol guarantees and it is a partial formalization. More work on confidentiality and authorization guarantees must be made, but the results are satisfying since they explore some core features in the protocol.
 
 
 
@@ -399,7 +416,7 @@ It is observable that the DAP does not preserve the transaction privacy. Theorem
   Then, Number T $\in$ analz(knows Spy evs)
 \end{theorem}
 
-Considering the best practices for a banking security framework \cite{Hutchinson2003}, privacy is a property that is usually desired in online banking protocols. Moreover, The argument that the transaction may be protected by an higher level communication channel does not ensure the privacy property, since it is given that the user personal computer is compromised and, thus, the Spy can access the transaction again.
+Considering the best practices for a banking security framework \cite{Hutchinson2003}, privacy is a property that is usually desired in online banking protocols. Moreover, the argument that the transaction may be protected by an higher level communication channel does not ensure the privacy property, since it is given that the user personal computer is compromised and, thus, the Spy can access the transaction again.
 
 Given this, there are no lemmas regarding confidentiality that can be made useful.
 
@@ -429,7 +446,7 @@ At the smartphone side, the guarantee that message \(m'\) is authentic is confir
   \end{align*}
 \end{theorem}
 
-Theorem \ref{thm:tan_a_identity_by_server} demonstrates how the server correctly links the TAN and hash \(h_S\) to the correct agent, proving that it can only authorize transactions to known peers. Thus, If the servers responds someone, it must knows the pre-shared key \(K\) belonging to such agent.
+Theorem \ref{thm:tan_a_identity_by_server} demonstrates how the server correctly links the TAN and hash \(h_S\) to the correct agent, proving that it can only authorize transactions to known peers. Thus, if the server responds to an agent, it must know the pre-shared key \(K\) belonging to such agent.
 
 \begin{theorem}
   \label{thm:tan_a_identity_by_server}
@@ -447,7 +464,7 @@ Theorem \ref{thm:tan_a_identity_by_server} demonstrates how the server correctly
 
 
 \subsection{Unicity}
-The TAN is the entity that uniquely identify a transaction. Hence, it is important that such entity preserves the unicity property. The Server must guarantee that if two TAN are equal, then they are referencing the same transaction. Theorem \ref{thm:server-tan-unique} describes that if two messages in the network preserve the same TAN, then they must carrying the same transaction to the same agent. This property cannot the verified by any agent, since they cannot read the Server's message ciphered content.
+The TAN is the entity that uniquely identifies a transaction. Hence, it is important that such entity preserves the unicity property. The Server must guarantee that if two TAN are equal, then they are referencing the same transaction. Theorem \ref{thm:server-tan-unique} describes that if two messages in the network contain the same TAN, then they must be carrying the same transaction to the same agent. This property cannot the verified by any agent, since they cannot read the Server's message ciphered content.
 
 \begin{theorem}[\textbf{Server\_TAN\_Unique}]
 \label{thm:server-tan-unique}

@@ -156,7 +156,7 @@ Now we focus on our working example. Figures \ref{fig:auth-attack1} and \ref{fig
       \draw[->] (A) -- (E) node[midway,auto] {3. $\{K_{AB}\}_{K_{BS}}, A$};
       \draw[->] (E) -- (B) node[midway,auto] {4. $\{K_{AB}\}_{K_{BS}}, X$};
   \end{tikzpicture}
-  \caption{First attack possibility against Protocol~\ref{prt:session-key-confidentiality}}
+  \caption{First attack possibility against the protocol described in Figure~\ref{prt:session-key-confidentiality}}
   \label{fig:auth-attack1}
 \end{figure}
 
@@ -180,7 +180,7 @@ The second case presents a more serious flaw. Here, the Spy intercepts the first
       \path[->,draw] (A) edge [sloped,above] node {5. $\{K_{AE}\}_{K_{ES}}, A$} (E2);
   \end{tikzpicture}
 
-  \caption{Second attack possibility against Protocol~\ref{prt:session-key-auth}}
+  \caption{Second attack possibility against the protocol in Figure~\ref{prt:session-key-auth}}
 \end{figure}
 
 In order to deal with the forementioned problems, we review our approach, redefining the protocol, which is given in Figure~\ref{prt:session-key-auth}. Now, the session key is linked with the identity of its owners, since the server replies Alice with two tuples: the session key and the identity of the participants, encrypted with their shared key. At the end, Alice forwards her identity, together with \(K_{AB}\), to \(B\). Note that now, the spy cannot replace any identity, since it is also encrypted and thus, authentication is preserved.
