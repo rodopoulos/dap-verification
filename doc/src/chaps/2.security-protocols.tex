@@ -37,8 +37,8 @@ Despite being a crucial basis on the success of a reliable protocol, cryptograph
 
 \begin{enumerate}
   \item The peers have a pre-shared key, already created;
-  \item An off-line public infrastructure may be used, where the participants hold certified public keys;
-  \item An on-line public infrastructure may be used, where peers share a key with a trusted third-party entity.
+  \item An off-line public infrastructure may be used, where the peers hold public keys;
+  \item An on-line public infrastructure may be used, where the peers share a key with a trusted third-party entity.
 \end{enumerate}
 
 Concerning the user entity and based on these concepts, the generation of session keys can be based on a \textit{key transport} or \textit{key agreement} protocol. The first is associated with protocols where participants use on-line servers, which generates keys and transfers them to users. The second is often associated with off-line infrastructures, which generates the key based on inputs provided by the peers. Hybrid protocols for key generation based on these two approaches also exist~\cite{BoydMathuria2008}.
@@ -137,7 +137,7 @@ Concerning the authentication of origin, confirming the authorship of \(A\) of a
 
 Also, guaranteeing the authorship of a message is guaranteeing its integrity. For this reason, some authors \cite{Bella2007} considers authentication and integrity can be considered equivalent. In order to ensure message integrity, one can use manipulation detection codes (MDC) or message authentication codes (MAC)~\cite{ross-security}.
 
-Other stronger properties may be needed. One is the pledge of the received message to be the first and original one, avoiding the acceptance of repeated messages. Concerning the protocol which will be studied in Chapter~\ref{chap:dap}, this notion is crucial. A good discussion on this is also given in~\cite{Gollmann2000}.
+Other stronger properties may be needed. One is the necessity of a received message to be the first and original one, avoiding the acceptance of repeated messages. Concerning the protocol which will be reviewed in Chapter~\ref{chap:dap}, this notion is crucial. A good discussion on this is also given in~\cite{Gollmann2000}.
 
 Now we focus on our working example. Figures \ref{fig:auth-attack1} and \ref{fig:auth-attack2} presents a diagram where agents are represented as nodes and messages are described above edged, preceded by they order. As stated, the attacker can intercept and modify messages, since she has full control of the network.
 
@@ -210,7 +210,7 @@ In the previous section we have presented the two most desirable goals in securi
 
 Even if it is not the focus of this work, \textbf{availability} is considered as a desired goal in protocols, since it is crucial for systems properly maintain ongoing sessions. Not only keeping a peer available is important, but guaranteeing a session key or message reception is also a concern. Thus, modeling the attacker ability of killing protocol messages and reliable defenses against denial of service attacks is a valid concern among protocol designers.
 
-Based on common errors found in published protocols, the work in~\cite{AbadiNeedham96} presents interesting guidelines for designing reliable security protocols. Although these guidelines are not sufficient for building correctness, the document offers examples of protocols that do not follow the displayed principles and fails to fulfill its goals, arguing that such principles are indeed a convenient starting point for formulating protocols.
+Based on common errors found in published protocols, the work in~\cite{AbadiNeedham96} presents interesting guidelines for designing reliable security protocols. Although these guidelines are not sufficient for guaranteeing correctness, the document offers examples of protocols that do not follow the displayed principles and fails to fulfill its goals, arguing that such principles are indeed a convenient starting point for formulating protocols.
 
 \begin{figure}[!ht]\label{fig:attack-ex-replay}
   \centering
@@ -245,7 +245,7 @@ An attempt for fixing such flaw is the classical protocol of Needham-Schroeder~\
   \caption{Session key establishment with proper confidentiality, authenticity and freshness}
 \end{figure}
 
-The solution relies in two fresh nonces, \(N_A\) and \(N_B\). Now, \(B\) will start the protocol, sending her identity and nonce to \(A\). \(A\) sends hers and \(B\)'s identities and nonces to the Server, who responds \(A\) with \(K_{AB}\), \(B\) identity and \(N_A\) encrypted with \(A\)'s shared key with the Server and an equivalent instance, encrypted with \(B\)'s shared key \(K_{BS}\). Finally, Alice sends \(B\)'s instance to her, properly distributing the session key \(K_{AB}\). The nonces allows the agents to check freshness of messages and its contents, the keys protect the integrity of data exchanged among peers, and the protocol is secure.
+The final solution relies in two fresh nonces, \(N_A\) and \(N_B\). Now, \(B\) will start the protocol, sending her identity and nonce to \(A\). \(A\) sends hers and \(B\)'s identities and nonces to the Server, who responds \(A\) with \(K_{AB}\), \(B\) identity and \(N_A\) encrypted with \(A\)'s shared key with the Server and an equivalent instance, encrypted with \(B\)'s shared key \(K_{BS}\). Finally, Alice sends \(B\)'s instance to her, properly distributing the session key \(K_{AB}\). The nonces allows the agents to check freshness of messages and its contents, the keys protect the integrity of data exchanged among peers, and the protocol is secure.
 
 
 

@@ -48,7 +48,7 @@ However, it is claimed that both schemes focus on transaction authentication, wh
 
 
 \section{Motivation}
-The DAP was the first attempt to provide a secure internet banking environment for the client base of the biggest bank in Brazil, \textit{Banco do Brasil}. The protocol is composed by a set of cryptographic protocols, orchestrated to offer integrity, authenticity and secrecy over banking transactions among any valid channel defined by the bank.
+The DAP was the first attempt to provide a secure internet banking environment for the client base of a notorious bank in Brazil. The protocol is composed by a set of cryptographic protocols, orchestrated to offer integrity, authenticity and secrecy over banking transactions among any valid channel defined by the bank.
 
 Also, bandwidth and computational power limits are established. The whole system must be able to run in devices with low computational power, requiring minimum user interaction, aiming a reduction in the volume of data exchanged between client and server. Therefore, this limitation creates a restriction for some of the protocol primitives and complexity.
 
@@ -75,11 +75,11 @@ Also, in the symmetric key generation phase, the User must use a personal smartc
 Based in assumptions that resemble the Dolev-Yao approach, the authors instance some basic premises for constructing the model, as follows:
 
 \begin{enumerate}
-  \item The Spy has a full control of the network, being able to intercept, block, produce or inject any kind of message, by any agent enjoying the channel;
+  \item The Spy has a full control of the network, being able to intercept, block, produce or inject any kind of message, by any agent using the channel;
 
   \item The User personal computer belongs to the set of compromised agents, i.e.\ the Spy has access to any information stored, produced or received by the User's computer and can produce and send messages from it, impersonating the User;
 
-  \item ATM machines and the smartphone do not belong to the compromised agents set. Even though, the thesis assume that the Spy can access any data directly displayed to the User via terminal access in an ATM machine. This premise does not hold for smartphones;
+  \item ATM machines and the smartphone do not belong to the compromised agents set. Even though, the hypothesis assume that the Spy can access any data directly displayed to the User via terminal access in an ATM machine. This premise does not hold for smartphones;
 
   \item The Spy does not have access to any personal smartcard.
 \end{enumerate}
@@ -124,7 +124,7 @@ Next, the Server responds the initial request with nonce \(N_S\), which is noted
 
 At the ATM machine, the user must present his credentials, through a personal smartcard and password. Proceeding the operation, the terminal requests the second part of the key to the Server, \(N_A\), which delivers it through a secure channel. Hence, the ATM displays \(N_A\) as a QR-code, which is scanned by the User's smartphone.
 
-Now, the smartphone computes key \(K\), using \(N_S\) and \(N_A\) as inputs and discarding them at the end. Since the Server generated both of the inputs, it can also computes the key \(K\) and the key is properly distributed between the Server and the User.
+Now, the smartphone computes key \(K\), using \(N_S\) and \(N_A\) in a binary addition operation, discarding them afterwards. Since the Server generated both of the inputs, it can also computes the key \(K\) and the key is properly distributed between the Server and the User.
 
 \begin{figure}[ht]\label{fig:dap-symmetric}
   \centering
@@ -286,7 +286,7 @@ Finally, we discuss the correctness arguments concerning security on DAP, postul
 
 Given that, the key \(K\), shared between user Smartphone and Bank for further message transaction validation, is stored in uncompromisable devices only. Additionally, the smartphone never sends any data over the network, so there is no data leak at this device and the key \(K\) --- and its derived keys \(k_1\) and \(k_2\) --- are secured.
 
-Regarding message the transaction phase, the integrity of the transaction is assured by the hash \(h_S\), where such cipher can only be produce by the ones possessing key \(k_1\) derived from \(K\), and further comparison with the hash produced at the User smartphone. Besides, the TAN \(r\) is stated as a randomly fresh identifier for the transaction, delivering unicity to the protocol session.
+Regarding message the transaction phase, the integrity of the transaction is assured by the hash \(h_S\), where such cipher can only be produced by the ones possessing key \(k_1\) derived from \(K\), and further comparison with the hash produced at the User smartphone. Besides, the TAN \(r\) is stated as a randomly fresh identifier for the transaction, delivering unicity to the protocol session.
 
 Moreover, even if the Spy intercepts message \(m\), alters its structure and relays it to the intended peer, still, the User will be prompted to answer the security challenge where she must verify and confirm the issued transaction, presented in clear text. If she suspects anything, she can simply drop the operation, halting the protocol.
 

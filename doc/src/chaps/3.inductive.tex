@@ -1,5 +1,5 @@
 %!TEX root = ../../dissertacao.tex
-This chapter~\label{chap:inductive} brings a brief introduction on formal verification and a more detailed explanation on the selected approach to be used in this work: the Inductive Method. The concepts will be restricted to the necessary elements needed for comprehension of the proposed problem.
+This chapter~\label{chap:inductive} shows a brief introduction on formal verification and a more detailed explanation on the selected approach to be used in this work: the Inductive Method. The concepts will be restricted to the necessary elements needed for comprehension of the proposed problem.
 
 
 
@@ -15,7 +15,7 @@ A classical example is the Needham-Schröeder protocol~\cite{NeedhamSchroeder78}
 Formal verification requires the definition of such protocols in a proper language, suitable for the application of specific methods and, hopefully, the use of automated reasoning tools, improving proof methodology. Also, formal methods can be divided in two major categories, according to~\cite{BoydMathuria2008}:
 
 \begin{itemize}
-  \item \textbf{Model checking}: protocol behaviors can be modeled as a finite set of states. Such proposal is suitable for checking if a given configuration satisfy a set of correctness conditions and analyze a certain past configuration, searching for attacks attempts. This approach is more appropriate for finding inconsistencies and attacks in the protocol rather than proving its correctness properties;
+  \item \textbf{Model checking}: protocol behaviors can be modeled as a finite set of states. Such proposal is suitable for checking if a given configuration satisfy a set of correctness conditions and analyze a certain past configuration, searching for attacks attempts. This approach is more appropriate for finding inconsistencies and attacks in the protocol rather than proving some of its correctness properties;
 
   \item \textbf{Theorem proving}: the protocol can described as a model, where \textit{all} possible behaviors are considered. Thus, any wanted property must be described as a theorems and proved using the axioms stated by the model. This method is more suitable for proving the correctness and properties of the protocol rather than finding possible attacks on them.
 \end{itemize}
@@ -47,13 +47,13 @@ Each formalized theory in Isabelle is contained in a proof script. Also, each Is
 
 
 \subsection{Agents}
-Agents are described in the \texttt{Message.thy} file, being the basic type for specifying participants in a protocol session. Three main entities are defined as free types: legal agents (Friends ), the Spy and the Server. Below, the \( \triangleq \) symbol reads as a definition equality operator for a keyword and the \(|\) symbol is the disjunction operator, separating the possible types for the \texttt{agent} datatype.
+Agents are described in the \texttt{Message.thy} file, being the basic type for specifying participants in a protocol session. Three main entities are defined as free types: legal agents (Friends ), the Spy and the Server. In the grammar below, the \( \triangleq \) symbol reads as a definition equality operator for a keyword and the \(|\) symbol is the disjunction operator, separating the possible types for the \texttt{agent} datatype.
 
 \begin{center}
   {\ttfamily datatype agent \( \triangleq \) Server | Spy | Friend \(nat\)}
 \end{center}
 
-The set of legal agents has a correspondence with the set of natural numbers. Thus, we have both an easy mapping for each participant of a protocol session and removal of limitations of its population size, providing the ability to reason over protocols with an indefinite number of peers.
+The set of legal agents has a correspondence with the set of natural numbers. Thus, we have both an easy mapping for each participant of a protocol session and removal of limitations of its population size, providing the ability to reason over protocols with an indefinite and infinite number of peers.
 
 The nullary constructor \texttt{Server} defines the trusted third part entity, presented in many protocols. It is considered uncompromisable and holds the long-term secrets (keys) of all agents. The Spy is the malicious agent, but who can also act as a legal one. She has access to the secrets of all compromised agents and her own secrets.
 
