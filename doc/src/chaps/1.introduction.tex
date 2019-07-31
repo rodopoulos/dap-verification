@@ -11,8 +11,6 @@ Like a regular computer program, security protocols are software, often involvin
 
 In this work, the Inductive Method was explored and subject to test on DAP, a real world and challenging protocol, where the chosen area of interest shows significant relevance. Based in techniques from previous works~\cite{BellaPaulson2006, Paulson99, Paulson98}, the protocol was formally specified and verified.
 
-The main results were a reliable formalization of smartphones and its related events regarding data input and output and, using such model, the formalization of the DAP. From the formalization, several lemmas regarding the model properties were derived, guaranteeing its reliability to the protocol and entities involved. Additionally, some of the protocol claimed properties were explored and further certified through formal reasoning.
-
 
 
 
@@ -25,8 +23,15 @@ Promising works for ensuring security have appeared over years using OTP schemes
 
 
 
-\section{Content Outline}
 
+\section{Results}
+The work produced three main results. First, a reliable formalization of smartphones and its related events regarding data input and output. Using such model, the formalization of the DAP was possible. The formalization considered the scenario where devices are secured and could not be exploited. The obtained model was proved sound against the protocol, containing proofs about the operation of the bank server, peers and their smartphones operation.
+
+ Additionally, some of the protocol claimed properties were explored and further certified through formal reasoning. It was found that the protocol had issues with the banking transaction privacy. Also, from the user's viewpoint, some security properties could not be verified, due to encrypted components in messages that could not be verified by the User's personal computer.
+
+
+
+\section{Content Outline}
 This document structure is divided in the following way:
 
 \begin{enumerate}
