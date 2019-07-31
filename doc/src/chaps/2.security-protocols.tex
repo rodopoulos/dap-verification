@@ -1,5 +1,5 @@
 %!TEX root = ../../dissertacao.tex
-This chapter~\label{chap:sec-protocols} surveys the main aspects of security protocols, explaining its common properties, goals, and frequent attacks methods. A basic notation, which will be used along all this document, will be presented as well.
+This chapter~\label{chap:sec-protocols} surveys the main aspects of security protocols, explaining its common properties, goals, and frequent attack methods. A basic notation, which will be used along all this document, will be presented as well.
 
 
 
@@ -8,7 +8,7 @@ This chapter~\label{chap:sec-protocols} surveys the main aspects of security pro
 \section{Basic Notions}
 Security protocols are handy tools for providing protection among communication protocols and systems. They can be informally defined as a set of steps executed between multiple entities, aiming to ensure a reliable and secure communication between them. Current protocol specifications vary in quality, purpose and syntax, although they are the base documents for formally reasoning about these protocols~\cite{Abadi99}. More definitions on security protocols can be obtained at~\cite{BoydMathuria2008} and~\cite{RyanSchneider2010}.
 
-As a communication agreement, security protocols are inherently concurrent, leading to a big spectrum of possibilities among its steps, peers behavior and system states. When considering the attacker factor --- an agent who can both act as a legal participant or produce and inject fake information to exploit the protocol --- the difficult in designing a reliable solution can grow dramatically. For the very same reason, it is difficult to design a good security protocol and easy to develop a defective one~\cite{Bella2007}.
+As a communication agreement, security protocols are inherently concurrent, leading to a large spectrum of possibilities among its steps, peers behavior and system states. When considering the attacker factor --- an agent who can both act as a legal participant or produce and inject fake information to exploit the protocol --- the difficulty in designing a reliable solution can grow dramatically. For the very same reason, it is difficult to design a good security protocol and easy to develop a defective one~\cite{Bella2007}.
 
 Protocol goals depend on the environment, resources and the protocol architecture itself and each situation asks for stronger guarantees in some propeties than others. Regarding this, some of those goals may have varying definitions in the literature, like authentication~\cite{Abadi99}. Nevertheless, some properties and concepts can be universal among security protocols, as well as some goals are a consensus in the literature~\cite{RyanSchneider2010}.
 
@@ -33,11 +33,11 @@ A suitable approach for attacker modeling is the classic work of Dolev-Yao~\cite
 
 
 \section{Cryptography and Key Management}
-Despite being a crucial basis on the success of a reliable protocol, cryptography will be treated in an abstract way here, since what matters are its concepts and its impact on the protocol behavior. Cryptographic keys are the basis for generating a secure communication, where it is used for enciphering all data transmitted along the channels. However, creating a valid new session key demands a previous secured channel. Indeed, the establishment of such key may occur in one of these three contexts:
+Despite being a crucial basis on the success of a reliable protocol, cryptography will be treated in an abstract way here, since what matters are its concepts and its impact on the protocol behavior. Cryptographic keys are the basis for generating secure communication, where it is used for enciphering all data transmitted along the channels. However, creating a valid new session key demands a previous secured channel. Indeed, the establishment of such key may occur in one of these three contexts:
 
 \begin{enumerate}
   \item The peers have a pre-shared key, already created;
-  \item An off-line public infrastructure may be used, where the peers hold public keys;
+  \item An off-line public infrastructure may be used, where the peers hold certified public keys;
   \item An on-line public infrastructure may be used, where the peers share a key with a trusted third-party entity.
 \end{enumerate}
 
@@ -48,7 +48,7 @@ Concerning the user entity and based on these concepts, the generation of sessio
 
 
 \section{Notation}
-Through this document, we will need a consistent notation for expressing protocol actions and symbols. We will use a system based on the one presented in~\cite{Bella2007}, which brings aspects from the seminal work of~\cite{Burrows90}, since it is our main reference method for verification in this work.
+Through this document, a consistent notation for expressing protocol actions and symbols will be used. A system based on the one presented in~\cite{Bella2007} will also be used, which brings aspects from the seminal work of~\cite{Burrows90}, since it is our main reference method for verification in this work.
 
 Primitive data instances, such messages, timestamps and \textit{nounces} can be represented as simple mnemonic letters and the encryption of such entities are represented with subscripts, for example, a message \(M\) using a key \(K\) is represented by \(M_K\). When giving authorship to a given resource, we also use subscripts, such a key from agent \(A\) resulting in the symbol \(K_A\). Accordingly, the session key established between agents \(A\) and \(B\) is represented by the symbol \(K_{AB}\). On following examples and proofs, the definitions will be straightforward.
 

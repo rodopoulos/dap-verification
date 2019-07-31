@@ -9,9 +9,9 @@ The \textit{Dynamic Authentication Protocol} (DAP)~\cite{Peotta2012} is a securi
 
 Like a regular computer program, security protocols are software, often involving concurrency, where general scenarios gather multiple peers communicating with each other. Numerous techniques were developed for formally verify security protocols. The \textit{Inductive Method}, first proposed by L.~Paulson~\cite{Paulson98} and further developed by G.~Bella~\cite{Bella2007} is an interesting system, which abstracts many details of a security protocol context in a manner where it is possible to reason about past executions in a formal and logical way.
 
-In this work, the Inductive Method was explored and putted to test on DAP, a real world and challenging protocol, where the chosen area of interest shows significant relevance. Based in techniques from previous works~\cite{BellaPaulson2006, Paulson99, Paulson98}, the protocol was formally specified and verified.
+In this work, the Inductive Method was explored and subject to test on DAP, a real world and challenging protocol, where the chosen area of interest shows significant relevance. Based in techniques from previous works~\cite{BellaPaulson2006, Paulson99, Paulson98}, the protocol was formally specified and verified.
 
-The main results were a reliable formalization of smartphones and its related events of inputing and outputting data and, using such models, the formalization of the DAP. From the formalization, several lemmas regarding the model properties were derived, guaranteeing its reliability to the protocol and entities involved. Additionally, some of the protocol claimed properties were explored and further certified through formal reasoning.
+The main results were a reliable formalization of smartphones and its related events regarding data input and output and, using such model, the formalization of the DAP. From the formalization, several lemmas regarding the model properties were derived, guaranteeing its reliability to the protocol and entities involved. Additionally, some of the protocol claimed properties were explored and further certified through formal reasoning.
 
 
 
@@ -19,9 +19,9 @@ The main results were a reliable formalization of smartphones and its related ev
 \section{Motivation}
 Authentication is the biggest concern in security for internet banking~\cite{Hutchinson2003}. Allied to confidentiality, these properties provides a reliable environment for users to perform monetary transactions without worrying with passive network eavesdroppers or active attackers trying to modify these transactions.
 
-However, despite the efforts to provide desired security qualities for internet banking security systems, criminals are still able to perform successful attacks on these infrastructures~\cite{Adham2013}.
+However, despite the efforts to provide desired security qualities for internet banking systems, criminals are still able to perform successful attacks on those infrastructures~\cite{Adham2013}.
 
-Promising works for ensuring security have appeared over years using OTP schemes~\cite{Starnberger2009, LeeHyunLim2010}, being them the basis for DAP\@. Still, no formal verification was done in any of these approaches. Therefore, there is no incontestable guarantee that they will not fail. Allied with a set of automated tools, formal verification can provide mathematical proofs that security protocols are correct or not. For that reason, we argue that formally verifying such critical systems is not only a valid motivation, but an obligation.
+Promising works for ensuring security have appeared over years using OTP schemes~\cite{Starnberger2009, LeeHyunLim2010}, the basis for DAP\@. Still, no formal verification was done in any of these approaches. Therefore, there is no incontestable guarantee that they will not fail. Allied with a set of automated tools, formal verification can provide mathematical proofs that security protocols are correct or not. For that reason, we argue that formally verifying such critical systems is not only a valid motivation, but an obligation.
 
 
 
@@ -36,7 +36,7 @@ This document structure is divided in the following way:
 
     \item \textbf{Chapter~\ref{chap:dap}} outlines internet banking systems and its challenges for presenting our targeted protocol, DAP, detailing its models, assumptions and operation;
     
-    \item \textbf{Chapter~\ref{chap:formal-phones}} presents the formal model built for reasoning about smartphones and its operation. Also, it discusses another extensions done in the Inductive Method in order to provide a reliable model for the protocol formalization itself;
+    \item \textbf{Chapter~\ref{chap:formal-phones}} presents the formal model built for reasoning about smartphones and its operation. Also, it discusses other extensions done in the Inductive Method in order to provide a reliable model for the protocol formalization itself;
 
     \item \textbf{Chapter~\ref{chap:verification}} focus on the formalization and verification of the DAP itself. The security premises presented in the original specification of the DAP are used, following a more cautious approach. Many results are presented in this chapter; 
     
