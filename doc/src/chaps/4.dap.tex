@@ -1,9 +1,9 @@
 %!TEX root = ../../dissertacao.tex
 In this chapter\label{chap:dap}, our case study, the Dynamic Authentication Protocol (DAP), is presented. The protocol is designed for providing an extra reliability layer for the online banking application, creating an encrypted authorization scheme for each banking transaction over a previously authenticated session between the User and the Bank.
 
-Prior to running the protocol, a shared key must be stablished between the User and the Bank, which will be stored both at the User's uncompromisable smartphone and the Bank Server. There are two different ways to generate such a key, a symmetric and an asymmetric method, where such operation is done only once for all protocol history.
+Prior to running the protocol, a shared key must be stablished between the User and the Bank, which will be stored both at the User's uncompromisable smartphone and the Bank Server. There are two different ways to generate such a key, a symmetric and an asymmetric method, where such operation is performed only once for all protocol history.
 
-Then, the User can issue transactions at the bank server, where each operation generates a Transaction Authorization Nonce (TAN) which is sent together with the prompted job as reply. At the User side, the message is checked and a challenge is presented, as a QR-Code message. The User scans it with his smartphone, which interprets, checks and displays the operation, asking for its authorization. If is correct, the User replies to the Server, sending the generated TAN to the Server. The latter compares it with its own copy and if it matches, the operation is confirmed. All message exchanges are encrypted and protected, using parts of the previously shared key.
+Then, the User can issue transactions at the bank server, where each operation generates a Transaction Authorization Nonce (TAN) which is sent together with the prompted job as reply. At the User side, the message is checked and a challenge is presented, as a QR-Code message. The User scans it with his smartphone, which interprets, checks and displays the operation, asking for its authorization. If it is correct, the User replies to the Server, sending the generated TAN to the Server. The latter compares it with its own copy and if it matches, the operation is confirmed. All message exchanges are encrypted and protected, using parts of the previously shared key.
 
 In order to understand the protocol context, we first present a brief introduction to internet banking systems, indicating its challenges. Then, we detail the protocol entities, phases and strategies. At then end, we conclude with a short discussion about security claims assumed by this protocol.
 
@@ -23,7 +23,7 @@ Since internet banking deals with sensible and financial data, those systems urg
 
 Specifically, authenticating clients and further operations carried by them are the key point for providing a reliable internet banking framework. Further, authorization, integrity and confidentiality are commonly cited qualities and finally, non-repudiation, availability and auditability are also desired properties for those systems~\cite{Hutchinson2003}.
 
-At the same time, such systems are a highly sought target among hackers and other ciber-criminal~\cite{Peotta2011, Hutchinson2003}. Several techniques for credential robbery and transaction manipulation for internet banking systems have been developed over the years, with formal classification studies made~\cite{Peotta2011, Adham2013}. It is interesting to cite some common attack patterns:
+At the same time, such systems are a preferential target among hackers and other ciber-criminal~\cite{Peotta2011, Hutchinson2003}. Several techniques for credential theft and transaction manipulation for internet banking systems have been developed over the years, with formal classification studies made~\cite{Peotta2011, Adham2013}. It is interesting to cite some common attack patterns:
 
 \begin{itemize}
   \item \textbf{Channel Breaking:} intercepting the communication between client and bank, and impersonating any of the entities in order to fake a legal identity and trying to perform actions as a legal user or as the server;
@@ -33,9 +33,9 @@ At the same time, such systems are a highly sought target among hackers and othe
   \item \textbf{Device Control:} the attacker combines several exploiting techniques in order to have full control of the user device, being able to steal credentials, perform fraudulent actions, spy on the user, and other malicious actions.
 \end{itemize}
 
-\textbf{Credential Thief} is a broader technique category, which envolves the robbery of user credentials in any viable way. Therefore, phishing attacks also fall into this category.
+\textbf{Credential Thief} is a broader technique category, which envolves the theft of user credentials in any viable way. Therefore, phishing attacks also fall into this category.
 
-Accordingly, many security schemes were developed in order to oppose against such attacking strategies. Also in~\cite{Peotta2011, Adham2013}, the authors provides a listing of current common security models found among banks.
+Accordingly, many security schemes were developed in order to oppose against such attacking strategies. Also in~\cite{Peotta2011, Adham2013}, the authors provide a listing of current common security models found among banks.
 
 Still in~\cite{Peotta2011, Adham2013}, the authors also cite how these models fail to provide reliability to the system, describing possible flaws which are passive of exploitation and strategies used by attackers. In short, such proposals are not enough for providing security for banking transactions.
 
@@ -52,7 +52,7 @@ The DAP was the first attempt to provide a secure internet banking environment f
 
 Also, bandwidth and computational power limits are established. The whole system must be able to run in devices with low computational power, requiring minimum user interaction, aiming a reduction in the volume of data exchanged between client and server. Therefore, this limitation creates a restriction for some of the protocol primitives and complexity.
 
-It is important to emphasize that the protocol identifies an unique transaction on each run. The user must be already authenticated before prompting a transaction authorization and private authentication keys must be previously exchanged between the server and the client. In a protocol run, the user receives a series of challenges, in order to verify the operation, where those challenges contain pieces of information about the given transaction.
+It is important to emphasize that the protocol identifies an unique transaction on each run. The user must be already authenticated before prompting a transaction authorization and private authentication keys must be previously exchanged between the server and the client. In a protocol run, the user receives a series of challenges, in order to verify the operation, which contain pieces of information about the given transaction.
 
 One of these tasks envolves the use of a third-party device equipped with a camera and QR-code scanning technology, usually a smartphone. This phase works as a final hash verification for each operation, where the user should scan a QR-code containing the transaction details, check it and send a 6-digit PIN that corresponds to the transaction authorization identifier, resulting in the final transaction authorization.
 
@@ -63,7 +63,7 @@ The protocol authors claim that this last step produce an extra security layer t
 
 
 \section{Definitions}
-First, we define the types of agents available in the system. The protocol informal specification define two main entities, which are the Server and the User. The former relates to the Bank itself, where it may be representing the Internet Banking application or the system mainframe. The latter is always the protocol initiator and interacts with the Server using three different communication channels: a personal computer, a mobile smartphone or an ATM machine.
+First, we define the types of agents available in the system. The protocol informal specification defines two main entities, which are the Server and the User. The former relates to the Bank itself, where it may be representing the Internet Banking application or the system mainframe. The latter is always the protocol initiator and interacts with the Server using three different communication channels: a personal computer, a mobile smartphone or an ATM machine.
 
 Each device has its proper role. Both smartphone and, mainly, the personal computer, act as the protocol initiator, for generating the shared key between User and Bank. At the User side, this key will be stored at the smartphone only. The ATM machine acts as a middle communicator, intended to give a part of the shared key to the User. In special, the personal computer is the only communication channel able to issue banking transactions to the Server.
 
@@ -72,10 +72,10 @@ Also, in the symmetric key generation phase, the User must use a personal smartc
 
 
 \subsection{Initial Assumptions}
-Based in assumptions that resemble the Dolev-Yao approach, the authors instance some basic premises for constructing the model, as follows:
+Based in assumptions that resemble the Dolev-Yao approach, the authors state some basic premises for constructing the model, as follows:
 
 \begin{enumerate}
-  \item The Spy has a full control of the network, being able to intercept, block, produce or inject any kind of message, by any agent using the channel;
+  \item The Spy has full control of the network, being able to intercept, block, produce or inject any kind of message, by any agent using the channel;
 
   \item The User personal computer belongs to the set of compromised agents, i.e.\ the Spy has access to any information stored, produced or received by the User's computer and can produce and send messages from it, impersonating the User;
 
@@ -98,7 +98,7 @@ The production of the shared key \(K\) is done only once, therefore the same key
 
 
 \section{Key Generation}
-The key generation focus on the establishment of \(K\): a shared key between a given user and the bank, used for further message transactions. At the end of generation process, the key will be securely stored at the User's smartphone and the Bank mainframe environment.
+The key generation focuses on the establishment of \(K\): a shared key between a given user and the bank, used for further message transactions. At the end of generation process, the key will be securely stored at the User's smartphone and the Bank mainframe environment.
 
 Each user will have its own shared key with the Bank, meaning that the number of keys stored at the bank side is identical to the number of clients which are employing the DAP system. Therefore, requesting such a key means that the client is interested in using the extra protection layer. Hence, key generation is always started by the User.
 
@@ -120,7 +120,7 @@ The Server receives the request and generates three entities:
   \item A cipher \(N_A\), which is obtained by the binary addition of two fresh nonces, namely \(N_A = N' \oplus N_K\).
 \end{itemize}
 
-Next, the Server responds the initial request with nonce \(N_S\), which is noted by the user over the personal computer channel, presented in the QR-Code form. The User must use his smartphone to scan the code, storing the nonce within it. Now the User is prompted to access an ATM machine, in order to collect the second part of the key.
+Next, the Server responds the initial request with nonce \(N_S\), which is noted by the user over the personal computer channel, presented in the QR-Code form. The User must use his smartphone to scan the code, storing the nonce within the device. Now the User is prompted to access an ATM machine, in order to collect the second part of the key.
 
 At the ATM machine, the user must present his credentials, through a personal smartcard and password. Proceeding the operation, the terminal requests the second part of the key to the Server, \(N_A\), which delivers it through a secure channel. Hence, the ATM displays \(N_A\) as a QR-code, which is scanned by the User's smartphone.
 
@@ -176,7 +176,7 @@ Now, the smartphone computes key \(K\), using \(N_S\) and \(N_A\) in a binary ad
 \subsection{Asymmetric Scheme}
 The asymmetric scheme resembles the public key RSA algorithm~\cite{RSA}. The User must issue the generation of key \(K\) at his smartphone. Although, a pair of keys are generated, \(pK_U\) and \(sK_U\), the public and private keys respectively. Then, it sends the public key to the Server.
 
-As soon the Server acknowledge the User public key, he signs it with his private key \(sK_S\) and sends his public key to the User. When the latter notes the Server's public key, he stores it, encrypting it with his private key.
+As soon as the Server acknowledges the User public key, he signs it with his private key \(sK_S\) and sends his public key to the User. When the latter notes the Server's public key, he stores it, encrypting it with his private key.
 
 This process, described in~\cite[p.78]{Peotta2012}, seems to have some inconsistencies. In private conversation with the protocol authors, we identified that the document needs reviews in this part. The text claims to describe a model based in public key infrastructure and RSA algorithm, but the presented scheme does not match the assertion. Thus, some naming conventions in the specification are not clear enough.
 
@@ -191,7 +191,7 @@ Once the shared key \(K\) is available for both the User and the Server, they ca
 
 Additionally, the key \(K\) is divided into two others: \(k_1\) and \(k_2\). The former is used for message integrity, as an input for HMAC-SHA1 protocol~\cite{Bellare96}, providing consistency checks among messages exchanged between the Server and the User. The latter is used for message secrecy, as an input for AES protocol ciphers~\cite{AES}, protecting messages or its components over clear channels.
 
-Figure~\ref{fig:dap-transaction} explain the message transaction whole process, which is based in the following steps:
+Figure~\ref{fig:dap-transaction} explains the whole message transaction process, which is based in the following steps:
 
 \begin{enumerate}
   \item The User prompts the banking transaction \(m\) through the Internet Banking application, at her personal computer. She must be previously authenticated. The transaction is sent in cleartext to the Server;
@@ -286,7 +286,7 @@ Finally, we discuss the correctness arguments concerning security on DAP, postul
 
 Given that, the key \(K\), shared between user Smartphone and Bank for further message transaction validation, is stored in uncompromisable devices only. Additionally, the smartphone never sends any data over the network, so there is no data leak at this device and the key \(K\) --- and its derived keys \(k_1\) and \(k_2\) --- are secured.
 
-Regarding message the transaction phase, the integrity of the transaction is assured by the hash \(h_S\), where such cipher can only be produced by the ones possessing key \(k_1\) derived from \(K\), and further comparison with the hash produced at the User smartphone. Besides, the TAN \(r\) is stated as a randomly fresh identifier for the transaction, delivering unicity to the protocol session.
+Regarding the message transaction phase, the integrity of the transaction is assured by the hash \(h_S\), where such cipher can only be produced by the ones possessing key \(k_1\) derived from \(K\), and further comparison with the hash produced at the User smartphone. Besides, the TAN \(r\) is stated as a randomly fresh identifier for the transaction, delivering unicity to the protocol session.
 
 Moreover, even if the Spy intercepts message \(m\), alters its structure and relays it to the intended peer, still, the User will be prompted to answer the security challenge where she must verify and confirm the issued transaction, presented in clear text. If she suspects anything, she can simply drop the operation, halting the protocol.
 

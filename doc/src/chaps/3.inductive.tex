@@ -15,28 +15,28 @@ A classical example is the Needham-Schröeder protocol~\cite{NeedhamSchroeder78}
 Formal verification requires the definition of such protocols in a proper language, suitable for the application of specific methods and, hopefully, the use of automated reasoning tools, improving proof methodology. Also, formal methods can be divided in two major categories, according to~\cite{BoydMathuria2008}:
 
 \begin{itemize}
-  \item \textbf{Model checking}: protocol behaviors can be modeled as a finite set of states. Such proposal is suitable for checking if a given configuration satisfy a set of correctness conditions and analyze a certain past configuration, searching for attacks attempts. This approach is more appropriate for finding inconsistencies and attacks in the protocol rather than proving some of its correctness properties;
+  \item \textbf{Model checking}: protocol behavior can be modeled as a finite set of states. Such proposal is suitable for checking if a given configuration satisfy a set of correctness conditions and analyze a certain past configuration, searching for attacks attempts. This approach is more appropriate for finding inconsistencies and attacks in the protocol rather than proving some of its correctness properties;
 
-  \item \textbf{Theorem proving}: the protocol can described as a model, where \textit{all} possible behaviors are considered. Thus, any wanted property must be described as a theorems and proved using the axioms stated by the model. This method is more suitable for proving the correctness and properties of the protocol rather than finding possible attacks on them.
+  \item \textbf{Theorem proving}: the protocol can described as a model, where \textit{all} possible behavior are considered. Thus, any wanted property must be described as a theorems and proved using the axioms stated by the model. This method is more suitable for proving the correctness and properties of the protocol rather than finding possible attacks on them.
 \end{itemize}
 
 
 
 \section{Method Introduction}\label{sec:inductive-method}
-The Inductive Method is a proof theory for security protocol, which aims for both the formalization and the verification of such protocols, using model checking and structural induction. First, the intended protocol \(\mathcal{P}\) must be defined as an inductively constructed model \(P\), composed by rules describing the real world steps of \(\mathcal{P}\).
+The Inductive Method is a proof theory for modeling and reasoning about security protocol, which aims for both the formalization and the verification of such protocols, using model checking and structural induction. First, the intended protocol \(\mathcal{P}\) must be defined as an inductively constructed model \(P\), composed by rules describing the real world steps of \(\mathcal{P}\).
 
-An infinitely countable set of agents is considered, who can fire events accordingly with the model \(P\), in any desired order or regularity, composing the network traffic. Agents can interleave between protocol sessions with their actions indefinitely. Among the agents, we stress a special one, the Spy, who has control over the network and compromised agents, it is used to model the threat scenario.
+An infinitely countable set of agents is considered, who can fire events accordingly with the model \(P\), in any desired order or regularity. Agents can interleave between protocol sessions with their actions indefinitely. Among the agents, we stress a special one, the Spy, who has control over the network and compromised agents, it is used to model the threat scenario.
 
-At a second stage, the model is verified towards proposed properties, reasoning along technical and theoretical traits. Here, structural induction takes crucial role. If a security property must hold for the protocol, it must hold for all possible traces derived from the formal model \(P\), hence induction over the set of possible network traces is the main proof tool used in this phase.
+At a second stage, the model is verified towards proposed properties, reasoning along technical and theoretical traits. Here, structural induction takes a crucial role. If a security property must hold for the protocol, it must hold for all possible traces derived from the formal model \(P\), hence induction over the set of possible network traces is the main proof tool used in this phase.
 
-Induction has been previously used for the formalisation of protocol, for example in the NRL Protocol Analyzaer by C.~Meadows~\cite{Meadows96}, and the Inductive Method has similarities with other model checking theories, like CSP~\cite{RyanSchneider2010}. It comprehends a strong threat model and concurrency among peers, however it does not check liveness properties. Moreover, the framework on which it is built provides easy ways for extension, allowing steady formalizations of atypical systems, a feature which interests us.
+Induction has been previously used for the formalisation of protocol, for example in the NRL Protocol Analyzar by C.~Meadows~\cite{Meadows96}, and the Inductive Method has similarities with other model checking theories, like CSP~\cite{RyanSchneider2010}. It comprehends a strong threat model and concurrency among peers, however it does not check liveness properties. Moreover, the framework on which it is built provides easy ways for extension, allowing steady formalizations of atypical systems, a feature which interests us.
 
 The method was first proposed by L.~Paulson~\cite{Paulson98} and extended by G.~Bella~\cite{Bella2007}. It has been used for the verification of many deployed and significant protocols~\cite{Paulson99, BellaPaulson2006, Bella2003}.
 
 
 
 \subsection{Isabelle}
-Given the considerably great number of possible agents and possible traces which can be derived from a model, the correctness proofs can take a substantial amount of work. As a result, the use of an automatic theorem prover is desirable. Isabelle~\cite{isabelle} is one of such systems, where the theory framework is built on, providing machine checkable and maintainable proofs scripts.
+Given the considerably great number of possible agents and possible traces which can be derived from a model, correctness proofs can take a substantial amount of work. As a result, the use of an automatic theorem prover is desirable. Isabelle~\cite{isabelle} is one of such systems, where the theory framework is built on, providing machine checkable and maintainable proofs scripts.
 
 Isabelle is a generic theorem prover, which can reason over several formal systems, in an interactive way. Hence, proofs are not entirely automatic, requiring certain user guidance. It combines high order logic, typed formalism and quantifiers for functions, predicates and sets. Also, the system has a good range of proof tools: simplifiers, induction-oriented commands and access to some automatic provers and state-of-the-art theories.
 
@@ -252,7 +252,7 @@ Operators are functions for reasoning about message sets. They translate the act
 
 In this section, some new symbols are introduced. The symbol \(\Longrightarrow \) denotes a sequent, where \(\Gamma \Longrightarrow \Delta \) reads as {\em if \(\Gamma \) holds, then so does \(\Delta \)}. Also, the \(\lBrack \) and \(\rBrack \) symbols are a shorthand syntax for the \texttt{Mpair} constructor, denoting concatenation of messages, while \(\lBrace \) and \(\rBrace \) are concatenation of clauses in a list.
 
-The \texttt{analz} operator denotes the act of inspecting the components of a message, breaking it up. Therefore, considering the messages set \(H\), the set \texttt{analz} \(H\) uses the following rules below.
+The \texttt{analz} operator denotes the act of inspecting the components of a message, breaking it up. Therefore, considering the message set \(H\), the set \texttt{analz} \(H\) uses the following rules below.
 
 \begin{enumerate}
   \item Any element of a message set \(H\) can be analyzed from it;
@@ -433,20 +433,20 @@ As discussed in Section~\ref{sec:protocols:auth}, authentication may assume many
 \begin{enumerate}
   \item \textbf{Aliveness of B}, meaning that \(B\) has been running the protocol;
   \item \textbf{Weak agreement of \(B\) with \(A\)}, meaning that \(B\) has been running the protocol with \(A\);
-  \item \textbf{Non-injective agreement of \(B\) with \(A\) on \(H\)}, meaning a weak agreement of \(B\) with \(A\), considering the set \(H\) of messages components;
+  \item \textbf{Non-injective agreement of \(B\) with \(A\) on \(H\)}, meaning a weak agreement of \(B\) with \(A\), considering the set \(H\) of message components;
   \item \textbf{Injective agreement of \(B\) with \(A\) on \(H\)}, meaning the non-injective agreement of \(B\) with \(A\), using the set \(H\) of message components, where \(B\) did not respond more than once on each session with \(A\).
 \end{enumerate}
 
-The Inductive Method does not provide formalisms to reason about the fourth point. Although, it is claimed on~\cite{Bella2007} that such formalization can be easily constructed by simply verification of repetition of a given event \textit{ev} in the analyzed trace, restraining the agents to single responses. However, the method mainly tries to provide models that are more permissive as possible, stating that any message could be repeated over traces with no harm to model.
+The Inductive Method does not provide formalisms to reason about the fourth point. Although, it is claimed on~\cite{Bella2007} that such formalization can be easily constructed by simple verification of repetition of a given event \textit{ev} in the analyzed trace, restraining the agents to single responses. However, the method mainly tries to provide models that are more permissive as possible, stating that any message could be repeated over traces with no harm to model.
 
-Specifically, non-injective agreements have a bigger focus. Regarding key distribution protocols, such property applied to session keys establishes a trust relation between the two agents, with a given key as a validation of such relationship, since both agents are uncompromised.
+Specifically, non-injective agreements have a wider focus. Regarding key distribution protocols, such property applied to session keys establishes a trust relation between the two agents, with a given key as a validation of such relationship, since both agents are uncompromised.
 
-Eventually, \textbf{key distribution} becomes a major goal to be checked. Since this concept is related to the agreement of two agents in a mutual secret, it is stated in~\cite{BellareRogaway93} that this property is, indeed, stronger than authentication and thus, authentication itself relies on key distribution. Additionally, the authors of the Inductive Method proves that if authentication holds, so does key distribution, specifically non-injective agreement on a session key.
+Eventually, \textbf{key distribution} becomes a major goal to be checked. Since this concept is related to the agreement of two agents in a mutual secret, it is stated in~\cite{BellareRogaway93} that this property is, indeed, stronger than authentication and thus, authentication itself relies on key distribution. Additionally, the authors of the Inductive Method prove that if authentication holds, so does key distribution, specifically non-injective agreement on a session key.
 
 
 
 \subsection{Goal Availability}
-The concept of goal availability is one of the main contributions in the work of G.~Bella~\cite{Bella2007}. In summary, it establishes a formal guarantee that the protocol model could meet a given goal and, once this is true, the validity of such goal can be applied to all peers within their assumptions. If such property holds to the model, but cannot be checked by the peers, it is argued that this goal is not available and thus, not fully assured.
+The concept of goal availability is one of the main contributions in the work of G.~Bella~\cite{Bella2007}. In summary, it establishes a formal guarantee that the protocol model could meet a given goal and, once this is true, the validity of such goal can be applied to all peers within their assumptions. If such property holds in the model, but cannot be checked by the peers, it is argued that this goal is not available and thus, not fully assured.
 
 Also, goal availability is closely related to the threat model considered by the protocol and its peers minimal trust. Considering the former, our adopted model is the Dolev-Yao, faithfully implemented by the Inductive Method using abstractions described in Sections~\ref{ssec:threat-model} and~\ref{ssec:operators}. If a different threat model is considered, important aspects of the model context are also altered, which may change the validity of previous goals.
 
@@ -456,13 +456,13 @@ Also, goal availability is closely related to the threat model considered by the
   Let \(\mathcal{P}\) be a security protocol, \(P\) be a formal model for \(\mathcal{P}\), and \(A\) be an agent's name. The \textit{minimal trust} of \(A\) is the set of environmental facts formalised in \(P\) whose truth values \(A\) needs to know but can never verify.
 \end{definition}
 
-Having the notion of what agents can verify, an \textit{aplicable guarantee} can be defined.
+Having the notion of what agents can verify, an \textit{applicable guarantee} can be defined.
 
 \begin{definition}
   Let \(\mathcal{P}\) be a security protocol, \(P\) be a formal model for \(\mathcal{P}\), and \(A\) be an agent's name. A formal guarantee in \(P\) is \textit{applicable} by \(A\) if it is established on the basis of assumptions that \(A\) is able to verify in \(P\) within her minimal trust.
 \end{definition}
 
-In these previous definitions, it is clear that guarantees that are applicable by an honest agent \(A\) are not necessarily applicable by another honest agent \(B\). Hence, this strengths the argument that only proved assumptions concerning protocol messages, specially the ones related to the agent, are the valid formal guarantees for a given protocol goal.
+In these previous definitions, it is clear that guarantees that are applicable by an honest agent \(A\) are not necessarily applicable by another honest agent \(B\). Hence, this strengthens the argument that only proved assumptions concerning protocol messages, specially the ones related to the agent, are the valid formal guarantees for a given protocol goal.
 
 Finally, the definition of available goal can be made. The principle should be used to guide the formal proofs about goals. As a result, whenever a goal is not available to some peer, it is not guaranteed at that model and so, it does not hold for the given protocol.
 

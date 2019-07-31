@@ -54,7 +54,7 @@ Primitive data instances, such messages, timestamps and \textit{nounces} can be 
 
 Concerning the key scope, a distinction is also required. For that, private keys are preceded by the indicator \(s\), meaning signature, and public keys are preceded by \(p\), meaning public. Hence, the private and public keys of peer \(A\) would be represented as \(sK_A\) and \(pK_A\), respectively.
 
-Besides, the use of fat brackets (\(\lBrack \) and \(\rBrack \)) has two purposes: it can distinguishes protocol messages from sets and represents a concatenation. Therefore, a concatenation of messages \(m\) and \(n\) is represented as \(\Bracks{m,n}\) and its encryption under key \(K\) is written as \(\Bracks{m,n}_K\).
+Besides, the use of fat brackets (\(\lBrack \) and \(\rBrack \)) has two purposes: it can distinguish protocol messages from sets and represents concatenation. Therefore, a concatenation of messages \(m\) and \(n\) is represented as \(\Bracks{m,n}\) and its encryption under key \(K\) is written as \(\Bracks{m,n}_K\).
 
 Finally, we need to represent message transportation. The syntax follows a simple structure, where each protocol step is represented in one line, following the order: step number, sender, recipient and finally the message contents, which contains at least one symbol. For instance, we use the hypothetic protocol provided in Figure~\ref{prt:notation-example}, where the host \(A\) sends its identity and a nonce \(N_A\) to a host \(B\), who replies with the nonce and a fresh session key \(K_{AB}\), both encrypted under its private signature key \(sK_B\).
 
@@ -69,7 +69,7 @@ Finally, we need to represent message transportation. The syntax follows a simpl
   \caption{Example protocol for notation undestanding}
 \end{figure}
 
-As a background example intended to provide a better understanding of the next concepts, the problems within some protocol designs and the syntax presented in this section, we describe a common situation, where two agents, \(A\) and \(B\) (commonly called Alice and Bob), want to communicate securely. For that, they generate a session key \(K_{AB}\), aided by a trusted third-party peer, the Server \(S\). Such key will be used for ciphering future messages, so it must be newly generated and only known to these three entities.
+As a background example intended to provide better understanding of the next concepts, the problems within some protocol designs and the syntax presented in this section, we describe a common situation, where two agents, \(A\) and \(B\) (commonly called Alice and Bob), want to communicate securely. For that, they generate a session key \(K_{AB}\), aided by a trusted third-party peer, the Server \(S\). Such key will be used for ciphering future messages, so it must be newly generated and only known to these three entities.
 
 In Figure~\ref{prt:naive-session-key}, a protocol is designed as a first and naive attempt to represent this situation. At first, Alice sends to the server her and Bob identities, who intend to communicate with each other. The Server replies to her the session key \(K_{AB}\), which Alice readily forwards to Bob, along with her identity. Over the next sections, we will identify problems and redesign the protocol.
 
@@ -91,7 +91,7 @@ In Figure~\ref{prt:naive-session-key}, a protocol is designed as a first and nai
 
 
 \section{Confidentiality}
-Confidentiality (or secrecy) is a required aspect when systems should not leak information to untrusted peers, guaranteeing access only for the trusted ones. Also, it is one of the most desirable properties among security protocols. As seem previously, cryptography is a suitable method for generating keys used for securing messages. We define a encryption scheme consisting of a key set \(\mathcal{K}\), a message set \(\mathcal{M}\) and a ciphertext set \(\mathcal{C}\) and three main algorithms:
+Confidentiality (or secrecy) is a required aspect when systems should not leak information to untrusted peers, guaranteeing access only for the trusted ones. Also, it is one of the most desirable properties among security protocols. As seen previously, cryptography is a suitable method for generating keys used for securing messages. We define a encryption scheme consisting of a key set \(\mathcal{K}\), a message set \(\mathcal{M}\) and a ciphertext set \(\mathcal{C}\) and three main algorithms:
 
 \begin{itemize}
   \item \textbf{Key Generation:} outputing an encryption key \(K \in \mathcal{K}\) and decryption key \(K^{-1} \in \mathcal{K}\);
@@ -105,9 +105,9 @@ Considering key properties, when a given encryption key \(K\) is the same as the
 
 Secrecy consistency can be discussed with respect to some degree of flexibility. An active spy should not be able to learn something on generated ciphertexts. The property of \textit{semantic security} states that if an attacker can compute something from a ciphertext, it must also be able to compute it from its equivalent message. Stronger than that, \textit{non-malleability} makes impossible to transform a given ciphertext in a related one without knowing the input plaintext. A detailed discussion on this topic is provided in~\cite{Abadi99}.
 
-Considering our previously presented example given in Figure \ref{prt:naive-session-key}, it is easy to show that confidentiality is compromised in the protocol. The session key \(K_{AB}\) is transmitted in cleartext over the network, so an active spy could simply extract it from the channel and use it for decipher subsequent messages exchanged between \(A\) and \(B\).
+Considering our previously presented example given in Figure \ref{prt:naive-session-key}, it is easy to show that confidentiality is compromised in that protocol. The session key \(K_{AB}\) is transmitted in cleartext over the network, so an active spy could simply extract it from the channel and use it for decipher subsequent messages exchanged between \(A\) and \(B\).
 
-We redesign our first attempt of the protocol, given in Figure~\ref{prt:session-key-confidentiality}. Here, we define keys \(K_{AS}\) and \(K_{BS}\) as previously shared keys known by the server and agents \(A\) and \(B\), respectively. Alice will repeat the first step of the former protocol, but now the server will reply with a tuple, composed by the session key \(K_{AB}\) encrypted with shared keys \(K_{AS}\) and \(K_{BS}\). Finally, Alice sends the session key, encrypted with Bob shared key, and her identity to Bob.
+We redesign our first attempt of securing the protocol, given in Figure~\ref{prt:session-key-confidentiality}. Here, we define keys \(K_{AS}\) and \(K_{BS}\) as previously shared keys known by the server and agents \(A\) and \(B\), respectively. Alice will repeat the first step of the former protocol, but now the server will reply with a tuple, composed by the session key \(K_{AB}\) encrypted with shared keys \(K_{AS}\) and \(K_{BS}\). Finally, Alice sends the session key, encrypted with Bob shared key, and her identity to Bob.
 
 \begin{figure}[ht]
   \centering
@@ -129,15 +129,15 @@ If the agents are not compromised, then the spy cannot retrieve the session key 
 
 
 \section{Authentication}\label{sec:protocols:auth}
-Authentication is a vastly studied topic among security researchers, since its definition is not really well-established, causing problems for a correct implementation of this property among protocols. Such topic is discussed at length in~\cite{Gollmann2000}.
+Authentication is a vastly studied topic among security researchers, since its definition is not really well-established, causing problems for its correct implementation of this property among protocols. Such topic is discussed at length in~\cite{Gollmann2000}.
 
-Here, we recall some definitions provided in~\cite{Diffie92} and~\cite{RyanSchneider2010}. Authentication can be defined as the oath on a communication session where peers can be assured about each others identity. Similarly, the establishment of trust in a peer identity, can be related to the generation of a session key for further communication among the peers involved in the session, validating each message.
+Here, we recall some definitions provided in~\cite{Diffie92} and~\cite{RyanSchneider2010}. Authentication can be defined as the intention to initiate a communication session, where peers can be assured about each others identity. Similarly, the establishment of trust in a peer identity, can be related to the generation of a session key for further communication among the peers involved in the session, validating each message.
 
 Concerning the authentication of origin, confirming the authorship of \(A\) of a given message received by \(B\), in a given protocol session, gives some guarantees. The first one is that \(A\) is alive and she must have sent the message. Further, a stronger property claims that she truly intended to communicate with \(B\), agreeing in following the protocol directives.
 
 Also, guaranteeing the authorship of a message is guaranteeing its integrity. For this reason, some authors \cite{Bella2007} considers authentication and integrity can be considered equivalent. In order to ensure message integrity, one can use manipulation detection codes (MDC) or message authentication codes (MAC)~\cite{ross-security}.
 
-Other stronger properties may be needed. One is the necessity of a received message to be the first and original one, avoiding the acceptance of repeated messages. Concerning the protocol which will be reviewed in Chapter~\ref{chap:dap}, this notion is crucial. A good discussion on this is also given in~\cite{Gollmann2000}.
+Other stronger properties may be needed. One is freshness, which is the necessity of a received message to be the first one, avoiding the acceptance of repeated messages. Concerning the protocol which will be reviewed in Chapter~\ref{chap:dap}, this notion is crucial. A good discussion on this is also given in~\cite{Gollmann2000}.
 
 Now we focus on our working example. Figures \ref{fig:auth-attack1} and \ref{fig:auth-attack2} presents a diagram where agents are represented as nodes and messages are described above edged, preceded by they order. As stated, the attacker can intercept and modify messages, since she has full control of the network.
 

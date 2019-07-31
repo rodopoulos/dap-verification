@@ -71,15 +71,15 @@ As a first step towards its formalization, we properly define smartphones, as an
 
 Note that such formalization bounds the ownership of a smartphone to one User only, establishing a permanent link between both entities. In the DAP specification, such bound is described in terms of the key $K$, shared between the User's smartphone and the Bank, which identifies the User towards the Bank. This entity is defined in a software context, in the smartphone memory, thereby it may be exploited. Furthermore, a bound between the User and the Smartphone can also be established by hardware means, using the SIM card, present in any smartphone in order to the device receive a proper phone number.
 
-However, these details are confined to the protocol implementation in the underlying software executing it. In short, the formalization of the smartphone entity cannot fully comprehend how the application will treat the link between a User and a mobile phone, combining software and hardware aspects. Accordingly, we preserve the theoretical ownership aspect, using a conservative approach, stating that our model establishes the link between the two entities and keep it until the end of all trace.
+However, these details are confined to the protocol implementation in the underlying software executing it. In short, the formalization of the smartphone entity cannot fully understand how the application will treat the link between a User and a mobile phone, combining software and hardware aspects. Accordingly, we preserve the theoretical ownership aspect, using a conservative approach, stating that our model establishes the link between the two entities and keep it until the end of all trace.
 
 
 
 \subsection{Vulnerabilities}
-An evaluation of realistic vulnerabilities for smartphones is presented, in order to fully comprehend how such aspects must be formalized in our final model:
+An evaluation of realistic vulnerabilities for smartphones is presented, in order to fully understand how such aspects must be formalized in our final model:
 
 \begin{itemize}
-  \item \textbf{Theft:} mobile phones are highly susceptible to robbery, considering that its reduced size also increases its risk to loss and stealing. Hence, we need to formalize devices that are robbed from their owners and used by the Spy, including them in a correspondent set \texttt{stolen};
+  \item \textbf{Theft:} mobile phones are highly susceptible to theft, considering that its reduced size also increases its risk to loss and stealing. Hence, we need to formalize devices that are stolen from their owners and used by the Spy, including them in a correspondent set \texttt{stolen};
 
   \item \textbf{Device control:} mobile phones are reduced personal computers, which can be held by users. As noted, they can also be exploited and controlled remotely by the Spy, giving her the ability to request computational actions and access device data. Therefore, compromised smartphones could be added to the set \texttt{badp}, of compromised agents. However, such capacities are limited to the set of computational operations, which does not include physical actions with the smartphone, like pointing its camera to something. As a result, the formalization of a compromised device must not include such actions, but only the ones achievable by computational means.
 \end{itemize}
@@ -97,9 +97,9 @@ In this model, agents' long-term keys are now stored in the Smartphone and agent
 %
 $$\texttt{shrK} : agent \longrightarrow key$$
 %
-How such keys are stored does not require an explicit formalization by the Smartphone model, but does require a description of how they are handled by agents and their devices. This approach flexibilize our specification process for smartphones, leaving any specific aspects to the protocol model specification.
+How such keys are stored does not require an explicit formalization by the Smartphone model, but does require a description of how they are handled by agents and their devices. This approach flexibilizes our specification process for smartphones, leaving any specific aspects to the protocol model specification.
 
-Several smartphone's operational systems present to their users the possibility to be operated until a passphrase is inputted, protecting them from any unwanted access and further illegal actions. However, such behavior is not required by the DAP specification and, given the fact that stolen devices are automatically considered compromised, such security scheme is irrelevant. Thus, we do not present a formalization of PIN-required actions on the smartphone.
+Several smartphone's operational systems present to their users the possibility to be operated until a passphrase is given, protecting them from any unwanted access and further illegal actions. However, such behavior is not required by the DAP specification and, given the fact that stolen devices are automatically considered compromised, such security scheme is irrelevant. Thus, we do not present a formalization of PIN-required actions on the smartphone.
 
 Finally, we mention the QR-Code ciphering scheme that happens over some steps of DAP. The protocol standard \cite{ISO13586} presents a matrix barcode scheme for displaying information, using four possible encoding modes: numeric, alphanumeric, binary and kanji. That said, we emphasize that no innate encryption happens in such codification and so, there is no need for a key definition here.
 
@@ -236,7 +236,7 @@ The definitions on the agents' initial knowledge set are properly updated, follo
 The function \textit{knows} will also be extended. The new events impacts both on agents and the Spy knowledge set, where the latter needs careful analysis, as follows. When the assumption of secured devices does not hold, we have that:
 \begin{enumerate}
   \setcounter{enumi}{3}
-  \item An agent knows what she inputs to any smartphone in a trace. If an agent is compromised, then the Spy also knows any inputed message;
+  \item An agent knows what she inputs to any smartphone in a trace. If an agent is compromised, then the Spy also knows any given message;
   %
   \begin{center}
     \texttt{knows} $A$ ((\texttt{Scans} $A'$ $P$ $X$) $\#$ \textit{evs}) $\triangleq$ $\begin{cases}
@@ -273,7 +273,7 @@ The function \textit{knows} will also be extended. The new events impacts both o
   \end{center}
 \end{enumerate}
 
-When the assumption of secure devices hold, the definition of the \textit{knows} preficate is simplified. Events \texttt{Scans} and \texttt{Outputs} do not need its correspondent reception events, since message reception is guaranteed. The \texttt{Scans} event is preserved, since it can only be exploited when the agent herself is compromised. Therefore, we only update the  \texttt{Outputs} event form:
+When the assumption of secure devices hold, the definition of the \textit{knows} predicate is simplified. Events \texttt{Scans} and \texttt{Outputs} do not need their correspondent reception events, since message reception is guaranteed. The \texttt{Scans} event is preserved, since it can only be exploited when the agent herself is compromised. Therefore, we only update the  \texttt{Outputs} event form:
 % 
 \begin{enumerate}
   \setcounter{enumi}{5}
@@ -290,7 +290,7 @@ When the assumption of secure devices hold, the definition of the \textit{knows}
 
 
 \section{Threat Model}
-Traditional protocols could have their threat model defined by rule \texttt{Fake} and some other definitions concerning agents knowledge. The introduction of smartphone events and further modifications in knowledge sets induce new kinds of aspects to be considered.
+Traditional protocols could have their threat model defined by rule \texttt{Fake} and some other definitions concerning agents knowledge. The introduction of smartphone events and further modifications in knowledge sets motivate new kinds of aspects to be considered.
 
 Smartphones can be exploited through illegal actions, as defined in Section~\ref{ssec:usability}. Our model does not allow the Spy to control the offline channel, but she has control over Smartphone inputs and outputs. Therefore, given an illegally usable smartphone, the Spy can send fake messages to it or can output fake messages to agents from her smartphone, pretending to be the compromised one. Such events should not be mixed with the ability of faking message in the regular network channel, in order to preserve behaviors linked to reception of messages from a specific channel.
 
@@ -298,7 +298,7 @@ Finally, rule \texttt{Fake} is extend in order to embrace such details, producin
 
 
 \section{Protocol Model}
-Once formalized, the model for smartphones guarantees the reception of messages for agents and devices, but only when the assumption of secure means holds. For the case when it does not hold, we need two more rules that models the reception of data, similarly to the reception rule for network events, since rules are not forced to happen in the model. The \texttt{SRcpt} and \texttt{ARcpt} rules guarantee the reception of data for insecured devices. Both of then are defined at the protocol level.
+Once formalized, the model for smartphones guarantees the reception of messages for agents and devices, but only when the assumption of secure devices holds. For the case when it does not hold, we need two more rules that models the reception of data, similarly to the reception rule for network events, since rules are not forced to happen in the model. The \texttt{SRcpt} and \texttt{ARcpt} rules guarantee the reception of data for insecured devices. Both are defined at the protocol level.
 % 
 \begin{align*}
   & \texttt{SRcpt}: \newline \\
@@ -316,8 +316,8 @@ Once formalized, the model for smartphones guarantees the reception of messages 
 \section{Further Discussion}
 The model presented in this section is suitable for a reasonable analysis of the proposed protocol and its tools. The formalization introduced the mechanisms for agent-device communication, considering possible attacks from the Spy perspective. 
 
-However, such formalization has many concepts being grouped into a single model. The out-of-band entities, which are not properly embedded in the software aspects of the protocol, are modeled together with the technical details of the protocol. Even if the model can depict major parts of the whole protocol operation, some others aspects may be left out, such as aspects regarding \textit{social engineering attacks}.
+However, such formalization has many concepts being grouped into a single model. The out-of-band entities, which are not properly embedded in the software aspects of the protocol, are modeled together with the technical details of the protocol. Even if the model can depict major parts of the whole protocol operation, some aspects may be left out, such as aspects regarding \textit{social engineering attacks}.
 
-The definition of a security protocol as a ceremony, involving both technical and social aspects, has already been done \cite{Ellison07} and introductory formalization and further extensions of such aspects have been done in the Inductive Method \cite{Bella2012}. The technique considers many out-of-band elements of the protocol, even the ones regarding human and computer interactions. The protocol is structured in layers, representing one major aspect in the protocol. The agent are also split into different kind of layers, where interactions are held between two layers. Thus, a security property must transverse many layers until reaching the human entity to be considered as valid.
+The definition of a security protocol as a ceremony, involving both technical and social aspects, has already been done \cite{Ellison07} and introductory formalization and further extensions of such aspects have been done in the Inductive Method \cite{Bella2012}. The technique considers many out-of-band elements of the protocol, even the ones regarding human and computer interactions. The protocol is structured in layers, each representing one major aspect in the protocol. The agent is also split into different kind of layers, where interactions are held between two layers. Thus, a security property must transverse many layers until reaching the human entity to be considered as valid.
 
-Additionally, this strategy can be extend to cover new entities, such as a new device that acts as a trusted devices, but that can be exploited by a malicious peer, given this possible scenario. Hence, this approach seems to be more interesting for verifying a protocol like the DAP, given the better model granularity it provides. This task is delegated to future work.
+Additionally, this strategy can be extended to cover new entities, such as a new device that acts as a trusted device, but that can be exploited by a malicious peer, given this possible scenario. Hence, this approach seems to be more interesting for verifying a protocol like the DAP, given the better model granularity it provides. This task is delegated to future work.

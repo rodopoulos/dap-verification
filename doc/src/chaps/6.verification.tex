@@ -2,7 +2,7 @@
 \label{chap:verification}
 Finally, we present a partial formalization and verification of the DAP\@. The key generation was left out, due to time constraints and lack of explicitness in the protocol document concerning the asymmetric phase.
 
-As discussed, it is possible to consider the situation where the user smartphone can be remotely exploited by the Spy and the one where the devices are secured. The formalization focus on in the former, being faithful to the protocol initial assumptions. With this approach, any innate flaws in the protocol can be early found. Properties can be progressively tested as we build more threatening scenarios.
+As discussed, it is possible to consider the situation where the user smartphone can be remotely exploited by the Spy and the one where the devices are secured. The formalization focus on the former, being faithful to the initial protocol assumptions. With this approach, any innate flaws in the protocol can be early found. Properties can be progressively tested as we build more threatening scenarios.
 
 The proof scripts regarding the formalization are partially described, where only relevant sections are included. The complete model with its proved properties and auxiliary lemmas are attached as appendix at the end of this document. They are also available at \cite{RodopoulosGithub}.
 
@@ -38,7 +38,7 @@ The constant \texttt{sdaptrans} denotes the secured DAP model, consisting of the
 
 The protocol rules are now presented. Rule \textit{DT1} represents an agent sending the intended transaction for authorization to the Server. The Server cannot be such agent, which leads to the inability of the Server to start the protocol. Following lemmas will state that the Servers cannot use a smartphone.
 
-It is important to stress the first adaption of the protocol entities. The transaction is defined as the concatenation of the sender's identity and a number, representing the transaction itself. We regard to this representation due to its simplicity and comprehensiveness, since a banking transaction may take many forms and an arbitrary number of fields, but it is certain that a transaction will have an originator and an identification \cite{Hutchinson2003}.
+It is important to stress the first adaptation of the protocol entities. A transaction is defined as the concatenation of the sender's identity and a number, representing the transaction itself. This representation is used due to its simplicity and comprehensiveness, since a banking transaction may take many forms and an arbitrary number of fields, but it is certain that a transaction will have an originator and an identification \cite{Hutchinson2003}.
 
 \begin{figure}[h!]
   \begin{align*}
@@ -60,7 +60,7 @@ It is important to stress the first adaption of the protocol entities. The trans
   \label{fig:dap-model-1-n-2}
 \end{figure}
 
-Rule \textit{DT2} has more complex premises. In this rule, the Server instances the TAN, which must be fresh. Moreover, the Server must be triggered in order to respond an initiator, thus we include the reception of a transaction by the Server. 
+Rule \textit{DT2} has more complex premises. In this rule, the Server instantiates the TAN, which must be fresh. Moreover, the Server must be triggered in order to respond an initiator, thus we include the reception of a transaction by the Server. 
 
 Finally, the Server uses the symmetric key both for generating the cipher with the TAN and the checksum hash for the offline phase. With the received transaction, the Server can respond the initial sender with the message \(m'\). Note that we have another adaptation of the protocol: we do not distinguish the keys for encryption and hash creation. Since they are produced from just taking a part from the original key, the Spy could have access to both keys \(k_1\) and \(k_2\) if she has access to the shared key \(K\).
 
@@ -81,7 +81,7 @@ Since the agent does not know her shared key, it cannot understand the contents 
   \caption{Secure DAP rule 3 formalization}
 \end{figure}
 
-Rule \textit{DT4} happens inside the smartphone. Here, the agent also must be holding her smartphone. In this stage, two important security steps are performed: the TAN decryption and the hash checksum. Both of this actions are formalized in the \texttt{Scans} event, where both ciphers are presented in clear, stating that the smartphone must precisely know the format of the received message. Hence, in order to present the received transaction on its screen, the smartphone must be fed with the expected input, that is, the equivalent hash representing the transaction and encrypted TAN.
+Rule \textit{DT4} happens inside the smartphone. Here, the agent also must be holding her smartphone. In this stage, two important security steps are performed: the TAN decryption and the hash checksum. Both actions are formalized in the \texttt{Scans} event, where both ciphers are presented in clear, stating that the smartphone must precisely know the format of the received message. Hence, in order to present the received transaction on its screen, the smartphone must be fed with the expected input, that is, the equivalent hash representing the transaction and encrypted TAN.
 
 \begin{figure}[!h]
   \begin{align*}
@@ -99,7 +99,7 @@ Rule \textit{DT4} happens inside the smartphone. Here, the agent also must be ho
   \caption{Secure DAP rule 4 formalization}
 \end{figure}
 
-Rule \textit{DT5} models the agent confirming the visualized transaction in her smartphone screen. For this reason, the agent must have issued a transaction, received it again with its correspondent ciphers from the Server and saw the same transaction, inputed by her in \textit{DT3}, on the device screen. Again, we adapted the protocol: the confirmation act is represented with the \texttt{Inputs} event, using the transaction itself as an acknowledgement that the outputed transaction is correct.
+Rule \textit{DT5} models the agent confirming the visualized transaction in her smartphone screen. For this reason, the agent must have issued a transaction, received it again with its correspondent ciphers from the Server seen the same transaction, given by her in \textit{DT3}, on the device screen. Again, we adapted the protocol: the confirmation act is represented with the \texttt{Inputs} event, using the transaction itself as an acknowledgement that the presented transaction is correct.
 
 \begin{figure}[!h]
   \begin{align*}
@@ -176,7 +176,7 @@ In the last step, rule \textit{DT8}, the Server acknowledges the transaction aut
 \end{figure}
 
 \subsection{Threats}
-The threat scenario is represented by three extra rules, modeling how the Spy can act in the protocol. The first one, \textit{Fake} uses a similar structure from the one presented in Chapter \ref{chap:inductive}, but also covering the smartphone case. In this rule, having all the entities to fake a message, the Spy can send it in the network or input it to another smartphone.
+Three extra rules represents the threat scenario, modeling how the Spy can act in the protocol. The first one, \textit{Fake} uses a similar structure from the one presented in Chapter \ref{chap:inductive}, but also covering the smartphone case. In this rule, having all the entities to fake a message, the Spy can send it in the network or input it to another smartphone.
 
 \begin{figure}[!h]
   \begin{align*}
@@ -191,7 +191,7 @@ The threat scenario is represented by three extra rules, modeling how the Spy ca
   \caption{Spy general behavior rule for Secure DAP}
 \end{figure}
 
-Still, it is necessary to model how the Spy can exploit illegally usable smartphones. This behavior is modeled with rules \textit{DT4\_Fake} and \textit{DT6\_Fake}. The first covers the case where the Spy can obtain a transaction displayed by a smartphone, in order to be confirmed by an user. The \texttt{illegalUse} predicate is defined according to the \texttt{secureP} flag. Also, the Spy must have inputed the message \(m'\) to the smartphone, which means that she must have early access to the Smartphone, either by holding or exploiting it.
+Still, it is necessary to model how the Spy can exploit illegally usable smartphones. This behavior is modeled with rules \textit{DT4\_Fake} and \textit{DT6\_Fake}. The first covers the case where the Spy can obtain a transaction displayed by a smartphone, in order to be confirmed by an user. The \texttt{illegalUse} predicate is defined according to the \texttt{secureP} flag. Also, the Spy must have presented message \(m'\) to the smartphone, which means that she must have early access to the Smartphone, either by holding or exploiting it.
 
 \begin{figure}[!h]
   \begin{align*}
@@ -209,7 +209,7 @@ Still, it is necessary to model how the Spy can exploit illegally usable smartph
   \caption{The Spy exploit for rule \textit{DT4}}
 \end{figure}
 
-Rule \textit{DT6\_Fake} models how the smartphone can obtain the displayed TAN by a smartphone, after the user confirmation phase. As in rule \textit{DT4\_Fake}, the smartphone must be illegally used and the message $m'$ must be inputed in the smartphone. Additionally, the confirmation phase must be performed and succeeded. Thereby, the Spy can obtain the deciphered than from the Smartphone.
+Rule \textit{DT6\_Fake} models how the smartphone can obtain the displayed TAN by a smartphone, after the user confirmation phase. As in rule \textit{DT4\_Fake}, the smartphone must be illegally used and the message $m'$ must be given to the smartphone. Additionally, the confirmation phase must be performed and succeeded. Thereby, the Spy can obtain the deciphered than from the Smartphone.
 
 \begin{figure}[!h]
   \begin{align*}
@@ -380,13 +380,13 @@ Rule \textit{DT5} has a special meaning: it acts as the confirmation step for th
 
 Theorem \ref{thm:inputs-a-smartphone-5} proves that if the event of an agent confirming a transaction on a smartphone exists, then she must been acting legally and her smartphone have confirmed that the received transaction is authentic. However, it is important to note that the agent itself does not participate in any of these stages directly, since she only knows the transaction among all the previous messages, which goes according to the DAP specification.
 
-Regarding message format guarantees, it is possible to find some issues with Rule \textit{DT3}. Once an agent receives message \(m'\) from the Server, she cannot inspect the format of the message. Thus, the agent dos not have any guarantees about that message, that is, the message is not explicit about its contents. Theorem \ref{thm:scans-smartphone-a-dt3-message-form-unprovable} shows that the contents of the message that the agent forwards to its smartphone cannot be derived, since that is not conclusive what each message entity representes
+Regarding message format guarantees, it is possible to find some issues with Rule \textit{DT3}. Once an agent receives message \(m'\) from the Server, she cannot inspect the format of the message. Thus, the agent does not have any guarantees about that message, that is, the message is not explicit about its contents. Theorem \ref{thm:scans-smartphone-a-dt3-message-form-unprovable} shows that the contents of the message that the agent forwards to its smartphone cannot be derived, since it is not conclusive what each message entity represents.
 
 \begin{theorem}[\textbf{Scans\_Smartphone\_A\_DT3\_form\_unprovable}]
 \label{thm:scans-smartphone-a-dt3-message-form-unprovable}
   If \text{evs} contains
   \[\Scans{A}{\Smartphone{A}}{\Bracks{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}, r', h_S}}\]
-  Then, for some nonce r', there is some nonce r that $r \neq \Crypt{\Key{shrK}{A}}{\Message{Nonce}{r}}$
+  Then, for some nonce r', there is a nonce r that $r' \neq \Crypt{\Key{shrK}{A}}{\Message{Nonce}{r}}$
 \end{theorem}
 
 Lemmas about Rule \textit{DT5} format are straightforward, once it is the only \textit{Inputs} event in the protocol and its message form is the transaction itself.
@@ -406,7 +406,7 @@ In this section, the verified model properties are described. These properties r
 
 
 
-\subsection{Privacy and Confidentiality}
+\subsection{Confidentiality and Privacy}
 It is observable that the DAP does not preserve the transaction privacy. Theorem \ref{thm:spy-knows-transaction} shows that the Spy possess the transaction number after the first step of the protocol. It is trivial to show this, since all messages that contains the transaction are sent in cleartext over the network.
 
 \begin{theorem}[\textbf{Spy\_knows\_transaction}]

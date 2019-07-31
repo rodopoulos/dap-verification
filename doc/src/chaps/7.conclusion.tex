@@ -1,6 +1,6 @@
 %!TEX root = ../../dissertacao.tex
 \label{chap:conclusion}
-This chapter brings a brief discussion about the results, challenges and future work regarding the DAP formalization and verification. The resulted work demanded the understanding of security protocols, formal verification and the DAP specification itself.
+This chapter brings a brief discussion about the results, challenges and future work regarding the DAP formalization and verification. The resulting work demanded the understanding of security protocols, formal verification and the DAP specification itself.
 
 
 \section{Results}
@@ -8,7 +8,7 @@ The protocol could be totally formalized. There are lemmas confirming the model 
 
 Regarding its properties, it was found that the DAP has issues with privacy, where the transaction issued by the user goes on cleartext through the network. Since it is a banking protocol, it seems odd that the protocol does not addresses such concern.
 
-However, the protocol fulfills great part of its goals. The Transaction Authorization Nonce (TAN) uniquely identifies transactions and acts as a valid token for the server to confirm that a transaction was effectively confirmed at the smartphone. Additionally, the produced ciphers at the server --- the encrypted TAN and checksum hash --- are used at the smartphone side to confirm that a trusted entity generated both of them, providing authenticity. At the same time, the integrity of such messages are guaranteed by the use of the long-term shared key \(K\) between the smartphone user and the server.
+However, the protocol fulfills great part of its goals. The Transaction Authorization Nonce (TAN) uniquely identifies transactions and acts as a valid token for the server to confirm that a transaction was effectively confirmed at the smartphone. Additionally, the produced ciphers at the server --- the encrypted TAN and checksum hash --- are used at the smartphone side to confirm that a trusted entity generated both of them, providing authenticity. At the same time, the integrity of such messages is guaranteed by the use of the long-term shared key \(K\) between the smartphone user and the server.
 
 The guarantees at the smartphone are condensed in the reliability properties of the model. These lemmas provide proofs that the protocol can legally move on when important steps were taken. In particular, the deciphered TAN is only presented in the smartphone screen if the checksum phase succeeded and the user confirmed the transaction at her smartphone.
 
@@ -16,13 +16,13 @@ Lemmas regarding rules $DT3$ and $DT6$ presented issues, where strong lemmas cou
 
 
 \section{Challenges}
-The use of the Inductive Method proved to be a reasonable choice, considering it provided a good framework that could be extended in order to model smartphones and its operation. The obtained model was able to represent different kinds of events and the smartphone operation with its available secrets. The sets of compromised ($badP$) and stolen ($stolen$) phones could reliably portray the situation where a malicious agent interfere in the protocol, affecting the devices according. However, for the targeted protocol, it was necessary to conceive some rules ($DT4\_Fake$ and $DT6\_Fake$) which described how the Spy could obtain more information through some events, where such rules have the precondition of a illegal use of the smartphone.
+The use of the Inductive Method proved to be a reasonable choice, considering it provided a good framework that could be extended in order to model smartphones and its operation. The obtained model was able to represent different kinds of events and the smartphone operation with its available secrets. The sets of compromised ($badP$) and stolen ($stolen$) phones could reliably portray the situation where a malicious agent interferes in the protocol, affecting the devices according. However, for the targeted protocol, it was necessary to conceive some rules ($DT4\_Fake$ and $DT6\_Fake$) which described how the Spy could obtain more information through some events, where such rules have the precondition of an illegal use of the smartphone.
 
-The initial protocol formalization did not considered that smartphones could be remotely exploited. With only this scenario, many properties could be explored and some were left out.
+The initial protocol formalization did not consider that smartphones could be remotely exploited. With only this scenario, many properties could be explored and some were left out.
 
 It was noted that the lemmas regarding the third rule of the model ($DT3$) presented some issues, where strong properties could not be proved. This event carries a concern: it is the phase where the User inputs the main message to her smartphone, without understanding its meaning due to encryption. Hence, it is difficult to extract properties which can be enjoyed by the user, since many of the security aspects available at the message are not clear to her.
 
-Also, on further rules, there are more interactions between the user and the smartphone that also presented some trouble to be formalized and inspected, due to its hardship to be translated into formal rules, using the available framework. The security protocol ceremony \cite{Ellison07} appear to be a more reliable path for formalizing the details in the interaction between a human and the smartphone devices, where such task is splitted in layers which can be properly formalized and have its particularities better identified. A security property is valid in the protocol when it transverses all layers. This could potentially bring better insights in the transaction confirmation phase at the smartphone.
+Also, on further rules, there are more interactions between the user and the smartphone that also presented some trouble to be formalized and inspected, due to its hardship to be translated into formal rules, using the available framework. The security protocol ceremony \cite{Ellison07} appears to be a more reliable path for formalizing the details in the interaction between a human and the smartphone devices, where such task is splitted in layers which can be properly formalized and have its particularities better identified. A security property is valid in the protocol when it transverses all layers. This could potentially bring better insights in the transaction confirmation phase at the smartphone.
 
 
 \section{Future Work}
@@ -30,6 +30,6 @@ As discussed, some properties were left out from the verification. The main focu
 
 One of the main tasks delegated to the future is the use of concepts from the security protocol ceremony, which could bring more interesting details about the phases where there are interactions between the user and her smartphone.
 
-Additionally, the DAP formalization lacks the scenario where smartphones can be exploited. This is an important scenario since it correspond to the real world. This formalization should take in account that the Spy can trigger any desired action in the smartphones, access their data and obtain any inputed information in this devices. In a more threatening scenario, some of the proved properties for the secured DAP version can become unprovable, since many of the protocol guarantees rely in the fact that the devices cannot be compromised.
+Additionally, the DAP formalization lacks the scenario where smartphones can be exploited. This is an important scenario since it corresponds to the real world. This formalization should take into account that the Spy can trigger any desired action in the smartphones, access their data and obtain any given information in this devices. In a more threatening scenario, some of the proved properties for the secured DAP version can become unprovable, since many of the protocol guarantees rely in the fact that the devices cannot be compromised.
 
 Finally, the formalization of the shared key generation phase was left out, both for the symmetric and asymmetric schemes. The former may present more interesting details about the protocol and the key itself, since it uses the peculiarities of the DAP as the use of smartphone and message exchange base in QR-codes.
