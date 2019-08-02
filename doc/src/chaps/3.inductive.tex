@@ -47,7 +47,7 @@ Each formalized theory in Isabelle is contained in a proof script. Also, each Is
 
 
 \subsection{Agents}
-Agents are described in the \texttt{Message.thy} file, being the basic type for specifying participants in a protocol session. Three main entities are defined as free types: legal agents (Friends ), the Spy and the Server. In the grammar below, the \( \triangleq \) symbol reads as a definition equality operator for a keyword and the \(|\) symbol is the disjunction operator, separating the possible types for the \texttt{agent} datatype.
+Agents are described in the \texttt{Message.thy} file, being the basic type for specifying participants in a protocol session. Three main entities are defined as free types: legal agents (Friends ), the Spy and the Server. In the definition below, the \( \triangleq \) symbol reads as a definition equality operator for a keyword and the \(|\) symbol is the disjunction operator, separating the possible types for the \texttt{agent} datatype.
 
 \begin{center}
   {\ttfamily datatype agent \( \triangleq \) Server | Spy | Friend \(nat\)}
@@ -309,7 +309,7 @@ Finally, the last operator \texttt{parts} is very similar to the \texttt{analz} 
   \end{center}
 \end{enumerate}
 
-Thereby, the extraction of messages from ciphers does not require a key, simulating unbounded computational power. This operator is mainly used in analysis of agents' knowledge sets along proofs and the following relation can be derived concerning the last two operators:
+Thereby, the extraction of messages from ciphers does not require a key in this operator, simulating unbounded computational power. This operator is mainly used in analysis of agents' knowledge sets along proofs and not used to give an agent unlimited power over sets of messages. Additionally, the following relation can be derived concerning the last two operators:
 
 \begin{center}
   \texttt{analz} \(\subseteq \) \texttt{parts}

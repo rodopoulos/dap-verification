@@ -418,7 +418,7 @@ It is observable that the DAP does not preserve the transaction privacy. Theorem
 
 Considering the best practices for a banking security framework \cite{Hutchinson2003}, privacy is a property that is usually desired in online banking protocols. Moreover, the argument that the transaction may be protected by an higher level communication channel does not ensure the privacy property, since it is given that the user personal computer is compromised and, thus, the Spy can access the transaction again.
 
-Given this, there are no lemmas regarding confidentiality that can be made useful.
+The confidentiality properties are bounded to the use of the pre-shared key \(K\) in the protocol. Confidentiality lemmas are related to the correct use of the given key and how it can produce correct ciphers. Therefore, the lemmas regarding the correct form of the produced messages, both by the Server and the agents, relate to confidentiality.
 
 
 
@@ -483,3 +483,11 @@ The TAN is the entity that uniquely identifies a transaction. Hence, it is impor
   \end{align*}
   Then, $A = A'$ and $T = T`$
 \end{theorem}
+
+
+\section{Discussion}
+As seen in this chapter, the smartphone model provided a base for reasoning about the devices operation in a protocol that included offline communication between agents and their devices. The model allowed the formalization of the protocol, considering the threat scenarios of device theft.
+
+It is important to notice that the smartphone provides more functionalities than necessary, introducing the concern of possible attacks on the device, breaking the security premises of the protocol. in this first version, the formalization did not consider such context, reasoning how the protocol could provide its promised properties. In the end, the protocol proved to be consistent in many of its proposed characteristics.
+
+However, it is important to notice that some guarantees are not verifiable by all peers. The guarantees concerning the messages that arrive at the agent's personal computer can not be verified by her, since she does not understand the ciphered entities of the message. Yet, this seems to be a crucial aspect to the protocol security: since the agent cannot understand such messages, it cannot disclose them as well to any the Spy. The protocol security heavily relies in that fact.
