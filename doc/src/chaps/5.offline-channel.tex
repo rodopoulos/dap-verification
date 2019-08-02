@@ -1,7 +1,7 @@
 %!TEX root = ../../dissertacao.tex
 \label{chap:formal-phones}
 
-As seen in Chapter \ref{chap:dap}, the DAP main strategy for securely authorizing transactions is providing a verification phase between the human User and his smartphone device, where the transaction will be revised and further confirmed by the User. All these operations take place in an offline and out-of-band channel, which is supposed to be inviolable by the Spy. Besides the inviolability of the channel, the DAP specification makes other strong assumptions about the smartphone security model, which will be further discussed later in this chapter.
+As seen in Chapter \ref{chap:dap}, the DAP main strategy for securely authorizing transactions is providing a verification phase between the human User and her smartphone device, where the transaction will be revised and further confirmed by the User. All these operations take place in an offline and out-of-band channel, which is supposed to be inviolable by the Spy. Besides the inviolability of the channel, the DAP specification makes other strong assumptions about the smartphone security model, which will be further discussed later in this chapter.
 
 As stated in Chapter \ref{chap:inductive}, the Inductive Method has proper formalizations for the network channel and regular agents behavior, but we stress that it does not take into account the offline channel and the smartphone peculiarities. In order to verify the protocol, we need to provide a reliable and suitable model for this context. In this chapter, we construct this formal model, considering all the real world details surrounding these entities, adapting the protocol assumptions into a conceivable scenario.
 
@@ -23,7 +23,7 @@ The DAP specification describes the User Smartphone as a key component for the p
 \end{description}
 % TODO: procurar aqui se a especificação pede para que o dispositivo tenha a característica de posse
 
-The above described properties can be embedded on a dedicated hardware, other than smartphones, which could be issued by the bank to the protocol users. Each client would have his own device, already packed with any required encryption key, establishing the proper link between the Bank and the User. Similar schemes have been already implemented by other online banking systems, for instance, One Time Password (OTP) proprietary tokens are delivered to bank clients, in order to compose two-factor authentication and transaction authorization systems for online banking protocols \cite{Bonneau2012, Claessens2002}.
+The above described properties can be embedded on a dedicated hardware, other than smartphones, which could be issued by the bank to the protocol users. Each client would have their own device, already packed with any required encryption key, establishing the proper link between the Bank and the User. Similar schemes have been already implemented by other online banking systems, for instance, One Time Password (OTP) proprietary tokens are delivered to bank clients, in order to compose two-factor authentication and transaction authorization systems for online banking protocols \cite{Bonneau2012, Claessens2002}.
 
 However, the protocol authors enjoyed the convenience of the smartphone. Not only the device appropriately fits the requirements for the protocol mandatory hardware but also has a strong and known acceptance among users around the world \cite{NewzooReport2018}. Therefore, the device is a reasonable choice.
 % TODO: consertar parágrafo anterior de acordo com a correção da Cláudia: "a requirement that specified (cite chapter before)".
@@ -175,7 +175,7 @@ We introduce the formal definition of the \textit{used} function, describing how
 
 \begin{enumerate}
   \setcounter{enumi}{3}
-  \item All components of a message that an agent inputs to his smartphone in a trace are used on that trace:
+  \item All components of a message that an agent inputs to her smartphone in a trace are used on that trace:
   \begin{center}
     \texttt{used}((\texttt{Inputs} $A$ $P$ $X$) $\#$ \textit{evs}) $\triangleq$ \texttt{parts} $\{ X\}\ \cup$ \texttt{used} \textit{evs}
   \end{center}
