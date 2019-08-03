@@ -218,9 +218,9 @@ Figure~\ref{fig:dap-transaction} explains the whole message transaction process,
     \newinst[1]{pc}{Personal Computer}
     \newinst[3]{srv}{Server}
 
-    \mess{pc}{$m$}{srv}
+    \mess{pc}{1. $m$}{srv}
     \begin{call}
-      {srv}{Generate $r_s$}{srv}{$r' = E_{k_2}(r_s)$}
+      {srv}{2. Generate $r_s$}{srv}{$r' = E_{k_2}(r_s)$}
     \end{call}
     \postlevel
     \begin{call}
@@ -230,11 +230,11 @@ Figure~\ref{fig:dap-transaction} explains the whole message transaction process,
     \mess{srv}{$m,r',h_S$}{pc}
 
     \begin{sdblock}{Offline channel}{}
-      \mess{pc}{$m, r', h_S$}{cel}
+      \mess{pc}{3. $m, r', h_S$}{cel}
 
       \postlevel
       \begin{call}
-        {cel}{$h_U = H_{k_1}(m,r')$}{cel}{$h_U == h_S$}
+        {cel}{4. $h_U = H_{k_1}(m,r')$}{cel}{$h_U == h_S$}
       \end{call}
       \postlevel
 
@@ -243,31 +243,31 @@ Figure~\ref{fig:dap-transaction} explains the whole message transaction process,
       % \end{call}
       % \postlevel
 
-      \mess{cel}{$m$}{pc}
+      \mess{cel}{5. $m$}{pc}
 
       \mess{pc}{Confirm $m$}{cel}
 
       \postlevel
 
       \begin{call}
-        {cel}{$r_u = D_{k_2}(r')$}{cel}{}
+        {cel}{6. $r_u = D_{k_2}(r')$}{cel}{}
       \end{call}
 
 
       \mess{cel}{$r_u$}{pc}
     \end{sdblock}
 
-    \mess{pc}{$r_u$}{srv}
+    \mess{pc}{7. $r_u$}{srv}
 
     \begin{call}
-      {srv}{$r_u = r_s$}{srv}{OK}
+      {srv}{8. $r_u = r_s$}{srv}{OK}
     \end{call}
 
     \mess{srv}{Success}{pc}
 
   \end{sequencediagram}
 
-  \caption{Diagram of a message transation in DAP}
+  \caption{Diagram of a message transation in DAP. The protocol steps are referenced in the diagram}
 \end{figure}
 
 
