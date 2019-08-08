@@ -29,18 +29,18 @@ An infinitely countable set of agents is considered, who can fire events accordi
 
 At a second stage, the model is verified towards proposed properties, reasoning along technical and theoretical traits. Here, structural induction takes a crucial role. If a security property must hold for the protocol, it must hold for all possible traces derived from the formal model \(P\), hence induction over the set of possible network traces is the main proof tool used in this phase.
 
-Induction has been previously used for the formalisation of protocol, for example in the NRL Protocol Analyzar by C.~Meadows~\cite{Meadows96}, and the Inductive Method has similarities with other model checking theories, like CSP~\cite{RyanSchneider2010}. It comprehends a strong threat model and concurrency among peers, however it does not check liveness properties. Moreover, the framework on which it is built provides easy ways for extension, allowing steady formalizations of atypical systems, a feature which interests us.
+Induction has been previously used for the formalization of protocol, for example in the NRL Protocol Analyzar by C.~Meadows~\cite{Meadows96}, and the Inductive Method has similarities with other model checking theories, like CSP~\cite{RyanSchneider2010}. It comprehends a strong threat model and concurrency among peers, however it does not check liveness properties. Moreover, the framework on which it is built provides easy ways for extension, allowing steady formalizations of atypical systems, a feature which interests us.
 
 The method was first proposed by L.~Paulson~\cite{Paulson98} and extended by G.~Bella~\cite{Bella2007}. It has been used for the verification of many deployed and significant protocols~\cite{Paulson99, BellaPaulson2006, Bella2003}.
 
 
 
 \subsection{Isabelle}
-Given the considerably great number of possible agents and possible traces which can be derived from a model, correctness proofs can take a substantial amount of work. As a result, the use of an automatic theorem prover is desirable. Isabelle~\cite{isabelle} is one of such systems, where the theory framework is built on, providing machine checkable and maintainable proofs scripts.
+Given the considerably great number of possible agents and possible traces which can be derived from a model, correctness proofs can take a substantial amount of work. As a result, the use of an automatic theorem prover is desirable. Isabelle~\cite{isabelle} is one of such systems, where the theory framework is built on, providing machine verifiable and maintainable proofs scripts.
 
 Isabelle is a generic theorem prover, which can reason over several formal systems, in an interactive way. Hence, proofs are not entirely automatic, requiring certain user guidance. It combines high order logic, typed formalism and quantifiers for functions, predicates and sets. Also, the system has a good range of proof tools: simplifiers, induction-oriented commands and access to some automatic provers and state-of-the-art theories.
 
-Lemmas and theorems are stated as goals, to which the user must apply proof tactics, being able to use previously proved lemmas. Such process may derive subgoals, which also need to be dealt with. Hence, the proof process is arduous and must be done with care. If an user fails to find a proof for a certain property, this may not be a certification of the inexistence of a proof. At the same time, the proof or somes of its aspects may be built on top of wrong formalizations, meaning the user is not skilled enough.
+Lemmas and theorems are stated as goals, to which the user must apply proof tactics, being able to use previously proved lemmas. Such process may derive subgoals, which also need to be dealt with. Hence, the proof process is arduous and must be done with care. If an user fails to find a proof for a certain property, this may not be a certification of the nonexistence of a proof. At the same time, the proof or some of its aspects may be built on top of wrong formalizations, meaning the user is not skilled enough.
 
 Each formalized theory in Isabelle is contained in a proof script. Also, each Isabelle distribution comes with a library of such formalizations. The Inductive Method framework is defined in the \textit{Auth} library~\cite{isabelle-hol-auth}, comprised in three files: \texttt{Message.thy}, \texttt{Event.thy} and \texttt{Public.thy}. The content of those files will be depicted over the rest of this chapter, where some of Isabelle syntax will be presented, when convenient.
 
@@ -125,7 +125,7 @@ Both events \texttt{Notes} and \texttt{Gets} are related to information acquisit
 
 A \textit{trace} can now be defined: a list of network events occurring while an unbounded population of agents are running the protocol. Specifically, the trace is a list of such events, disposed in reverse chronological order, since events are added at the list head. Hence, traces may have many configurations, but must stay faithful to the protocol model. The set of possible traces of a given protocol characterizes its formal model.
 
-We can now recall some aspects concerning timestamps. In the Inductive Method, a timestamp describes the moment where an event happened in a trace, using the trace length as the mesure. Therefore, for generating a timestamp, the following function is used:
+We can now recall some aspects concerning timestamps. In the Inductive Method, a timestamp describes the moment where an event happened in a trace, using the trace length as the measure. Therefore, for generating a timestamp, the following function is used:
 
 \begin{center}
   {\ttfamily CT\@: event list \(\longrightarrow \) nat}
@@ -266,7 +266,7 @@ The \texttt{analz} operator denotes the act of inspecting the components of a me
     \(\Bracks{X,Y} \in \texttt{analz} H \Longrightarrow Y \in \) \texttt{analz} \(H\)
   \end{center}
 
-  \item The contents of an analyzed ciphertext can only properly be analyzed and further retrieved in possession of its decryption key.
+  \item The contents of an analyzed cyphertext can only properly be analyzed and further retrieved in possession of its decryption key.
   \begin{center}
     \(\Braces{\texttt{Crypt}\ K\ X \in \texttt{analz}\ H; \texttt{Key}\ (invKey\ K) \in \texttt{analz}\ H} \Longrightarrow X \in \texttt{analz}\ H\)
   \end{center}
@@ -302,7 +302,7 @@ The second operator is the \texttt{synth}, which basically denotes the action of
 Finally, the last operator \texttt{parts} is very similar to the \texttt{analz} operator, hence its rules are similar to the latter, except the one concerning encryption:
 
 \begin{enumerate} \setcounter{enumi}{3}
-  \item The contents of any ciphertext can be obtained.
+  \item The contents of any cyphertext can be obtained.
   %
   \begin{center}
     \(\texttt{Crypt}\ K\ X \in \texttt{parts}\ H \Longrightarrow X \in \texttt{parts}\ H\)
@@ -423,7 +423,7 @@ A formalization for this definition prompted the creation of a new predicate in 
 \subsection{Authenticity}
 This property can also be read as legitimacy. In the method, the guarantee of a message's authorship is presented as synonym of integrity, since if the message is unaltered (integrity), then the authorship must be preserved. Even if the Spy intercepts the message and them relays it to the recipient, if integrity is preserved, then legitimacy is still preserved, since the Spy acted as a channel relay.
 
-As a result, it is important that the message's author does not belong to the compromised agent set. Otherwise, any messages sent by him would be compromised as well and authenticity would not hold. Such concept may seem obvious for integrity matters, but it is important to enforce the authorship interest. Therefore, both properties are attached during our verifications.
+As a result, it is important that the message's author does not belong to the compromised agent set. Otherwise, any messages sent by him would be compromised as well and authenticity would not hold. Such concept may seem obvious for integrity matters, but it is important to enforce the authorship interest. Therefore, both properties are attached during our verification.
 
 
 
@@ -453,7 +453,7 @@ Also, goal availability is closely related to the threat model considered by the
 \textit{Minimal trust} concerns facts that agents must assume true, due to inability to verify them, in order to check a protocol guarantee from their point of view. Precisely, agents can only verify what they send and receive from the network, having no guarantees at all about other peers. Likewise, agents cannot state if they are compromised. Therefore, they must take such facts as true, in order to establish a suitable set of clauses to attest some goal. We formally define minimal trust below.
 
 \begin{definition}
-  Let \(\mathcal{P}\) be a security protocol, \(P\) be a formal model for \(\mathcal{P}\), and \(A\) be an agent's name. The \textit{minimal trust} of \(A\) is the set of environmental facts formalised in \(P\) whose truth values \(A\) needs to know but can never verify.
+  Let \(\mathcal{P}\) be a security protocol, \(P\) be a formal model for \(\mathcal{P}\), and \(A\) be an agent's name. The \textit{minimal trust} of \(A\) is the set of environmental facts formalized in \(P\) whose truth values \(A\) needs to know but can never verify.
 \end{definition}
 
 Having the notion of what agents can verify, an \textit{applicable guarantee} can be defined.

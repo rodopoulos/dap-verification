@@ -10,7 +10,7 @@ Security protocols are handy tools for providing protection among communication 
 
 As a communication agreement, security protocols are inherently concurrent, leading to a large spectrum of possibilities among its steps, peers behavior and system states. When considering the attacker factor --- an agent who can both act as a legal participant or produce and inject fake information to exploit the protocol --- the difficulty in designing a reliable solution can grow dramatically. For the very same reason, it is difficult to design a good security protocol and easy to develop a defective one~\cite{Bella2007}.
 
-Protocol goals depend on the environment, resources and the protocol architecture itself and each situation asks for stronger guarantees in some propeties than others. Regarding this, some of those goals may have varying definitions in the literature, like authentication~\cite{Abadi99}. Nevertheless, some properties and concepts can be universal among security protocols, as well as some goals are a consensus in the literature~\cite{RyanSchneider2010}.
+Protocol goals depend on the environment, resources and the protocol architecture itself and each situation asks for stronger guarantees in some properties than others. Regarding this, some of those goals may have varying definitions in the literature, like authentication~\cite{Abadi99}. Nevertheless, some properties and concepts can be universal among security protocols, as well as some goals are a consensus in the literature~\cite{RyanSchneider2010}.
 
 
 
@@ -50,13 +50,13 @@ Concerning the user entity and based on these concepts, the generation of sessio
 \section{Notation}
 Through this document, a consistent notation for expressing protocol actions and symbols will be used. A system based on the one presented in~\cite{Bella2007} will also be used, which brings aspects from the seminal work of~\cite{Burrows90}, since it is our main reference method for verification in this work.
 
-Primitive data instances, such messages, timestamps and \textit{nounces} can be represented as simple mnemonic letters and the encryption of such entities are represented with subscripts, for example, a message \(M\) using a key \(K\) is represented by \(M_K\). When giving authorship to a given resource, we also use subscripts, such a key from agent \(A\) resulting in the symbol \(K_A\). Accordingly, the session key established between agents \(A\) and \(B\) is represented by the symbol \(K_{AB}\). On following examples and proofs, the definitions will be straightforward.
+Primitive data instances, such messages, timestamps and \textit{nonces} can be represented as simple mnemonic letters and the encryption of such entities are represented with subscripts, for example, a message \(M\) using a key \(K\) is represented by \(M_K\). When giving authorship to a given resource, we also use subscripts, such a key from agent \(A\) resulting in the symbol \(K_A\). Accordingly, the session key established between agents \(A\) and \(B\) is represented by the symbol \(K_{AB}\). On following examples and proofs, the definitions will be straightforward.
 
 Concerning the key scope, a distinction is also required. For that, private keys are preceded by the indicator \(s\), meaning signature, and public keys are preceded by \(p\), meaning public. Hence, the private and public keys of peer \(A\) would be represented as \(sK_A\) and \(pK_A\), respectively.
 
 Besides, the use of fat brackets (\(\lBrack \) and \(\rBrack \)) has two purposes: it can distinguish protocol messages from sets and represents concatenation. Therefore, a concatenation of messages \(m\) and \(n\) is represented as \(\Bracks{m,n}\) and its encryption under key \(K\) is written as \(\Bracks{m,n}_K\).
 
-Finally, we need to represent message transportation. The syntax follows a simple structure, where each protocol step is represented in one line, following the order: step number, sender, recipient and finally the message contents, which contains at least one symbol. For instance, we use the hypothetic protocol provided in Figure~\ref{prt:notation-example}, where the host \(A\) sends its identity and a nonce \(N_A\) to a host \(B\), who replies with the nonce and a fresh session key \(K_{AB}\), both encrypted under its private signature key \(sK_B\).
+Finally, we need to represent message transportation. The syntax follows a simple structure, where each protocol step is represented in one line, following the order: step number, sender, recipient and finally the message contents, which contains at least one symbol. For instance, we use the hypothetical protocol provided in Figure~\ref{prt:notation-example}, where the host \(A\) sends its identity and a nonce \(N_A\) to a host \(B\), who replies with the nonce and a fresh session key \(K_{AB}\), both encrypted under its private signature key \(sK_B\).
 
 \begin{figure}[ht]\label{prt:notation-example}
   \centering
@@ -66,7 +66,7 @@ Finally, we need to represent message transportation. The syntax follows a simpl
       2. & B \longrightarrow A &:& \Bracks{N_A, K_{AB}}_{K_B} \\
     \end{array}
     \]
-  \caption{Example protocol for notation undestanding}
+  \caption{Example protocol for notation understanding}
 \end{figure}
 
 As a background example intended to provide better understanding of the next concepts, the problems within some protocol designs and the syntax presented in this section, we describe a common situation, where two agents, \(A\) and \(B\) (commonly called Alice and Bob), want to communicate securely. For that, they generate a session key \(K_{AB}\), aided by a trusted third-party peer, the Server \(S\). Such key will be used for ciphering future messages, so it must be newly generated and only known to these three entities.
@@ -91,21 +91,21 @@ In Figure~\ref{prt:naive-session-key}, a protocol is designed as a first and nai
 
 
 \section{Confidentiality}
-Confidentiality (or secrecy) is a required aspect when systems should not leak information to untrusted peers, guaranteeing access only for the trusted ones. Also, it is one of the most desirable properties among security protocols. As seen previously, cryptography is a suitable method for generating keys used for securing messages. We define a encryption scheme consisting of a key set \(\mathcal{K}\), a message set \(\mathcal{M}\) and a ciphertext set \(\mathcal{C}\) and three main algorithms:
+Confidentiality (or secrecy) is a required aspect when systems should not leak information to untrusted peers, guaranteeing access only for the trusted ones. Also, it is one of the most desirable properties among security protocols. As seen previously, cryptography is a suitable method for generating keys used for securing messages. We define a encryption scheme consisting of a key set \(\mathcal{K}\), a message set \(\mathcal{M}\) and a cyphertext set \(\mathcal{C}\) and three main algorithms:
 
 \begin{itemize}
-  \item \textbf{Key Generation:} outputing an encryption key \(K \in \mathcal{K}\) and decryption key \(K^{-1} \in \mathcal{K}\);
+  \item \textbf{Key Generation:} outputting an encryption key \(K \in \mathcal{K}\) and decryption key \(K^{-1} \in \mathcal{K}\);
 
-  \item \textbf{Encryption:} taking a message \(m \in \mathcal{M}\) and encryption key \(K \in \mathcal{K}\), it outputs the ciphertext \(c \in \mathcal{C}\), which is defined as \(c = m_K\);
+  \item \textbf{Encryption:} taking a message \(m \in \mathcal{M}\) and encryption key \(K \in \mathcal{K}\), it outputs the cyphertext \(c \in \mathcal{C}\), which is defined as \(c = m_K\);
 
-  \item \textbf{Decryption:} taking a ciphertext \(c \in \mathcal{C}\) and decryption key \(K^{-1} \in \mathcal{K}\), it outputs the message \(m \in \mathcal{M}\), which is defined as \(m = D_{K^{-1}}(c)\).
+  \item \textbf{Decryption:} taking a cipher-text \(c \in \mathcal{C}\) and decryption key \(K^{-1} \in \mathcal{K}\), it outputs the message \(m \in \mathcal{M}\), which is defined as \(m = D_{K^{-1}}(c)\).
 \end{itemize}
 
 Considering key properties, when a given encryption key \(K\) is the same as the decryption key \(K^{-1}\), that is \(K = K^{-1}\), it is stated that they are \emph{symmetric} keys. Otherwise, they are \emph{non-symmetric} keys, which are normally engaged in a process of public key encryption, commonly used nowadays~\cite{RyanSchneider2010}.
 
-Secrecy consistency can be discussed with respect to some degree of flexibility. An active spy should not be able to learn something on generated ciphertexts. The property of \textit{semantic security} states that if an attacker can compute something from a ciphertext, it must also be able to compute it from its equivalent message. Stronger than that, \textit{non-malleability} makes impossible to transform a given ciphertext in a related one without knowing the input plaintext. A detailed discussion on this topic is provided in~\cite{Abadi99}.
+Secrecy consistency can be discussed with respect to some degree of flexibility. An active spy should not be able to learn something on generated cyphertext. The property of \textit{semantic security} states that if an attacker can compute something from a cipher-text, it must also be able to compute it from its equivalent message. Stronger than that, \textit{non-malleability} makes impossible to transform a given cyphertext in a related one without knowing the input plain text. A detailed discussion on this topic is provided in~\cite{Abadi99}.
 
-Considering our previously presented example given in Figure \ref{prt:naive-session-key}, it is easy to show that confidentiality is compromised in that protocol. The session key \(K_{AB}\) is transmitted in cleartext over the network, so an active spy could simply extract it from the channel and use it for decipher subsequent messages exchanged between \(A\) and \(B\).
+Considering our previously presented example given in Figure \ref{prt:naive-session-key}, it is easy to show that confidentiality is compromised in that protocol. The session key \(K_{AB}\) is transmitted in clear text over the network, so an active spy could simply extract it from the channel and use it for decipher subsequent messages exchanged between \(A\) and \(B\).
 
 We redesign our first attempt of securing the protocol, given in Figure~\ref{prt:session-key-confidentiality}. Here, we define keys \(K_{AS}\) and \(K_{BS}\) as previously shared keys known by the server and agents \(A\) and \(B\), respectively. Alice will repeat the first step of the former protocol, but now the server will reply with a tuple, composed by the session key \(K_{AB}\) encrypted with shared keys \(K_{AS}\) and \(K_{BS}\). Finally, Alice sends the session key, encrypted with Bob shared key, and her identity to Bob.
 
@@ -183,7 +183,7 @@ The second case presents a more serious flaw. Here, the Spy intercepts the first
   \caption{Second attack possibility against the protocol in Figure~\ref{prt:session-key-auth}}
 \end{figure}
 
-In order to deal with the forementioned problems, we review our approach, redefining the protocol, which is given in Figure~\ref{prt:session-key-auth}. Now, the session key is linked with the identity of its owners, since the server replies Alice with two tuples: the session key and the identity of the participants, encrypted with their shared key. At the end, Alice forwards her identity, together with \(K_{AB}\), to \(B\). Note that now, the spy cannot replace any identity, since it is also encrypted and thus, authentication is preserved.
+In order to deal with the aforementioned problems, we review our approach, redefining the protocol, which is given in Figure~\ref{prt:session-key-auth}. Now, the session key is linked with the identity of its owners, since the server replies Alice with two tuples: the session key and the identity of the participants, encrypted with their shared key. At the end, Alice forwards her identity, together with \(K_{AB}\), to \(B\). Note that now, the spy cannot replace any identity, since it is also encrypted and thus, authentication is preserved.
 
 \begin{figure}[ht]\label{prt:session-key-auth}
   \centering

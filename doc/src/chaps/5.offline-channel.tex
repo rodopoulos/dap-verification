@@ -162,7 +162,7 @@ The regular network events are kept as in Chapter \ref{chap:inductive}, while fo
 
   \item[\texttt{SGets}] defines the reception event at the smartphone side, in respect to a \textit{Inputs} event;
 
-  \item[\texttt{Outputs}] defines the sending of data from a smartphone to an agent, using the smartphone screen. Like the \textit{Inputs} event, it envolves both entities;
+  \item[\texttt{Outputs}] defines the sending of data from a smartphone to an agent, using the smartphone screen. Like the \textit{Inputs} event, it involves both entities;
 
   \item[\texttt{AGets}] finally, defines the reception of data by an agent from the offline channel.
 \end{description}
@@ -298,7 +298,7 @@ Finally, rule \texttt{Fake} is extend in order to embrace such details, producin
 
 
 \section{Protocol Model}
-Once formalized, the model for smartphones guarantees the reception of messages for agents and devices, but only when the assumption of secure devices holds. For the case when it does not hold, we need two more rules that models the reception of data, similarly to the reception rule for network events, since rules are not forced to happen in the model. The \texttt{SRcpt} and \texttt{ARcpt} rules guarantee the reception of data for insecured devices. Both are defined at the protocol level.
+Once formalized, the model for smartphones guarantees the reception of messages for agents and devices, but only when the assumption of secure devices holds. For the case when it does not hold, we need two more rules that models the reception of data, similarly to the reception rule for network events, since rules are not forced to happen in the model. The \texttt{SRcpt} and \texttt{ARcpt} rules guarantee the reception of data for insecure devices. Both are defined at the protocol level.
 % 
 \begin{align*}
   & \texttt{SRcpt}: \newline \\

@@ -1,7 +1,7 @@
 %!TEX root = ../../dissertacao.tex
 In this chapter\label{chap:dap}, our case study, the Dynamic Authentication Protocol (DAP), is presented. The protocol is designed for providing an extra reliability layer for the online banking application, creating an encrypted authorization scheme for each banking transaction over a previously authenticated session between the User and the Bank.
 
-Prior to running the protocol, a shared key must be stablished between the User and the Bank, which will be stored both at the User's uncompromisable smartphone and the Bank Server. There are two different ways to generate such a key, a symmetric and an asymmetric method, where such operation is performed only once for all protocol history.
+Prior to running the protocol, a shared key must be established between the User and the Bank, which will be stored both at the User's uncompromisable smartphone and the Bank Server. There are two different ways to generate such a key, a symmetric and an asymmetric method, where such operation is performed only once for all protocol history.
 
 Then, the User can issue transactions at the bank server, where each operation generates a Transaction Authorization Nonce (TAN) which is sent together with the prompted job as reply. At the User side, the message is checked and a challenge is presented, as a QR-Code message. The User scans it with her smartphone, which interprets, checks and displays the operation, asking for its authorization. If it is correct, the User replies to the Server, sending the generated TAN to the Server. The latter compares it with its own copy and if it matches, the operation is confirmed. All message exchanges are encrypted and protected, using parts of the previously shared key.
 
@@ -23,7 +23,7 @@ Since internet banking deals with sensible and financial data, those systems urg
 
 Specifically, authenticating clients and further operations carried by them are the key point for providing a reliable internet banking framework. Further, authorization, integrity and confidentiality are commonly cited qualities and finally, non-repudiation, availability and auditability are also desired properties for those systems~\cite{Hutchinson2003}.
 
-At the same time, such systems are a preferential target among hackers and other ciber-criminal~\cite{Peotta2011, Hutchinson2003}. Several techniques for credential theft and transaction manipulation for internet banking systems have been developed over the years, with formal classification studies made~\cite{Peotta2011, Adham2013}. It is interesting to cite some common attack patterns:
+At the same time, such systems are a preferential target among hackers and other cyber-criminal~\cite{Peotta2011, Hutchinson2003}. Several techniques for credential theft and transaction manipulation for internet banking systems have been developed over the years, with formal classification studies made~\cite{Peotta2011, Adham2013}. It is interesting to cite some common attack patterns:
 
 \begin{itemize}
   \item \textbf{Channel Breaking:} intercepting the communication between client and bank, and impersonating any of the entities in order to fake a legal identity and trying to perform actions as a legal user or as the server;
@@ -33,7 +33,7 @@ At the same time, such systems are a preferential target among hackers and other
   \item \textbf{Device Control:} the attacker combines several exploiting techniques in order to have full control of the user device, being able to steal credentials, perform fraudulent actions, spy on the user, and other malicious actions.
 \end{itemize}
 
-\textbf{Credential Thief} is a broader technique category, which envolves the theft of user credentials in any viable way. Therefore, phishing attacks also fall into this category.
+\textbf{Credential Thief} is a broader technique category, which involves the theft of user credentials in any viable way. Therefore, phishing attacks also fall into this category.
 
 Accordingly, many security schemes were developed in order to oppose against such attacking strategies. Also in~\cite{Peotta2011, Adham2013}, the authors provide a listing of current common security models found among banks.
 
@@ -54,9 +54,9 @@ Also, bandwidth and computational power limits are established. The whole system
 
 It is important to emphasize that the protocol identifies a unique transaction on each run. The user must be already authenticated before prompting a transaction authorization and private authentication keys must be previously exchanged between the server and the client. In a protocol run, the user receives a series of challenges, in order to verify the operation, which contain pieces of information about the given transaction.
 
-One of these tasks envolves the use of a third-party device equipped with a camera and QR-code scanning technology, usually a smartphone. This phase works as a final hash verification for each operation, where the user should scan a QR-code containing the transaction details, check it and send a 6-digit PIN that corresponds to the transaction authorization identifier, resulting in the final transaction authorization.
+One of these tasks involves the use of a third-party device equipped with a camera and QR-code scanning technology, usually a smartphone. This phase works as a final hash verification for each operation, where the user should scan a QR-code containing the transaction details, check it and send a 6-digit PIN that corresponds to the transaction authorization identifier, resulting in the final transaction authorization.
 
-The protocol authors claim that this last step produce an extra security layer that could only be exploited through social engineering tactics, hardening the attack against a serie of known strategies. In summary, an attacker can fake an operation but cannot authorize it, since the authorization procedure was removed from the session context and transferred to the user responsibility over an offline channel.
+The protocol authors claim that this last step produce an extra security layer that could only be exploited through social engineering tactics, hardening the attack against a series of known strategies. In summary, an attacker can fake an operation but cannot authorize it, since the authorization procedure was removed from the session context and transferred to the user responsibility over an offline channel.
 
 
 
@@ -84,7 +84,7 @@ Based in assumptions that resemble the Dolev-Yao approach, the authors state som
   \item The Spy does not have access to any personal smartcard.
 \end{enumerate}
 
-Finally, the problem statement may be placed: the User wants to send a message \(m\) to the Server, which contains a certain operation to be authorized. Thus, the proposed security protocol DAP will be used. Finally, an active Spy will try to exploit such system, trying to perform an ilegal action.
+Finally, the problem statement may be placed: the User wants to send a message \(m\) to the Server, which contains a certain operation to be authorized. Thus, the proposed security protocol DAP will be used. Finally, an active Spy will try to exploit such system, trying to perform an illegal action.
 
 
 
@@ -194,7 +194,7 @@ Additionally, the key \(K\) is divided into two others: \(k_1\) and \(k_2\). The
 Figure~\ref{fig:dap-transaction} explains the whole message transaction process, which is based in the following steps:
 
 \begin{enumerate}
-  \item The User prompts the banking transaction \(m\) through the Internet Banking application, at her personal computer. She must be previously authenticated. The transaction is sent in cleartext to the Server;
+  \item The User prompts the banking transaction \(m\) through the Internet Banking application, at her personal computer. She must be previously authenticated. The transaction is sent in clear text to the Server;
 
   \item Once the Server receives \(m\), it generates the \textbf{Transaction Authorization Nonce} (TAN), which we will name \(r_S\). This nonce will uniquely identify the transaction \(m\), acting as a reference for further authorization. Also, it produces cipher \(r'\), encrypting nonce \(r_S\) using key \(k_2\) and an AES encryption scheme, and the checksum hash \(h_S\), applying the HMAC-SHA1 protocol over the concatenation of transaction \(m\) and cipher \(r'\), using key \(k_1\). Finally, entities \(m, r'\) and \(h_S\) are grouped and sent to the User;
 
@@ -267,7 +267,7 @@ Figure~\ref{fig:dap-transaction} explains the whole message transaction process,
 
   \end{sequencediagram}
 
-  \caption{Diagram of a message transation in DAP. The protocol steps are referenced in the diagram}
+  \caption{Diagram of a message transaction in DAP. The protocol steps are referenced in the diagram}
 \end{figure}
 
 

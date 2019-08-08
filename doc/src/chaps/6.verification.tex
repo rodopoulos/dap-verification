@@ -99,7 +99,7 @@ Rule \textit{DT4} happens inside the smartphone. Here, the agent also must be ho
   \caption{Secure DAP rule 4 formalization}
 \end{figure}
 
-Rule \textit{DT5} models the agent confirming the visualized transaction in her smartphone screen. For this reason, the agent must have issued a transaction, received it again with its correspondent ciphers from the Server seen the same transaction, given by her in \textit{DT3}, on the device screen. Again, we adapted the protocol: the confirmation act is represented with the \texttt{Inputs} event, using the transaction itself as an acknowledgement that the presented transaction is correct.
+Rule \textit{DT5} models the agent confirming the visualized transaction in her smartphone screen. For this reason, the agent must have issued a transaction, received it again with its correspondent ciphers from the Server seen the same transaction, given by her in \textit{DT3}, on the device screen. Again, we adapted the protocol: the confirmation act is represented with the \texttt{Inputs} event, using the transaction itself as an acknowledgment that the presented transaction is correct.
 
 \begin{figure}[!h]
   \begin{align*}
@@ -261,7 +261,7 @@ It is also guaranteed that the Server cannot initiate the protocol, which is sho
   Then, $A \neq \Server$
 \end{theorem}
 
-Finally, Theorem \ref{thm:says-server-dt8} guarantees the whole authentication process at the Server side, stating that it can only send a success message - represented by the transaction - if it received the transaction priorly and the produced TAN matches the received one. This property is verifiable only at the Server side, once it is the only entity that posses the original TAN.
+Finally, Theorem \ref{thm:says-server-dt8} guarantees the whole authentication process at the Server side, stating that it can only send a success message - represented by the transaction - if it received the transaction prior and the produced TAN matches the received one. This property is verifiable only at the Server side, once it is the only entity that posses the original TAN.
 
 \begin{theorem}[\textbf{Says\_Server\_DT8}]
   \label{thm:says-server-dt8}
@@ -407,11 +407,11 @@ In this section, the verified model properties are described. These properties r
 
 
 \subsection{Confidentiality and Privacy}
-It is observable that the DAP does not preserve the transaction privacy. Theorem \ref{thm:spy-knows-transaction} shows that the Spy possess the transaction number after the first step of the protocol. It is trivial to show this, since all messages that contains the transaction are sent in cleartext over the network.
+It is observable that the DAP does not preserve the transaction privacy. Theorem \ref{thm:spy-knows-transaction} shows that the Spy possess the transaction number after the first step of the protocol. It is trivial to show this, since all messages that contains the transaction are sent in clear text over the network.
 
 \begin{theorem}[\textbf{Spy\_knows\_transaction}]
   \label{thm:spy-knows-transaction}
-  If evs constains
+  If evs contains
   \[\Says{A}{\Server}{\Bracks{\Message{Agent}{A}, \Message{Number}{T}}}\]
   Then, Number T $\in$ analz(knows Spy evs)
 \end{theorem}
